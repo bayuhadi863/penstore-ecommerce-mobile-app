@@ -1,4 +1,15 @@
+import 'dart:ffi';
+
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
+import 'package:penstore/screens/auth/login_screen.dart';
+
+import 'package:penstore/widgets/text_form_field.dart';
 import 'package:penstore/widgets/home/appbar_home.dart';
 import 'package:penstore/widgets/home/banner_slider.dart';
 import 'package:penstore/widgets/home/katalog_widget.dart';

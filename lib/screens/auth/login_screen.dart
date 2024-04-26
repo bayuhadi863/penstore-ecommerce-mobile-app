@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/auth/login_controller.dart';
 import 'package:penstore/screens/auth/register_screen.dart';
 import 'package:penstore/screens/bottom_navigation.dart';
+import 'package:penstore/utils/auth_validations.dart';
 // import 'package:penstore/screens/home_screen.dart';
 import 'package:penstore/widgets/text_form_field.dart';
 
@@ -28,6 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
+    final loginController = Get.put(LoginController());
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -68,95 +73,99 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Selamat Datang',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              'Isilah identitas anda dibawah ini untuk masuk',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            CustomTextField(
-                              // controller: TextEditingController(),
-                              focusNode: _emailFocusNode,
-                              hintText: 'Email',
-                              prefixIcon: 'email',
-                              keyboardType: TextInputType.emailAddress,
-                              onSubmitted: (_) {
-                                FocusScope.of(context)
-                                    .requestFocus(_passwordFocusNode);
-                              },
-                            ),
-                            const SizedBox(height: 20),
-                            CustomTextField(
-                              keyboardType: TextInputType.visiblePassword,
-                              // controller: TextEditingController(),
-                              focusNode: _passwordFocusNode,
-                              hintText: 'Password',
-                              prefixIcon: 'lock',
-                              obscureText: _isObscure,
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isObscure = !_isObscure;
-                                  });
-                                },
-                                child: Icon(
-                                  _isObscure
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: const Color(0xFF757B7B),
-                                ),
-                              ),
-                              onSubmitted: (_) {
-                                //fungsi untuk menampilkan password
-                                _passwordFocusNode.unfocus();
-                              },
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF6BCCC9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(27),
-                                ),
-                                shadowColor:
-                                    const Color(0xFF91E0DD).withOpacity(0.3),
-                                visualDensity: VisualDensity.standard,
-                                elevation: 4,
-                                minimumSize: const Size(double.infinity, 54),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const MyBottomNavBar(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Masuk',
+                        child: Form(
+                          key: loginController.formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Selamat Datang',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 24,
                                   fontFamily: 'Poppins',
-                                  color: Colors.white,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 5),
+                              const Text(
+                                'Isilah identitas anda dibawah ini untuk masuk',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              CustomTextField(
+                                controller: loginController.email,
+                                validator: (value) =>
+                                    AuthValidations.validateEmail(value),
+                                focusNode: _emailFocusNode,
+                                hintText: 'Email',
+                                prefixIcon: 'email',
+                                keyboardType: TextInputType.emailAddress,
+                                onSubmitted: (_) {
+                                  FocusScope.of(context)
+                                      .requestFocus(_passwordFocusNode);
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              CustomTextField(
+                                keyboardType: TextInputType.visiblePassword,
+                                controller: loginController.password,
+                                validator: (value) =>
+                                    AuthValidations.validateEmptyText(
+                                        'Password', value),
+                                focusNode: _passwordFocusNode,
+                                hintText: 'Password',
+                                prefixIcon: 'lock',
+                                obscureText: _isObscure,
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isObscure = !_isObscure;
+                                    });
+                                  },
+                                  child: Icon(
+                                    _isObscure
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: _isObscure
+                                        ? const Color(0xFF757B7B)
+                                        : const Color(0xFF6BCCC9),
+                                  ),
+                                ),
+                                onSubmitted: (_) {
+                                  //fungsi untuk menampilkan password
+                                  _passwordFocusNode.unfocus();
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF6BCCC9),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(27),
+                                  ),
+                                  shadowColor:
+                                      const Color(0xFF91E0DD).withOpacity(0.3),
+                                  visualDensity: VisualDensity.standard,
+                                  elevation: 4,
+                                  minimumSize: const Size(double.infinity, 54),
+                                ),
+                                onPressed: () {
+                                  loginController.login(context);
+                                },
+                                child: const Text(
+                                  'Masuk',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Align(
@@ -176,13 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterScreen(),
-                                    ),
-                                  );
+                                  Get.toNamed("/register");
                                 },
                                 child: const Text(
                                   'Daftar Sekarang!',

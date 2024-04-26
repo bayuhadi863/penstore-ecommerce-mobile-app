@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/auth/register_controller.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
+import 'package:penstore/utils/auth_validations.dart';
 import 'package:penstore/widgets/text_form_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -29,6 +32,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
+    final registerController = Get.put(RegisterController());
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -65,115 +70,140 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Buat Akun Baru',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              'Isilah identitas anda dibawah ini untuk masuk',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            CustomTextField(
-                              // controller: TextEditingController(),
-                              keyboardType: TextInputType.text,
-                              focusNode: _nameFocusNode,
-                              hintText: 'Nama Lengkap',
-                              prefixIcon: 'user_outline',
-                              onSubmitted: (_) {
-                                FocusScope.of(context)
-                                    .requestFocus(_emailFocusNode);
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              // controller: TextEditingController(),
-                              focusNode: _emailFocusNode,
-                              hintText: 'Email',
-                              prefixIcon: 'email',
-                              keyboardType: TextInputType.emailAddress,
-                              onSubmitted: (_) {
-                                FocusScope.of(context)
-                                    .requestFocus(_phoneFocusNode);
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              // controller: TextEditingController(),
-                              focusNode: _phoneFocusNode,
-                              hintText: 'No Telepon',
-                              prefixIcon: 'phone',
-                              keyboardType: TextInputType.phone,
-                              onSubmitted: (_) {
-                                FocusScope.of(context)
-                                    .requestFocus(_passwordFocusNode);
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              keyboardType: TextInputType.visiblePassword,
-                              // controller: TextEditingController(),
-                              focusNode: _passwordFocusNode,
-                              hintText: 'Password',
-                              prefixIcon: 'lock',
-                              obscureText: _isObscure,
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isObscure = !_isObscure;
-                                  });
-                                },
-                                child: Image.asset(
-                                  'assets/icons/visibility.png',
-                                  color: const Color(0xFF757B7B),
-                                  height: 20,
-                                  width: 20,
-                                  filterQuality: FilterQuality.high,
-                                ),
-                              ),
-                              onSubmitted: (_) {
-                                _passwordFocusNode.unfocus();
-                              },
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF6BCCC9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(27),
-                                ),
-                                shadowColor:
-                                    const Color(0xFF91E0DD).withOpacity(0.3),
-                                visualDensity: VisualDensity.standard,
-                                elevation: 4,
-                                minimumSize: const Size(double.infinity, 54),
-                              ),
-                              onPressed: () {},
-                              child: const Text(
-                                'Daftar',
+                        padding: const EdgeInsets.only(
+                            left: 30, top: 30, right: 30, bottom: 10),
+                        child: Form(
+                          key: registerController.formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Buat Akun Baru',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 24,
                                   fontFamily: 'Poppins',
-                                  color: Colors.white,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 5),
+                              const Text(
+                                'Isilah identitas anda dibawah ini untuk masuk',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              CustomTextField(
+                                controller: registerController.name,
+                                validator: (value) =>
+                                    AuthValidations.validateName(value),
+                                keyboardType: TextInputType.text,
+                                focusNode: _nameFocusNode,
+                                hintText: 'Nama Lengkap',
+                                prefixIcon: 'user2',
+                                onSubmitted: (_) {
+                                  FocusScope.of(context)
+                                      .requestFocus(_emailFocusNode);
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              CustomTextField(
+                                controller: registerController.email,
+                                validator: (value) =>
+                                    AuthValidations.validateEmail(value),
+                                focusNode: _emailFocusNode,
+                                hintText: 'Email',
+                                prefixIcon: 'email',
+                                keyboardType: TextInputType.emailAddress,
+                                onSubmitted: (_) {
+                                  FocusScope.of(context)
+                                      .requestFocus(_phoneFocusNode);
+                                },
+                              ),
+                              // SizedBox(
+                              //   height: 2,
+                              // ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(left: 16),
+                              //   child: Text(
+                              //     'Email tidak valid',
+                              //     style: TextStyle(fontSize: 12),
+                              //   ),
+                              // ),
+                              // const SizedBox(height: 16),
+                              // CustomTextField(
+                              //   controller: registerController.phone,
+                              //   validator: (value) =>
+                              //       AuthValidations.validatePhone(value),
+                              //   focusNode: _phoneFocusNode,
+                              //   hintText: 'No Telepon',
+                              //   prefixIcon: 'phone',
+                              //   keyboardType: TextInputType.phone,
+                              //   onSubmitted: (_) {
+                              //     FocusScope.of(context)
+                              //         .requestFocus(_passwordFocusNode);
+                              //   },
+                              // ),
+                              const SizedBox(height: 16),
+                              CustomTextField(
+                                keyboardType: TextInputType.visiblePassword,
+                                controller: registerController.password,
+                                validator: (value) =>
+                                    AuthValidations.validatePassword(value),
+                                focusNode: _passwordFocusNode,
+                                hintText: 'Password',
+                                prefixIcon: 'lock',
+                                obscureText: _isObscure,
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isObscure = !_isObscure;
+                                    });
+                                  },
+                                  child: Icon(
+                                    _isObscure
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: _isObscure
+                                        ? const Color(0xFF757B7B)
+                                        : const Color(0xFF6BCCC9),
+                                  ),
+                                ),
+                                onSubmitted: (_) {
+                                  _passwordFocusNode.unfocus();
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF6BCCC9),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(27),
+                                  ),
+                                  shadowColor:
+                                      const Color(0xFF91E0DD).withOpacity(0.3),
+                                  visualDensity: VisualDensity.standard,
+                                  elevation: 4,
+                                  minimumSize: const Size(double.infinity, 54),
+                                ),
+                                onPressed: () {
+                                  registerController.register(context);
+                                },
+                                child: const Text(
+                                  'Daftar',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Align(
@@ -193,12 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginScreen(),
-                                    ),
-                                  );
+                                  Get.offAllNamed("/login");
                                 },
                                 child: const Text(
                                   'Masuk Sekarang!',

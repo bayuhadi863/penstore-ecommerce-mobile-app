@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592305459302",
+    "project_id": "penstore-3a902",
+    "storage_bucket": "penstore-3a902.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592305459302:android:bcd48d709491842c379da7",
+        "android_client_info": {
+          "package_name": "com.example.penstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSjGkCQbTKwhcEXqlwgV4zA6gy6drTEto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
