@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
 
 class AppBarHome extends StatelessWidget {
   const AppBarHome({super.key});
@@ -7,6 +9,8 @@ class AppBarHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final userController = Get.put(UserController());
+
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(
@@ -52,11 +56,11 @@ class AppBarHome extends StatelessWidget {
                   ),
               width: mediaQueryWidth * 0.60,
               height: mediaQueryHeight * 0.055,
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Welcome',
                     style: TextStyle(
                       fontSize: 14,
@@ -65,13 +69,15 @@ class AppBarHome extends StatelessWidget {
                       fontFamily: 'Poppins',
                     ),
                   ),
-                  Text(
-                    'Senjani Tania',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF424242),
-                      fontFamily: 'Poppins',
+                  Obx(
+                    () => Text(
+                      userController.user.value.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF424242),
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
                 ],

@@ -25,6 +25,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               hintText: "Cari barang apa?",
               prefixIcon: 'search',
               keyboardType: TextInputType.text,
+              controller: TextEditingController(),
             ),
           ),
           Container(

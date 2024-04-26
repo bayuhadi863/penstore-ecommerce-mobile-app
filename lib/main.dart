@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:penstore/firebase_options.dart';
-import 'package:penstore/repository/auth_repository.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/screens/auth/register_screen.dart';
 import 'package:penstore/screens/bottom_navigation.dart';

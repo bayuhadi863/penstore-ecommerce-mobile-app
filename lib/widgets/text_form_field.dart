@@ -27,6 +27,7 @@ class CustomTextField extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
 
@@ -134,32 +135,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               filterQuality: FilterQuality.high,
             ),
           ),
-          suffixIcon: widget.suffixIcon != null
-              ? widget.suffixIcon
-              // GestureDetector(
-              //     onTap: () {
-              //       // Toggle obscureText
-              //       setState(() {
-              //         widget.obscureText = !widget.obscureText;
-              //         suffixIconColor = widget.obscureText
-              //             ? const Color(0xFF757B7B)
-              //             : const Color(0xFF6BCCC9);
-              //       });
-              //     },
-              //     child: Container(
-              //       height: 54,
-              //       width: 54,
-              //       alignment: Alignment.center,
-              //       child: Image.asset(
-              //         'assets/icons/visibility.png',
-              //         color: suffixIconColor,
-              //         height: 24,
-              //         width: 24,
-              //         filterQuality: FilterQuality.high,
-              //       ),
-              //     ),
-              //   )
-              : null,
+          suffixIcon: widget.suffixIcon,
           suffixIconConstraints: const BoxConstraints(
             minHeight: 54,
             minWidth: 54,

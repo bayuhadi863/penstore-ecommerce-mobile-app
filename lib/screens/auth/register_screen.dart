@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/auth/register_controller.dart';
-import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/utils/auth_validations.dart';
 import 'package:penstore/widgets/text_form_field.dart';
 
@@ -104,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 keyboardType: TextInputType.text,
                                 focusNode: _nameFocusNode,
                                 hintText: 'Nama Lengkap',
-                                prefixIcon: 'user2',
+                                prefixIcon: 'user_outline',
                                 onSubmitted: (_) {
                                   FocusScope.of(context)
                                       .requestFocus(_emailFocusNode);
