@@ -9,6 +9,8 @@ class CustomTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
   final GestureDetector? suffixIcon;
   final TextInputType keyboardType;
+  final TextEditingController controller;
+  String? Function(dynamic value)? validator;
 
   CustomTextField({
     super.key,
@@ -19,6 +21,9 @@ class CustomTextField extends StatefulWidget {
     this.onSubmitted,
     this.suffixIcon,
     required this.keyboardType,
+    required this.controller,
+    required,
+    this.validator,
   });
 
   @override
@@ -60,10 +65,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 54,
+      // height: 54,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.circular(27),
         boxShadow: [
           BoxShadow(
@@ -73,12 +78,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
         ],
       ),
-      child: TextField(
+      child: TextFormField(
+        controller: widget.controller,
+        validator: widget.validator,
         keyboardType: widget.keyboardType,
         focusNode: widget.focusNode,
         cursorColor: const Color(0xFF6BCCC9),
         obscureText: widget.obscureText,
         decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+          filled: true,
+          fillColor: Colors.white,
           focusColor: const Color(0xFF6BCCC9),
           hintText: widget.hintText,
           hintStyle: const TextStyle(
@@ -87,7 +100,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
             fontWeight: FontWeight.normal,
             fontFamily: 'Poppins',
           ),
-          border: InputBorder.none,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(27),
+            borderSide: BorderSide.none,
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+            borderRadius: BorderRadius.circular(27),
+          ),
+          errorStyle: const TextStyle(
+            color: Colors.red,
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+            fontFamily: 'Poppins',
+          ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Color(0xFF6BCCC9),
@@ -107,36 +135,37 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           ),
           suffixIcon: widget.suffixIcon != null
-              ? GestureDetector(
-                  onTap: () {
-                    // Toggle obscureText
-                    setState(() {
-                      widget.obscureText = !widget.obscureText;
-                      suffixIconColor = widget.obscureText
-                          ? const Color(0xFF757B7B)
-                          : const Color(0xFF6BCCC9);
-                    });
-                  },
-                  child: Container(
-                    height: 54,
-                    width: 54,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/icons/visibility.png',
-                      color: suffixIconColor,
-                      height: 24,
-                      width: 24,
-                      filterQuality: FilterQuality.high,
-                    ),
-                  ),
-                )
+              ? widget.suffixIcon
+              // GestureDetector(
+              //     onTap: () {
+              //       // Toggle obscureText
+              //       setState(() {
+              //         widget.obscureText = !widget.obscureText;
+              //         suffixIconColor = widget.obscureText
+              //             ? const Color(0xFF757B7B)
+              //             : const Color(0xFF6BCCC9);
+              //       });
+              //     },
+              //     child: Container(
+              //       height: 54,
+              //       width: 54,
+              //       alignment: Alignment.center,
+              //       child: Image.asset(
+              //         'assets/icons/visibility.png',
+              //         color: suffixIconColor,
+              //         height: 24,
+              //         width: 24,
+              //         filterQuality: FilterQuality.high,
+              //       ),
+              //     ),
+              //   )
               : null,
           suffixIconConstraints: const BoxConstraints(
             minHeight: 54,
             minWidth: 54,
           ),
         ),
-        onSubmitted: widget.onSubmitted,
+        onFieldSubmitted: widget.onSubmitted,
       ),
     );
   }

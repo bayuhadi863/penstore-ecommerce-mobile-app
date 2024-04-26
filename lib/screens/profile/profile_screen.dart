@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/auth/logout_controller.dart';
+import 'package:penstore/repository/auth_repository.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,8 +17,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: const Center(
-        child: Text('Profile Screen'),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            final logoutController = Get.put(LogoutController());
+            logoutController.logout();
+          },
+          child: const Text('Logout'),
+        ),
       ),
     );
   }

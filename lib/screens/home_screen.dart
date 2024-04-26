@@ -1,7 +1,12 @@
+import 'dart:ffi';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/widgets/banner_slider.dart';
 import 'package:penstore/widgets/text_form_field.dart';
@@ -28,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
+    final userController = Get.put(UserController());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -83,11 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                   width: mediaQueryWidth * 0.60,
                   height: mediaQueryHeight * 0.055,
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Welcome',
                         style: TextStyle(
                           fontSize: 14,
@@ -96,13 +103,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontFamily: 'Poppins',
                         ),
                       ),
-                      Text(
-                        'Senjani Tania',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF424242),
-                          fontFamily: 'Poppins',
+                      Obx(
+                        () => Text(
+                          userController.user.value.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF424242),
+                            fontFamily: 'Poppins',
+                          ),
                         ),
                       ),
                     ],
@@ -156,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       hintText: "Cari barang apa?",
                       prefixIcon: 'search',
                       keyboardType: TextInputType.text,
+                      controller: TextEditingController(),
                     ),
                   ),
                   Container(
@@ -579,7 +589,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Container(
                               width: 26,
                               height: 26,
-                              alignment: Alignment.center ,
+                              alignment: Alignment.center,
                               margin:
                                   const EdgeInsets.only(right: 10, bottom: 10),
                               decoration: BoxDecoration(
