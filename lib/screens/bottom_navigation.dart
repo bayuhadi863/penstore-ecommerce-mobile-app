@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:penstore/screens/chat/chat_screen.dart';
 import 'package:penstore/screens/home_screen.dart';
 import 'package:penstore/screens/profile/profile_screen.dart';
@@ -66,7 +65,9 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(
-                    'assets/icons/home.png',
+                    myCurrentIndex == 0
+                        ? 'assets/icons/home_fill.png'
+                        : 'assets/icons/home_outline.png',
                     height: 24,
                     width: 24,
                     color: myCurrentIndex == 0
@@ -92,7 +93,9 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(
-                    'assets/icons/favorite.png',
+                    myCurrentIndex == 1
+                        ? 'assets/icons/favorite_fill.png'
+                        : 'assets/icons/favorite_outline.png',
                     height: 24,
                     width: 24,
                     color: myCurrentIndex == 1
@@ -118,7 +121,9 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(
-                    'assets/icons/chat.png',
+                    myCurrentIndex == 2
+                        ? 'assets/icons/chat_fill.png'
+                        : 'assets/icons/chat_outline.png',
                     height: 24,
                     width: 24,
                     color: myCurrentIndex == 2
@@ -144,7 +149,9 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(
-                    'assets/icons/user2.png',
+                    myCurrentIndex == 3
+                        ? 'assets/icons/user_fill.png'
+                        : 'assets/icons/user_outline.png',
                     height: 24,
                     width: 24,
                     color: myCurrentIndex == 3

@@ -94,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyboardType: TextInputType.text,
                               focusNode: _nameFocusNode,
                               hintText: 'Nama Lengkap',
-                              prefixIcon: 'user2',
+                              prefixIcon: 'user_outline',
                               onSubmitted: (_) {
                                 FocusScope.of(context)
                                     .requestFocus(_emailFocusNode);

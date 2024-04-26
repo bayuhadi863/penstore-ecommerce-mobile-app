@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
-import 'package:penstore/screens/auth/register_screen.dart';
-import 'package:penstore/screens/bottom_navigation.dart';
-import 'package:penstore/screens/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +16,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+      ),
       debugShowCheckedModeBanner: false,
       title: 'PENSTORE',
       home: LoginScreen(),
