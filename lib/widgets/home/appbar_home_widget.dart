@@ -36,7 +36,7 @@ class AppBarHome extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 },
                 icon: const Icon(Icons.menu),
               ),

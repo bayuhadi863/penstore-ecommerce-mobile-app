@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
-import 'package:penstore/widgets/home/add_koleksi_dialog_widget.dart';
-import 'package:penstore/widgets/home/banner_slider.dart';
+import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
+import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class ListProductWidget extends StatefulWidget {
   const ListProductWidget({super.key});

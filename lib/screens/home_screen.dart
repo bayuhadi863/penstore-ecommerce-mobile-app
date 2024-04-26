@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:penstore/widgets/home/appbar_home.dart';
-import 'package:penstore/widgets/home/banner_slider.dart';
+import 'package:penstore/widgets/home/appbar_home_widget.dart';
+import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:penstore/widgets/home/katalog_widget.dart';
 import 'package:penstore/widgets/home/list_product_widget.dart';
 import 'package:penstore/widgets/home/search_widget.dart';
