@@ -1,12 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CustomTextField extends StatefulWidget {
-  // final TextEditingController controller;
   final FocusNode focusNode;
   final String hintText;
-  final IconData prefixIcon;
+  final String prefixIcon;
   bool obscureText;
   final Function(String)? onSubmitted;
   final GestureDetector? suffixIcon;
@@ -14,22 +12,51 @@ class CustomTextField extends StatefulWidget {
 
   CustomTextField({
     super.key,
-    // required this.controller,
     required this.focusNode,
     required this.hintText,
     required this.prefixIcon,
     this.obscureText = false,
     this.onSubmitted,
-    this.suffixIcon, 
+    this.suffixIcon,
     required this.keyboardType,
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  late Color prefixIconColor;
+  late Color suffixIconColor;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize icon colors based on initial focus state
+    prefixIconColor = widget.focusNode.hasFocus
+        ? const Color(0xFF6BCCC9)
+        : const Color(0xFF757B7B);
+    suffixIconColor = const Color(0xFF757B7B);
+    // Listen to changes in focus state
+    widget.focusNode.addListener(updateIconColors);
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the focus node listener
+    widget.focusNode.removeListener(updateIconColors);
+    super.dispose();
+  }
+
+  // Method to update icon colors based on focus state
+  void updateIconColors() {
+    setState(() {
+      prefixIconColor = widget.focusNode.hasFocus
+          ? const Color(0xFF6BCCC9)
+          : const Color(0xFF757B7B);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,25 +68,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF91E0DD).withOpacity(0.3),
-            blurRadius: 6,
+            blurRadius: 16,
             offset: const Offset(1, 1),
           ),
         ],
       ),
       child: TextField(
-        // controller: widget.controller,
-        textAlignVertical: TextAlignVertical.center,
         keyboardType: widget.keyboardType,
         focusNode: widget.focusNode,
         cursorColor: const Color(0xFF6BCCC9),
         obscureText: widget.obscureText,
         decoration: InputDecoration(
+          focusColor: const Color(0xFF6BCCC9),
           hintText: widget.hintText,
           hintStyle: const TextStyle(
             color: Color(0xFF757B7B),
-            fontSize: 16,
+            fontSize: 12,
             fontWeight: FontWeight.normal,
-            height: BorderSide.strokeAlignCenter,
+            fontFamily: 'Poppins',
           ),
           border: InputBorder.none,
           focusedBorder: OutlineInputBorder(
@@ -68,24 +94,47 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             borderRadius: BorderRadius.circular(27),
           ),
-          // ignore: unnecessary_null_comparison
-          prefixIcon: widget.prefixIcon != null
-              ? Icon(widget.prefixIcon, color: const Color(0xFF757B7B))
-              : null,
+          prefixIcon: Container(
+            height: 54,
+            width: 54,
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/icons/${widget.prefixIcon}.png',
+              color: prefixIconColor,
+              height: 24,
+              width: 24,
+              filterQuality: FilterQuality.high,
+            ),
+          ),
           suffixIcon: widget.suffixIcon != null
               ? GestureDetector(
                   onTap: () {
                     // Toggle obscureText
                     setState(() {
                       widget.obscureText = !widget.obscureText;
+                      suffixIconColor = widget.obscureText
+                          ? const Color(0xFF757B7B)
+                          : const Color(0xFF6BCCC9);
                     });
                   },
-                  child: Icon(
-                    widget.obscureText ? Icons.visibility : Icons.visibility_off,
-                    color: const Color(0xFF757B7B),
+                  child: Container(
+                    height: 54,
+                    width: 54,
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/icons/visibility.png',
+                      color: suffixIconColor,
+                      height: 24,
+                      width: 24,
+                      filterQuality: FilterQuality.high,
+                    ),
                   ),
                 )
               : null,
+          suffixIconConstraints: const BoxConstraints(
+            minHeight: 54,
+            minWidth: 54,
+          ),
         ),
         onSubmitted: widget.onSubmitted,
       ),

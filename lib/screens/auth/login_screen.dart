@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:penstore/screens/auth/register_screen.dart';
+import 'package:penstore/screens/bottom_navigation.dart';
+// import 'package:penstore/screens/home_screen.dart';
 import 'package:penstore/widgets/text_form_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,13 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Stack(
             children: [
               // gambar
-              Container(
-                height: mediaQueryHeight * 0.437,
-                width: mediaQueryWidth,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/prabowo.png'),
-                    fit: BoxFit.cover,
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  height: mediaQueryHeight * 0.380,
+                  width: mediaQueryWidth,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/prabowo.png'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
@@ -49,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  height: mediaQueryHeight * 0.6,
+                  height: mediaQueryHeight * 0.657,
                   width: mediaQueryWidth,
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -87,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // controller: TextEditingController(),
                               focusNode: _emailFocusNode,
                               hintText: 'Email',
-                              prefixIcon: Icons.email,
+                              prefixIcon: 'email',
                               keyboardType: TextInputType.emailAddress,
                               onSubmitted: (_) {
                                 FocusScope.of(context)
@@ -100,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // controller: TextEditingController(),
                               focusNode: _passwordFocusNode,
                               hintText: 'Password',
-                              prefixIcon: Icons.lock,
+                              prefixIcon: 'lock',
                               obscureText: _isObscure,
                               suffixIcon: GestureDetector(
                                 onTap: () {
@@ -133,7 +138,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 elevation: 4,
                                 minimumSize: const Size(double.infinity, 54),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MyBottomNavBar(),
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'Masuk',
                                 style: TextStyle(
@@ -166,7 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const RegisterScreen(),
+                                      builder: (context) =>
+                                          const RegisterScreen(),
                                     ),
                                   );
                                 },

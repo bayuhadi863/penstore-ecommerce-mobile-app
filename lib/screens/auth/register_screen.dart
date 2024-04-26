@@ -38,13 +38,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Stack(
             children: [
               // gambar
-              Container(
-                height: mediaQueryHeight * 0.437,
-                width: mediaQueryWidth,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/prabowo.png'),
-                    fit: BoxFit.cover,
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  height: mediaQueryHeight * 0.380,
+                  width: mediaQueryWidth,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/prabowo.png'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
@@ -52,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  height: mediaQueryHeight * 0.6,
+                  height: mediaQueryHeight * 0.657,
                   width: mediaQueryWidth,
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -61,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       topRight: Radius.circular(32),
                     ),
                   ),
-                  child: Stack(
+                  child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -91,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyboardType: TextInputType.text,
                               focusNode: _nameFocusNode,
                               hintText: 'Nama Lengkap',
-                              prefixIcon: Icons.person,
+                              prefixIcon: 'user2',
                               onSubmitted: (_) {
                                 FocusScope.of(context)
                                     .requestFocus(_emailFocusNode);
@@ -102,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // controller: TextEditingController(),
                               focusNode: _emailFocusNode,
                               hintText: 'Email',
-                              prefixIcon: Icons.email,
+                              prefixIcon: 'email',
                               keyboardType: TextInputType.emailAddress,
                               onSubmitted: (_) {
                                 FocusScope.of(context)
@@ -114,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // controller: TextEditingController(),
                               focusNode: _phoneFocusNode,
                               hintText: 'No Telepon',
-                              prefixIcon: Icons.phone,
+                              prefixIcon: 'phone',
                               keyboardType: TextInputType.phone,
                               onSubmitted: (_) {
                                 FocusScope.of(context)
@@ -127,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // controller: TextEditingController(),
                               focusNode: _passwordFocusNode,
                               hintText: 'Password',
-                              prefixIcon: Icons.lock,
+                              prefixIcon: 'lock',
                               obscureText: _isObscure,
                               suffixIcon: GestureDetector(
                                 onTap: () {
@@ -135,11 +138,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     _isObscure = !_isObscure;
                                   });
                                 },
-                                child: Icon(
-                                  _isObscure
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
+                                child: Image.asset(
+                                  'assets/icons/visibility.png',
                                   color: const Color(0xFF757B7B),
+                                  height: 20,
+                                  width: 20,
+                                  filterQuality: FilterQuality.high,
                                 ),
                               ),
                               onSubmitted: (_) {
