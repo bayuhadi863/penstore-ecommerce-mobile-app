@@ -1,17 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:penstore/screens/auth/login_screen.dart';
+import 'package:get/get.dart';
+import 'package:penstore/models/product_model.dart';
+import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class ListProductWidget extends StatefulWidget {
-  const ListProductWidget({super.key});
+  final String? selectedCategory;
+
+  const ListProductWidget({super.key, required this.selectedCategory});
 
   @override
   State<ListProductWidget> createState() => _ListProductWidgetState();
 }
 
 class _ListProductWidgetState extends State<ListProductWidget> {
+  List<ProductModel> products = [];
+  bool isLoading = false;
+
+  Future<void> _getProducts() async {
+    print("ambil semua data");
+    setState(() {
+      isLoading = true;
+    });
+
+    final ProductRepository productRepository = ProductRepository();
+    final List<ProductModel> _products =
+        await productRepository.getAllProducts();
+    setState(() {
+      products = _products;
+      isLoading = false;
+    });
+  }
+
+  Future<void> _getProductsByCategory() async {
+    print("ambil data tertentu");
+    setState(() {
+      isLoading = true;
+    });
+
+    final ProductRepository productRepository = ProductRepository();
+    final List<ProductModel> _products = await productRepository
+        .getProductsByCategoryId(widget.selectedCategory! as String);
+    setState(() {
+      products = _products;
+      isLoading = false;
+    });
+  }
+
+  // mengecek apakah categoryId berubah
+  @override
+  void didUpdateWidget(covariant ListProductWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedCategory != oldWidget.selectedCategory) {
+      if (widget.selectedCategory != '') {
+        _getProductsByCategory();
+      } else {
+        _getProducts();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.selectedCategory != '') {
+      _getProductsByCategory();
+    } else {
+      _getProducts();
+    }
+    print(products);
+  }
+
   bool isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,12 +90,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
+                    Get.toNamed('/detail-product');
                   },
                   child: Container(
                     height: 100,
@@ -163,7 +221,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed('/cart');
+                    },
                     child: Container(
                       width: 26,
                       height: 26,

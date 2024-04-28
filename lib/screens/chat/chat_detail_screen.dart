@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+
+class ChatDetailScreen extends StatefulWidget {
+  const ChatDetailScreen({super.key});
+
+  @override
+  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+}
+
+class _ChatDetailScreenState extends State<ChatDetailScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat Detail'),
+      ),
+      body: const Center(
+        child: Text('Chat Detail Screen'),
+      ),
+    );
+  }
+}

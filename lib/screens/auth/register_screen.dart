@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/auth/register_controller.dart';
+import 'package:penstore/screens/auth/verification_screen.dart';
 import 'package:penstore/utils/auth_validations.dart';
 import 'package:penstore/widgets/text_form_field.dart';
 
@@ -191,7 +192,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 onPressed: () {
                                   registerController.register(context);
+                                  Get.to(
+                                    VerificationScreen(email: registerController.email.text),
+                                  );
                                 },
+
                                 child: const Text(
                                   'Daftar',
                                   style: TextStyle(
