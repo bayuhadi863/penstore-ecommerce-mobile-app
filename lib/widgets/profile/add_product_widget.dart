@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProductForm extends StatefulWidget {
   const AddProductForm({super.key});
@@ -13,6 +17,19 @@ class AddProductForm extends StatefulWidget {
 class _AddProductFormState extends State<AddProductForm> {
   final _formKey = GlobalKey<FormState>();
   var _value = "-1";
+  File? selectedImage;
+  Uint8List? image;
+
+  Future _pickImageFromGallery() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedImage = File(returnImage.path);
+      image = File(returnImage.path).readAsBytesSync();
+      print('Image Path : ${selectedImage!.path}');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +75,10 @@ class _AddProductFormState extends State<AddProductForm> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  _pickImageFromGallery();
+                                  print('Pick Image');
+                                },
                                 child: DottedBorder(
                                   padding: EdgeInsets.all(20),
                                   child: const Column(
