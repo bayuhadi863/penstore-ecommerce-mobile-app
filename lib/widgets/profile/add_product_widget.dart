@@ -12,6 +12,7 @@ class AddProductForm extends StatefulWidget {
 
 class _AddProductFormState extends State<AddProductForm> {
   final _formKey = GlobalKey<FormState>();
+  var _value = "-1";
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +85,27 @@ class _AddProductFormState extends State<AddProductForm> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.list),
-                                      hintText: 'Kategori Produk'),
+                                child: DropdownButtonFormField(
+                                  onChanged: (v) {},
+                                  value: _value,
+                                  items: const [
+                                    DropdownMenuItem(
+                                      child: Text("Pilih Kategori"),
+                                      value: "-1",
+                                    ),
+                                    DropdownMenuItem(
+                                      child: Text("Alat Tulis"),
+                                      value: "1",
+                                    ),
+                                    DropdownMenuItem(
+                                        child: Text("Lainnya"), value: "2"),
+                                  ],
                                 ),
+                                // TextFormField(
+                                //   decoration: const InputDecoration(
+                                //       icon: Icon(Icons.list),
+                                //       hintText: 'Kategori Produk'),
+                                // ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8),
