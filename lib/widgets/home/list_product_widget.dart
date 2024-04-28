@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
@@ -14,6 +15,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
   bool isFavorite = false;
   @override
   Widget build(BuildContext context) {
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Column(
       children: List.generate(
         10,
@@ -27,12 +29,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
+                    Get.toNamed('/detail-product');
                   },
                   child: Container(
                     height: 100,
@@ -104,57 +101,55 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                           ],
                         ),
                         const SizedBox(width: 10),
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Pensil Staedler 2B',
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Pensil Staedler 2B',
+                                  style: TextStyle(
+                                    color: Color(0xFF424242),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                SizedBox(
+                                   width: mediaQueryWidth * 0.6,
+                                  child: const Text(
+                                    'Pensil Staedtler adalah alat tulis yang terkenal diproduksi oleh merek Staedtler. Pensil ini...',
                                     style: TextStyle(
-                                      color: Color(0xFF424242),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF757B7B),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.normal,
                                       fontFamily: 'Poppins',
                                     ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(
-                                    width: 230,
-                                    child: Text(
-                                      'Pensil Staedtler adalah alat tulis yang terkenal diproduksi oleh merek Staedtler. Pensil ini...',
-                                      style: TextStyle(
-                                        color: Color(0xFF757B7B),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.normal,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                ),
+                              ],
+                            ),
+                            const Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Rp 40.000 -',
+                                  style: TextStyle(
+                                    color: Color(0xFF91E0DD),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Rp 40.000 -',
-                                    style: TextStyle(
-                                      color: Color(0xFF91E0DD),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -163,7 +158,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed('/cart');
+                    },
                     child: Container(
                       width: 26,
                       height: 26,
@@ -187,6 +184,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
           );
         },
       ),
+    
     );
   }
 }
