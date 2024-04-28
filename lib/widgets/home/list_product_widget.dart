@@ -90,8 +90,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
           : products.isEmpty
               ? const Text("data tidak ada")
               : ListView.builder(
-                shrinkWrap: true,
-                  itemCount: products.length,
+                  itemCount: products.length, 
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     ProductModel product = products[index];
                     return Container(
