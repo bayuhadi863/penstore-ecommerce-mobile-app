@@ -13,8 +13,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String categoryId = '';
+
   final FocusNode _searchFocusNode = FocusNode();
   bool isFavorite = false;
+
+  // set ubah category
+  Future<void> _setCategory(String? categoryId) async {
+    if (categoryId != null) {
+      setState(() {
+        this.categoryId = categoryId;
+      });
+      print("category ganti");
+    } else {
+      setState(() {
+        this.categoryId = '';
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setCategory;
+  }
 
   @override
   void dispose() {
@@ -42,21 +64,25 @@ class _HomeScreenState extends State<HomeScreen> {
         height: mediaQueryHeight,
         width: mediaQueryWidth,
         // color: const Color(0xFF6BCCC9),
-        child: const Column(
+        child: Column(
           children: [
             // widget search
-            SearchWidget(),
+            const SearchWidget(),
             // widget katalog
-            KatalogWidget(),
+            KatalogWidget(
+              onCategorySelected: _setCategory,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     //widget banner slider
-                    BannerSlider(),
+                    const BannerSlider(),
                     //widget list product
-                    ListProductWidget(),
-                    SizedBox(
+                    ListProductWidget(
+                      selectedCategory: categoryId,
+                    ),
+                    const SizedBox(
                       height: 100,
                     ),
                   ],
