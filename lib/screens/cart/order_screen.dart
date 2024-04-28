@@ -29,6 +29,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     setState(() {
       selectedImage = File(returnImage.path);
       image = File(returnImage.path).readAsBytesSync();
+      print('Image Path : ${selectedImage!.path}');
     });
   }
 
@@ -484,6 +485,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       child: GestureDetector(
                                         onTap: () {
                                           _pickImageFromGallery();
+                                          print('Pick Image');
                                         },
                                         child: Container(
                                           alignment: Alignment.center,
