@@ -221,7 +221,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed('/cart');
+                    },
                     child: Container(
                       width: 26,
                       height: 26,
