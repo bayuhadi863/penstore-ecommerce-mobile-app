@@ -1,21 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/models/product_model.dart';
+import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class ListProductWidget extends StatefulWidget {
-  const ListProductWidget({super.key});
+  final String? selectedCategory;
+
+  const ListProductWidget({super.key, required this.selectedCategory});
 
   @override
   State<ListProductWidget> createState() => _ListProductWidgetState();
 }
 
 class _ListProductWidgetState extends State<ListProductWidget> {
+  List<ProductModel> products = [];
+  bool isLoading = false;
+
+  Future<void> _getProducts() async {
+    print("ambil semua data");
+    setState(() {
+      isLoading = true;
+    });
+
+    final ProductRepository productRepository = ProductRepository();
+    final List<ProductModel> _products =
+        await productRepository.getAllProducts();
+    setState(() {
+      products = _products;
+      isLoading = false;
+    });
+  }
+
+  Future<void> _getProductsByCategory() async {
+    print("ambil data tertentu");
+    setState(() {
+      isLoading = true;
+    });
+
+    final ProductRepository productRepository = ProductRepository();
+    final List<ProductModel> _products = await productRepository
+        .getProductsByCategoryId(widget.selectedCategory! as String);
+    setState(() {
+      products = _products;
+      isLoading = false;
+    });
+  }
+
+  // mengecek apakah categoryId berubah
+  @override
+  void didUpdateWidget(covariant ListProductWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedCategory != oldWidget.selectedCategory) {
+      if (widget.selectedCategory != '') {
+        _getProductsByCategory();
+      } else {
+        _getProducts();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.selectedCategory != '') {
+      _getProductsByCategory();
+    } else {
+      _getProducts();
+    }
+    print(products);
+  }
+
   bool isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
-    final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Column(
       children: List.generate(
         10,
@@ -29,7 +91,12 @@ class _ListProductWidgetState extends State<ListProductWidget> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.toNamed('/detail-product');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
                   },
                   child: Container(
                     height: 100,
@@ -101,55 +168,57 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                           ],
                         ),
                         const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Pensil Staedler 2B',
-                                  style: TextStyle(
-                                    color: Color(0xFF424242),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
-                                SizedBox(
-                                   width: mediaQueryWidth * 0.6,
-                                  child: const Text(
-                                    'Pensil Staedtler adalah alat tulis yang terkenal diproduksi oleh merek Staedtler. Pensil ini...',
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Pensil Staedler 2B',
                                     style: TextStyle(
-                                      color: Color(0xFF757B7B),
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xFF424242),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Rp 40.000 -',
-                                  style: TextStyle(
-                                    color: Color(0xFF91E0DD),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Poppins',
+                                  SizedBox(
+                                    width: 230,
+                                    child: Text(
+                                      'Pensil Staedtler adalah alat tulis yang terkenal diproduksi oleh merek Staedtler. Pensil ini...',
+                                      style: TextStyle(
+                                        color: Color(0xFF757B7B),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Rp 40.000 -',
+                                    style: TextStyle(
+                                      color: Color(0xFF91E0DD),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -158,9 +227,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/cart');
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 26,
                       height: 26,
@@ -184,7 +251,6 @@ class _ListProductWidgetState extends State<ListProductWidget> {
           );
         },
       ),
-    
     );
   }
 }
