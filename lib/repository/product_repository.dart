@@ -4,15 +4,15 @@ import 'package:get/get.dart';
 import 'package:penstore/models/product_model.dart';
 
 class ProductRepository extends GetxController {
-  static ProductRepository get to => Get.find();
+  static ProductRepository get instance => Get.find();
 
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   // tambah produk
-  Future<void> addProduct(String uid, String name, String desc, int stock,
+  Future<void> addProduct(String name, String desc, int stock,
       int price, String categoryId) async {
     try {
-      await db.collection('products').doc(uid).set({
+      await db.collection('products').add({
         "name": name,
         "desc": desc,
         "stock": stock,
