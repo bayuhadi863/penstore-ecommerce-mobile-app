@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
@@ -103,12 +104,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
-                                ),
-                              );
+                              Get.toNamed('/detail-product');
                             },
                             child: Container(
                               height: 100,
@@ -246,7 +242,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                           Align(
                             alignment: Alignment.bottomRight,
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed('/cart');
+                              },
                               child: Container(
                                 width: 26,
                                 height: 26,
