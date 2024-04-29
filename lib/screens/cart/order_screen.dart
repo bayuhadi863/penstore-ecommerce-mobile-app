@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,18 +20,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String? paymentProof;
   File? selectedImage;
   Uint8List? image;
+  int imageHeight = 0;
+  int imageWidth = 0;
 
   Future _pickImageFromGallery() async {
     final returnImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returnImage == null) return;
+
+    final decodedImage =
+        await decodeImageFromList(await returnImage.readAsBytes());
+
     setState(() {
       selectedImage = File(returnImage.path);
       image = File(returnImage.path).readAsBytesSync();
+      imageHeight = decodedImage.height;
+      imageWidth = decodedImage.width;
+      print('Image Height : $imageHeight');
+      print('Image Width : $imageWidth');
       print('Image Path : ${selectedImage!.path}');
     });
   }
 
+  bool isSent = false;
 // List of payment methods
   List<String> paymentMethods = [
     'Pilih Metode Pembayaran',
@@ -63,6 +73,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+    // image picker from gallery
+    
+
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 74,
@@ -221,13 +234,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       ],
                                     ),
                                     const SizedBox(width: 10),
-                                    Column(
+                                    const Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
+                                        Text(
                                           'Pensil Staedler 2B',
                                           style: TextStyle(
                                             color: Color(0xFF424242),
@@ -236,7 +249,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             fontFamily: 'Poppins',
                                           ),
                                         ),
-                                        const Text(
+                                        Text(
                                           'Jumlah : 10',
                                           style: TextStyle(
                                             color: Color(0xFF757B7B),
@@ -245,7 +258,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             fontFamily: 'Poppins',
                                           ),
                                         ),
-                                        const Text(
+                                        Text(
                                           'Rp 40.000 -',
                                           style: TextStyle(
                                             color: Color(0xFF91E0DD),
@@ -280,10 +293,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               child: Container(
                                 width: double.infinity,
                                 alignment: Alignment.centerRight,
-                                child: Text(
+                                child: const Text(
                                   'Lihat Semua',
                                   style: TextStyle(
-                                    color: const Color(0xFF6BCCC9),
+                                    color: Color(0xFF6BCCC9),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins',
@@ -304,10 +317,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               child: Container(
                                 width: double.infinity,
                                 alignment: Alignment.centerRight,
-                                child: Text(
+                                child: const Text(
                                   'Tutup Semua',
                                   style: TextStyle(
-                                    color: const Color(0xFF6BCCC9),
+                                    color: Color(0xFF6BCCC9),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins',
@@ -329,11 +342,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     Container(
                       width: double.infinity,
-                      height: selectedPaymentMethod == null ? 100 : 352,
+                      height: selectedPaymentMethod == null
+                          ? 100
+                          : selectedImage == null
+                              ? 352
+                              : imageHeight.toDouble(),
                       margin: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 10, top: 10),
                       child: Container(
-                        height: selectedPaymentMethod == null ? 100 : 352,
+                        height: selectedPaymentMethod == null
+                            ? 100
+                            : selectedImage == null
+                                ? 352
+                                : imageHeight.toDouble(),
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 20),
                         decoration: BoxDecoration(
@@ -384,7 +405,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                               child: DropdownButton<String>(
                                 value: selectedPaymentMethod,
-                                hint: Text(
+                                hint: const Text(
                                   'Pilih Metode Pembayaran',
                                   style: TextStyle(
                                     color: Color(0xFF757B7B),
@@ -421,8 +442,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: 10),
-                                  Row(
+                                  const SizedBox(height: 10),
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -446,8 +467,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(height: 10),
-                                  Row(
+                                  const SizedBox(height: 10),
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -471,68 +492,81 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(height: 10),
-                                  Container(
-                                    height: 106.61,
-                                    width: double.infinity,
-                                    child: DottedBorder(
-                                      color: const Color(0xFF6BCCC9),
-                                      strokeWidth: 1,
-                                      borderType: BorderType.RRect,
-                                      dashPattern: const [7, 7],
-                                      strokeCap: StrokeCap.butt,
-                                      radius: const Radius.circular(12),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          _pickImageFromGallery();
-                                          print('Pick Image');
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 106.61,
-                                          width: double.infinity,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Text(
-                                                    'Bukti Pembayaran',
-                                                    style: TextStyle(
-                                                      color: Color(0xFF757B7B),
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontFamily: 'Poppins',
+                                  const SizedBox(height: 15),
+                                  //menampilkan image
+                                  if (selectedImage != null)
+                                    SizedBox(
+                                      // height: 600,
+                                      width: double.infinity,
+                                      child: Image.memory(
+                                        image!,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    )
+                                  else
+                                    SizedBox(
+                                      height: 106.61,
+                                      width: double.infinity,
+                                      child: DottedBorder(
+                                        color: const Color(0xFF6BCCC9),
+                                        strokeWidth: 1,
+                                        borderType: BorderType.RRect,
+                                        dashPattern: const [7, 7],
+                                        strokeCap: StrokeCap.butt,
+                                        radius: const Radius.circular(12),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _pickImageFromGallery();
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            height: 106.61,
+                                            width: double.infinity,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                const Column(
+                                                  children: [
+                                                    Text(
+                                                      'Bukti Pembayaran',
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFF757B7B),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: 'Poppins',
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    'Seret atau pilih gambar',
-                                                    style: TextStyle(
-                                                      color: Color(0xFF757B7B),
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontFamily: 'Poppins',
+                                                    Text(
+                                                      'Seret atau pilih gambar',
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFF757B7B),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: 'Poppins',
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Image.asset(
-                                                'assets/icons/Plus.png',
-                                                width: 24,
-                                                height: 24,
-                                              ),
-                                            ],
+                                                  ],
+                                                ),
+                                                Image.asset(
+                                                  'assets/icons/Plus.png',
+                                                  width: 24,
+                                                  height: 24,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
+
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Container(
@@ -550,7 +584,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                       ),
                                       onPressed: () {
-                                        // Get.toNamed('/checkout');
+                                        setState(() {
+                                          isSent = true;
+                                        });
                                       },
                                       child: const Center(
                                         child: Text(
@@ -627,10 +663,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ],
                             ),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
+                                Text(
                                   'Subtotal Produk',
                                   style: TextStyle(
                                     color: Color(0xFF757B7B),
@@ -639,7 +675,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'Rp 80.000.000,-',
                                   style: TextStyle(
                                     color: Color(0xFF757B7B),
@@ -650,10 +686,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ],
                             ),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
+                                Text(
                                   'Biaya Layanan',
                                   style: TextStyle(
                                     color: Color(0xFF757B7B),
@@ -662,7 +698,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'Rp 12.000,-',
                                   style: TextStyle(
                                     color: Color(0xFF757B7B),
@@ -673,10 +709,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ],
                             ),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
+                                Text(
                                   'Total Pembayaran',
                                   style: TextStyle(
                                     color: Color(0xFF757B7B),
@@ -685,7 +721,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'Rp 80.012.000,-',
                                   style: TextStyle(
                                     color: Color(0xFF91E0DD),
@@ -745,9 +781,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         ),
                         SizedBox(width: mediaQueryWidth * 0.02),
-                        Text(
+                        const Text(
                           'Semua',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Color(0xFF424242),
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -767,9 +803,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           color: const Color(0xFF6BCCC9),
                         ),
                       ),
-                      child: SingleChildScrollView(
+                      child: const SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: const Text(
+                        child: Text(
                           'Rp 80.000.000,-',
                           style: TextStyle(
                             color: Color(0xFF6BCCC9),
