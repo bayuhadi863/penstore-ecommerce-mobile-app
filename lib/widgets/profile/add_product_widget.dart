@@ -35,142 +35,171 @@ class _AddProductFormState extends State<AddProductForm> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: ElevatedButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: ((context) => AlertDialog(
-                  content: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      Positioned(
-                        right: -40,
-                        top: -40,
-                        child: InkResponse(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const CircleAvatar(
-                            child: Icon(Icons.close),
-                          ),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        child: Form(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                child: const Row(
-                                  children: [
-                                    Icon(Icons.list_alt_outlined),
-                                    Text(
-                                      "Tambah Produk",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w800),
-                                    )
-                                  ],
-                                ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+              child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.notes_outlined),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Penjualan Saya",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              )
+            ],
+          )),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.add),
+            label: const Text("Tambah Data"),
+            style: ButtonStyle(shape:
+                MaterialStateProperty.resolveWith<OutlinedBorder>(
+                    (Set<MaterialState> states) {
+              return RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8));
+            })),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: ((context) => AlertDialog(
+                      content: Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          Positioned(
+                            right: -40,
+                            top: -40,
+                            child: InkResponse(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const CircleAvatar(
+                                child: Icon(Icons.close),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  _pickImageFromGallery();
-                                  print('Pick Image');
-                                },
-                                child: DottedBorder(
-                                  padding: EdgeInsets.all(20),
-                                  child: const Column(
-                                    children: [
-                                      Text(
-                                        "Gambar Produk",
-                                        style: TextStyle(
-                                            // fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text("Seret atau pilih gambar"),
-                                      Icon(Icons.add_a_photo_outlined)
-                                    ],
+                            ),
+                          ),
+                          SingleChildScrollView(
+                            child: Form(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(8),
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.list_alt_outlined),
+                                        Text(
+                                          "Tambah Produk",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w800),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.inbox_outlined),
-                                      hintText: 'Nama Produk'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: DropdownButtonFormField(
-                                  onChanged: (v) {},
-                                  value: _value,
-                                  items: const [
-                                    DropdownMenuItem(
-                                      child: Text("Pilih Kategori"),
-                                      value: "-1",
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text("Alat Tulis"),
-                                      value: "1",
-                                    ),
-                                    DropdownMenuItem(
-                                        child: Text("Lainnya"), value: "2"),
-                                  ],
-                                ),
-                                // TextFormField(
-                                //   decoration: const InputDecoration(
-                                //       icon: Icon(Icons.list),
-                                //       hintText: 'Kategori Produk'),
-                                // ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.attach_money_outlined),
-                                      hintText: 'Harga Produk'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.add_chart),
-                                      hintText: 'Stok'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                      icon: Icon(Icons.article_outlined),
-                                      hintText: 'Deskripsi'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                      }
+                                  GestureDetector(
+                                    onTap: () {
+                                      _pickImageFromGallery();
+                                      print('Pick Image');
                                     },
-                                    child: const Text('Tambah Produk')),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-          );
-        },
-        child: const Text('Add Product'),
+                                    child: DottedBorder(
+                                      padding: EdgeInsets.all(20),
+                                      child: const Column(
+                                        children: [
+                                          Text(
+                                            "Gambar Produk",
+                                            style: TextStyle(
+                                                // fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text("Seret atau pilih gambar"),
+                                          Icon(Icons.add_a_photo_outlined)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: TextFormField(
+                                      decoration: const InputDecoration(
+                                          icon: Icon(Icons.inbox_outlined),
+                                          hintText: 'Nama Produk'),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: DropdownButtonFormField(
+                                      onChanged: (v) {},
+                                      value: _value,
+                                      items: const [
+                                        DropdownMenuItem(
+                                          child: Text("Pilih Kategori"),
+                                          value: "-1",
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text("Alat Tulis"),
+                                          value: "1",
+                                        ),
+                                        DropdownMenuItem(
+                                            child: Text("Lainnya"), value: "2"),
+                                      ],
+                                    ),
+                                    // TextFormField(
+                                    //   decoration: const InputDecoration(
+                                    //       icon: Icon(Icons.list),
+                                    //       hintText: 'Kategori Produk'),
+                                    // ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: TextFormField(
+                                      decoration: const InputDecoration(
+                                          icon:
+                                              Icon(Icons.attach_money_outlined),
+                                          hintText: 'Harga Produk'),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: TextFormField(
+                                      decoration: const InputDecoration(
+                                          icon: Icon(Icons.add_chart),
+                                          hintText: 'Stok'),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: TextFormField(
+                                      decoration: const InputDecoration(
+                                          icon: Icon(Icons.article_outlined),
+                                          hintText: 'Deskripsi'),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            _formKey.currentState!.save();
+                                          }
+                                        },
+                                        child: const Text('Tambah Produk')),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+              );
+            },
+            //child: const Text('Add Product'),
+          ),
+        ],
       ),
     );
   }
