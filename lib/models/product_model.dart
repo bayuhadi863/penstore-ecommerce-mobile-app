@@ -8,6 +8,8 @@ class ProductModel {
   int price;
   String categoryId;
   DateTime? createdAt;
+  String? userId;
+  String? imageUrl;
   
   ProductModel({
     required this.id,
@@ -16,11 +18,13 @@ class ProductModel {
     required this.stock,
     required this.price,
     required this.categoryId,
+    required this.userId,
+    required this.imageUrl,
     this.createdAt
   });
 
   static ProductModel empty() => 
-    ProductModel(id: '', name: '', desc: '', stock: 0, price: 0, categoryId: '', createdAt: null);
+    ProductModel(id: '', name: '', desc: '', stock: 0, price: 0, categoryId: '', userId: '', imageUrl: '',createdAt: null);
   
 
   Map<String, dynamic> toJson(createdAt) {
@@ -30,6 +34,8 @@ class ProductModel {
       'price': price,
       'stock': stock,
       'categoryId': categoryId,
+      'userId': userId,
+      'imageUrl': imageUrl,
       'createdAt': createdAt
     };
   }
@@ -43,6 +49,8 @@ class ProductModel {
       stock: data['stock'],
       price: data['price'],
       categoryId: data['categoryId'],
+      userId: data['userId'],
+      imageUrl: data['imageUrl'],
       createdAt: data['createdAt']?.toDate(),
     );
   }

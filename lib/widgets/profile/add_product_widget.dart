@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,13 +21,12 @@ class _AddProductFormState extends State<AddProductForm> {
   String? choosedCategory;
   bool isLoading = false;
 
+  final addProductController = Get.put(AddProductController());
+
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
   final FocusNode _stockFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
-
-  File? selectedImage;
-  Uint8List? image;
 
   Future<void> _getCategories() async {
     setState(() {
@@ -42,6 +42,8 @@ class _AddProductFormState extends State<AddProductForm> {
     });
   }
 
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void dispose() {
     _nameFocusNode.dispose();
@@ -54,24 +56,33 @@ class _AddProductFormState extends State<AddProductForm> {
   @override
   void initState() {
     super.initState();
+    // jika belum login
+    if (user == null) {
+      Get.offAllNamed("/login");
+    }
+    print("user sekarang : $user");
     _getCategories();
   }
 
+  // UPLOAD GAMBAR  ==============================
   Future _pickImageFromGallery() async {
     final returnImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
+    if (returnImage == null) {
+      print("gagal memilih gambar");
+      return;
+    }
     setState(() {
-      selectedImage = File(returnImage.path);
-      image = File(returnImage.path).readAsBytesSync();
-      print('Image Path : ${selectedImage!.path}');
+      addProductController.selectedImage = File(returnImage.path);
+      addProductController.image = File(returnImage.path).readAsBytesSync();
+      print('Image Path : ${addProductController.selectedImage!.path}');
     });
+
+    await addProductController.getImageUrl();
   }
 
   @override
   Widget build(BuildContext context) {
-    final addProductController = Get.put(AddProductController());
-
     return Padding(
       padding: const EdgeInsets.all(20),
       child: ElevatedButton(
@@ -124,7 +135,7 @@ class _AddProductFormState extends State<AddProductForm> {
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: () {
+                                      onTap: () async {
                                         _pickImageFromGallery();
                                         print('Pick Image');
                                       },

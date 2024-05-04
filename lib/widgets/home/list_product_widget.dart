@@ -77,7 +77,6 @@ class _ListProductWidgetState extends State<ListProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Column(children: [
       isLoading
           ? const Center(
@@ -91,7 +90,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
           : products.isEmpty
               ? const Text("data tidak ada")
               : ListView.builder(
-                  itemCount: products.length, 
+                  itemCount: products.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -137,12 +136,22 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                                           clipBehavior: Clip.hardEdge,
                                           borderRadius:
                                               BorderRadius.circular(12),
-                                          child: Image.asset(
-                                            'assets/icons/cart_outline.png',
-                                            height: 16,
-                                            width: 16,
-                                            filterQuality: FilterQuality.high,
-                                          ),
+                                          child: (product.imageUrl != null &&
+                                                  product.imageUrl!.isNotEmpty)
+                                              ? Image.network(
+                                                  product.imageUrl!,
+                                                  height: 16,
+                                                  width: 16,
+                                                  filterQuality:
+                                                      FilterQuality.high,
+                                                )
+                                              : Image.asset(
+                                                  'assets/icons/cart_outline.png',
+                                                  height: 16,
+                                                  width: 16,
+                                                  filterQuality:
+                                                      FilterQuality.high,
+                                                ),
                                         ),
                                       ),
                                       Positioned(
