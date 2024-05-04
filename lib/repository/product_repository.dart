@@ -13,8 +13,8 @@ class ProductRepository extends GetxController {
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   // tambah produk
-  Future<void> addProduct(
-      String name, String desc, int stock, int price, String imgUrl ,String categoryId) async {
+  Future<void> addProduct(String name, String desc, int stock, int price,
+      String imgUrl, String categoryId) async {
     try {
       await db.collection('products').add({
         "name": name,
@@ -111,6 +111,28 @@ class ProductRepository extends GetxController {
             .toList();
       } else {
         return [];
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // // get product by id
+  Future<ProductModel> getProductById(String productId) async {
+    try {
+      final DocumentSnapshot documentSnapshot =
+          await db.collection('products').doc(productId).get();
+
+      if (documentSnapshot.exists) {
+        return ProductModel.fromSnapshot(documentSnapshot);
+      } else {
+        throw ProductModel.empty();
       }
     } on FirebaseException catch (e) {
       throw e.code;

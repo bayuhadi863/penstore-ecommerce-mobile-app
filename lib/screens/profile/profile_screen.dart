@@ -1,7 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
@@ -16,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final userController = Get.put(UserController());
   //final _formKey = GlobalKey<FormState>();
   final FocusNode _searchFocusNode = FocusNode();
 

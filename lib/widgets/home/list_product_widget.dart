@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
-import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 
 class ListProductWidget extends StatefulWidget {
@@ -104,7 +103,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Get.toNamed('/detail-product');
+                              Get.toNamed('/detail-product', arguments: {'productId': product.id});
                             },
                             child: Container(
                               height: 100,
@@ -143,7 +142,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                                                   height: 16,
                                                   width: 16,
                                                   filterQuality:
-                                                      FilterQuality.high,
+                                                      FilterQuality.low,
                                                 )
                                               : Image.asset(
                                                   'assets/icons/cart_outline.png',

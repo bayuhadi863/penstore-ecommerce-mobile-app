@@ -10,15 +10,17 @@ class CategoryRepository extends GetxController {
 
   // get all category
   Future<List<CategoryModel>> getCategories() async {
-  try {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot = 
-    await db.collection('categories').get();
-    if (querySnapshot.docs.isNotEmpty) {
-      return querySnapshot.docs.map((doc) => CategoryModel.fromSnapshot(doc)).toList();
-    } else {
-      return [];
-    }
-  } on FirebaseException catch (e) {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await db.collection('categories').get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs
+            .map((doc) => CategoryModel.fromSnapshot(doc))
+            .toList();
+      } else {
+        return [];
+      }
+    } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {
       throw 'Format exeption error';
@@ -27,6 +29,27 @@ class CategoryRepository extends GetxController {
     } catch (e) {
       throw 'Something went wrong. Please try again';
     }
-}
+  }
 
+  // ambil category berdasarkan id
+  Future<CategoryModel> getCategoryById(String id) async {
+    try {
+      final DocumentSnapshot documentSnapshot =
+          await db.collection('categories').doc(id).get();
+
+      if (documentSnapshot.exists) {
+        return CategoryModel.fromSnapshot(documentSnapshot);
+      } else {
+        throw CategoryModel.empty();
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
 }
