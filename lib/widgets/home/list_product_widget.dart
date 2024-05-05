@@ -103,7 +103,8 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Get.toNamed('/detail-product', arguments: {'productId': product.id});
+                              Get.toNamed('/detail-product',
+                                  arguments: {'productId': product.id});
                             },
                             child: Container(
                               height: 100,
@@ -142,7 +143,8 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                                                   height: 16,
                                                   width: 16,
                                                   filterQuality:
-                                                      FilterQuality.low,
+                                                      FilterQuality.high,
+                                                  fit: BoxFit.cover,
                                                 )
                                               : Image.asset(
                                                   'assets/icons/cart_outline.png',

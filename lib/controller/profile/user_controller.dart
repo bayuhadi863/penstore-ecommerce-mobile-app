@@ -1,3 +1,5 @@
+// ignore_for_file: use_rethrow_when_possible
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:penstore/models/user_model.dart';

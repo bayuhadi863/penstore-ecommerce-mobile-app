@@ -35,34 +35,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(
             height: 100,
           ),
-          Container(
-            child: const Column(
-              children: [
-                Text(
-                  "Senjani Thania",
-                  style: TextStyle(fontSize: 17),
+          Column(
+            children: [
+              Obx(
+                () => Text(
+                  userController.user.value.name,
+                  style: const TextStyle(fontSize: 17),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("No Telepon"),
-                      Text("no telepon"),
-                    ],
-                  ),
+              ),
+              const Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("No Telepon"),
+                    Text("no telepon"),
+                  ],
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text("Email"), Text("Email")],
-                  ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Email"),
+                    Text(userController.user.value.email)
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const Divider(
             height: 20,

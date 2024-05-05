@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/cart/add_cart_controller.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 import 'package:penstore/repository/product_repository.dart';
@@ -87,6 +89,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+
+    final UserController userController = Get.put(UserController());
+    final AddCartController addCartController = Get.put(AddCartController());
 
     return isLoading
         ? const Center(
@@ -490,7 +495,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                         ),
                                       ),
                                       InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          addCartController.createCart(
+                                              userController.user.value,
+                                              product!,
+                                              quantity);
+                                        },
                                         child: Container(
                                           width: mediaQueryWidth * 0.328,
                                           height: mediaQueryHeight * 0.048,

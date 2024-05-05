@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:penstore/controller/cart/get_carts_controller.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
+import 'package:penstore/models/cart_model.dart';
+import 'package:penstore/repository/cart_repository.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class CartScreen extends StatefulWidget {
@@ -10,10 +16,19 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final getCartsController = Get.put(GetCartsController());
   int quantity = 0;
   bool isAddButtonPressed = false;
   bool isRemoveButtonPressed = false;
   bool isCheckedAll = false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setState(() {
+  //     quantity = getCartsController.carts.length;
+  //   });
+  // }
 
   void _onCheckedAllChanged(bool? value) {
     setState(() {
@@ -143,7 +158,6 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
       ),
-      
       body: Stack(
         children: [
           SizedBox(
@@ -153,178 +167,238 @@ class _CartScreenState extends State<CartScreen> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  Column(
-                    children: List.generate(
-                      10,
-                      (index) {
-                        return Container(
-                          width: double.infinity,
-                          height: 100,
-                          margin: const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 10, top: 10),
-                          child: Container(
-                            height: 100,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      const Color(0xFF91E0DD).withOpacity(0.3),
-                                  blurRadius: 16,
-                                  offset: const Offset(1, 1),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF91E0DD)
-                                        .withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(6),
+                  StreamBuilder<List<CartModel>>(
+                      stream: CartRepository.instance.streamCarts(FirebaseAuth
+                          .instance
+                          .currentUser!
+                          .uid), // Menggunakan streamCarts dari controller
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // Tampilkan pesan error jika terjadi kesalahan
+                        } else {
+                          // Render data carts jika tidak ada error dan sudah ada data
+                          final carts = snapshot.data!;
+                          return Column(
+                            children: List.generate(
+                              carts.length,
+                              (index) {
+                                return Container(
+                                  width: double.infinity,
+                                  height: 100,
+                                  margin: const EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 10, top: 10),
+                                  child: Container(
+                                    height: 100,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFF91E0DD)
+                                              .withOpacity(0.3),
+                                          blurRadius: 16,
+                                          offset: const Offset(1, 1),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 24,
+                                          height: 24,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF91E0DD)
+                                                .withOpacity(0.3),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: Checkbox(
+                                            value: _isCheckedList[index],
+                                            onChanged: (value) {
+                                              _onChanged(index, value!);
+                                            },
+                                            activeColor: Colors.transparent,
+                                            checkColor: const Color(0xFF6BCCC9),
+                                            side: BorderSide.none,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width: mediaQueryWidth * 0.040),
+                                        Stack(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Get.toNamed('/detail-product');
+                                              },
+                                              child: Container(
+                                                width: 80,
+                                                height: 90,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: ClipRRect(
+                                                  clipBehavior: Clip.hardEdge,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: (carts[index]
+                                                                  .product
+                                                                  .imageUrl !=
+                                                              null &&
+                                                          carts[index]
+                                                              .product
+                                                              .imageUrl!
+                                                              .isNotEmpty)
+                                                      ? Image.network(
+                                                          carts[index]
+                                                              .product
+                                                              .imageUrl!,
+                                                          height: 16,
+                                                          width: 16,
+                                                          filterQuality:
+                                                              FilterQuality
+                                                                  .high,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          'assets/icons/cart_outline.png',
+                                                          height: 16,
+                                                          width: 16,
+                                                          filterQuality:
+                                                              FilterQuality
+                                                                  .high,
+                                                        ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              carts[index].product.name,
+                                              style: const TextStyle(
+                                                color: Color(0xFF424242),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            Text(
+                                              '10000-',
+                                              style: const TextStyle(
+                                                color: Color(0xFF91E0DD),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            Container(
+                                              width: mediaQueryWidth * 0.259,
+                                              height: mediaQueryHeight * 0.038,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                border: Border.all(
+                                                  color:
+                                                      const Color(0xFFB3B3B3),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      // print(carts[index].id!);
+                                                      // setState(() {
+                                                      //   isAddButtonPressed =
+                                                      //       true;
+                                                      // });
+                                                      await CartRepository
+                                                          .instance
+                                                          .addCartQuantity(
+                                                              carts[index].id!,
+                                                              1);
+                                                      // setState(() {
+                                                      //   isAddButtonPressed =
+                                                      //       false;
+                                                      // });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.add,
+                                                      size: 18,
+                                                      color: isAddButtonPressed
+                                                          ? const Color(
+                                                              0xFF6BCCC9)
+                                                          : const Color(
+                                                              0xFFB3B3B3),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    carts[index]
+                                                        .quantity
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontFamily: 'Poppins',
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      // print(carts[index].id!);
+                                                      // setState(() {
+                                                      //   isRemoveButtonPressed =
+                                                      //       true;
+                                                      // });
+                                                      await CartRepository
+                                                          .instance
+                                                          .subtractCartQuantity(
+                                                              carts[index].id!,
+                                                              1);
+                                                      // setState(() {
+                                                      //   isRemoveButtonPressed =
+                                                      //       false;
+                                                      // });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.remove,
+                                                      size: 18,
+                                                      color:
+                                                          isRemoveButtonPressed
+                                                              ? const Color(
+                                                                  0xFF6BCCC9)
+                                                              : const Color(
+                                                                  0xFFB3B3B3),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Checkbox(
-                                    value: _isCheckedList[index],
-                                    onChanged: (value) {
-                                      _onChanged(index, value!);
-                                    },
-                                    activeColor: Colors.transparent,
-                                    checkColor: const Color(0xFF6BCCC9),
-                                    side: BorderSide.none,
-                                  ),
-                                ),
-                                SizedBox(width: mediaQueryWidth * 0.040),
-                                Stack(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Get.toNamed('/detail-product');
-                                      },
-                                      child: Container(
-                                        width: 80,
-                                        height: 90,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: ClipRRect(
-                                          clipBehavior: Clip.hardEdge,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: Image(
-                                            filterQuality: FilterQuality.high,
-                                            image: AssetImage(
-                                              imgList[0],
-                                            ),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Pensil Staedler 2B',
-                                      style: TextStyle(
-                                        color: Color(0xFF424242),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                    const Text(
-                                      'Rp 40.000 -',
-                                      style: TextStyle(
-                                        color: Color(0xFF91E0DD),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                    Container(
-                                      width: mediaQueryWidth * 0.259,
-                                      height: mediaQueryHeight * 0.038,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        border: Border.all(
-                                          color: const Color(0xFFB3B3B3),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () => addQuantity(index),
-                                            onTapDown: (_) {
-                                              setState(() {
-                                                isAddButtonPressed = true;
-                                              });
-                                            },
-                                            onTapUp: (_) {
-                                              setState(() {
-                                                isAddButtonPressed = false;
-                                              });
-                                            },
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 18,
-                                              color: isAddButtonPressed
-                                                  ? const Color(0xFF6BCCC9)
-                                                  : const Color(0xFFB3B3B3),
-                                            ),
-                                          ),
-                                          Text(
-                                            quantityList[index].toString(),
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () => removeQuantity(index),
-                                            onTapDown: (_) {
-                                              setState(() {
-                                                isRemoveButtonPressed = true;
-                                              });
-                                            },
-                                            onTapUp: (_) {
-                                              setState(() {
-                                                isRemoveButtonPressed = false;
-                                              });
-                                            },
-                                            child: Icon(
-                                              Icons.remove,
-                                              size: 18,
-                                              color: isRemoveButtonPressed
-                                                  ? const Color(0xFF6BCCC9)
-                                                  : const Color(0xFFB3B3B3),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                          );
+                        }
+                      }),
                   const SizedBox(height: 100),
                 ],
               ),
@@ -391,7 +465,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal ,
+                      scrollDirection: Axis.horizontal,
                       child: const Text(
                         'Rp 80.000.000,-',
                         style: TextStyle(
@@ -432,7 +506,6 @@ class _CartScreenState extends State<CartScreen> {
           )
         ],
       ),
-    
     );
   }
 }

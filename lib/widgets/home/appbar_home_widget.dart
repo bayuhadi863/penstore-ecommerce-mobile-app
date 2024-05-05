@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
+import 'package:penstore/screens/cart/cart_screen.dart';
 
 class AppBarHome extends StatelessWidget {
   const AppBarHome({super.key});
@@ -99,7 +100,10 @@ class AppBarHome extends StatelessWidget {
                 ],
               ),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  // navigate to cart screen
+                  Get.to(() => const CartScreen());
+                },
                 icon: Image.asset(
                   'assets/icons/cart_outline.png',
                   height: 24,
@@ -112,6 +116,5 @@ class AppBarHome extends StatelessWidget {
         ),
       ),
     );
-  
   }
 }
