@@ -14,33 +14,40 @@ class _ProfileImageState extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     final top = coverHeight / 2 - profileHeight / 2;
-    return Container(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          buildCoverImage(),
-          Positioned(top: top, child: buildProfileImage()),
-        ],
-      ),
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        buildCoverImage(),
+        Positioned(top: top, child: buildProfileImage()),
+      ],
     );
   }
 
   buildCoverImage() => Container(
-        color: Colors.grey,
-        child: Image(
-          image: const AssetImage('assets/images/cover.jpg'),
-          width: double.infinity,
-          height: coverHeight / 2,
-          fit: BoxFit.cover,
-        ),
+        color: const Color(0xFF91E0DD),
+        height: coverHeight / 2,
+        width: double.infinity,
+        // child: Image(
+        //   image: const AssetImage('assets/images/cover.jpg'),
+        //   width: double.infinity,
+        //   height: coverHeight / 2,
+        //   fit: BoxFit.cover,
+        // ),
       );
 
-  buildProfileImage() => CircleAvatar(
-        radius: profileHeight / 2,
-        backgroundColor: Colors.grey.shade800,
-        backgroundImage: const AssetImage(
-          'assets/images/profile.jpeg',
+  buildProfileImage() => Container(
+        padding: const EdgeInsets.all(4),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        child: CircleAvatar(
+          radius: profileHeight / 2,
+          // backgroundColor: Colors.grey.shade800,
+          backgroundImage: const AssetImage(
+            'assets/images/profile.jpeg',
+          ),
         ),
       );
 }

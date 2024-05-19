@@ -14,7 +14,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

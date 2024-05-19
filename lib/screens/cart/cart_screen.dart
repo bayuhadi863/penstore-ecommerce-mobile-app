@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:penstore/controller/cart/get_carts_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/cart_model.dart';
 import 'package:penstore/repository/cart_repository.dart';
-import 'package:penstore/widgets/home/banner_slider_widget.dart';
+import 'package:penstore/widgets/cart/appBar_cart_widget.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -86,78 +85,10 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.transparent, // Membuat AppBar transparan
         elevation: 0,
         scrolledUnderElevation: 0, // Menghilangkan shadow pada AppBar
-        title: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //icon menu
-                Container(
-                  width: 48,
-                  height: 48,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(50),
-                    shape: BoxShape.rectangle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF91E0DD).withOpacity(0.3),
-                        blurRadius: 16,
-                        offset: const Offset(1, 1),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      size: 20,
-                      color: Color(0xFF6BCCC9),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: mediaQueryWidth * 0.60,
-                  height: mediaQueryHeight * 0.055,
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Keranjang Saya',
-                            style: TextStyle(
-                              color: Color(0xFF424242),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' (2)',
-                            style: TextStyle(
-                              color: Color(0xFF6BCCC9),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        title: const AppBarCartWidget(),
       ),
+      
+      
       body: Stack(
         children: [
           SizedBox(
@@ -296,7 +227,8 @@ class _CartScreenState extends State<CartScreen> {
                                               ),
                                             ),
                                             Text(
-                                              '10000-',
+                                              'Rp. ${carts[index].product.price
+                                                  .toString()},-',
                                               style: const TextStyle(
                                                 color: Color(0xFF91E0DD),
                                                 fontSize: 12,
@@ -404,6 +336,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
           ),
+          
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -504,6 +437,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
           )
+        
         ],
       ),
     );

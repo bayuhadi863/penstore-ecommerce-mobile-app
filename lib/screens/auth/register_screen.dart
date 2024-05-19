@@ -192,9 +192,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 onPressed: () {
                                   registerController.register(context);
-                                  Get.to(
-                                    VerificationScreen(email: registerController.email.text),
-                                  );
+                                  // Get.to(
+                                  //   VerificationScreen(email: registerController.email.text),
+                                  // );
                                 },
 
                                 child: const Text(

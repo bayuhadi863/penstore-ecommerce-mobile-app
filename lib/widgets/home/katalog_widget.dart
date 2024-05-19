@@ -25,7 +25,8 @@ class _KatalogWidgetState extends State<KatalogWidget> {
     final List<CategoryModel> _categories =
         await categoryRepository.getCategories();
     setState(() {
-      categories =  [CategoryModel(id: 'semua', category_name: 'Semua')] + _categories;
+      categories =
+          [CategoryModel(id: 'semua', category_name: 'Semua')] + _categories;
       isLoading = false;
     });
   }
@@ -38,83 +39,94 @@ class _KatalogWidgetState extends State<KatalogWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 32,
-        child: isLoading
-            ? const Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: CircularProgressIndicator(
-                    color: Colors.grey,
+    return SizedBox(
+      width: double.infinity,
+      height: 32,
+      child: isLoading
+          ? const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: CircularProgressIndicator(
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          : categories.isEmpty
+              ? const Text("data tidak ada")
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListView.builder(
+                        // This next line does the trick.
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          CategoryModel category = categories[index];
+                          final bool isActive = _selectedCategory == index;
+
+                          return GestureDetector(
+                            onTap: () {
+                              print("tekan category");
+                              setState(() {
+                                _selectedCategory = index;
+                                widget.onCategorySelected(
+                                    category.id == 'semua' ? '' : category.id);
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 30),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: isActive
+                                  ? BoxDecoration(
+                                      color: const Color(0xFF6BCCC9),
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: const Color(0xFF6BCCC9),
+                                        width: 1,
+                                      ),
+                                    )
+                                  : BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: const Color(0xFFB3B3B3),
+                                        width: 1,
+                                      ),
+                                    ),
+                              child: Center(
+                                child: Text(
+                                  category.category_name,
+                                  style: isActive
+                                      ? const TextStyle(
+                                          color: Color(0xFFFFFFFF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Poppins',
+                                        )
+                                      : const TextStyle(
+                                          color: Color(0xFF757B7B),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Poppins',
+                                        ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      )
+                    ],
                   ),
                 ),
-              )
-            : categories.isEmpty
-                ? const Text("data tidak ada")
-                : ListView.builder(
-                    // This next line does the trick.
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      CategoryModel category = categories[index];
-                      final bool isActive = _selectedCategory == index;
-
-                      return GestureDetector(
-                        onTap: () {
-                          print("tekan category");
-                          setState(() {
-                            _selectedCategory = index;
-                            widget.onCategorySelected(category.id == 'semua' ? '' : category.id);
-                          });
-                          
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 30),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: isActive
-                              ? BoxDecoration(
-                                  color: const Color(0xFF6BCCC9),
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    color: const Color(0xFF6BCCC9),
-                                    width: 1,
-                                  ),
-                                )
-                              : BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    color: const Color(0xFFB3B3B3),
-                                    width: 1,
-                                  ),
-                                ),
-                          child: Center(
-                            child: Text(
-                              category.category_name,
-                              style: isActive
-                                  ? const TextStyle(
-                                      color: Color(0xFFFFFFFF),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Poppins',
-                                    )
-                                  : const TextStyle(
-                                      color: Color(0xFF757B7B),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Poppins',
-                                    ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 import 'package:penstore/repository/product_repository.dart';
+import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class DetailProductScreen extends StatefulWidget {
   const DetailProductScreen({super.key});
@@ -92,6 +93,110 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
 
     final UserController userController = Get.put(UserController());
     final AddCartController addCartController = Get.put(AddCartController());
+
+    List<Widget> generateProductContainers() {
+      return List.generate(10, (index) {
+        return Container(
+          width: mediaQueryWidth * 0.9,
+          height: 69,
+          padding: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 16,
+                color: const Color(0xFF6BCCC9).withOpacity(0.3),
+                offset: const Offset(1, 1),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 49,
+                    height: 49,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ClipRRect(
+                      clipBehavior: Clip.hardEdge,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image(
+                        filterQuality: FilterQuality.high,
+                        image: AssetImage(imgList[0]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Column(
+                    children: [
+                      Text(
+                        'Bintang Ardana',
+                        style: TextStyle(
+                          fontFamily: 'poppins',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF424242),
+                        ),
+                      ),
+                      Text(
+                        'Barang bagus asli',
+                        style: TextStyle(
+                          fontFamily: 'poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF424242),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      color: Color(0xFFFFC701),
+                      size: 16,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Color(0xFFFFC701),
+                      size: 16,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Color(0xFFFFC701),
+                      size: 16,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Color(0xFFFFC701),
+                      size: 16,
+                    ),
+                    Icon(
+                      Icons.star_border_outlined,
+                      color: Color(0xFFFFC701),
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+    }
 
     return isLoading
         ? const Center(
@@ -268,14 +373,13 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                         ),
                                       ),
                                       SizedBox(height: mediaQueryHeight * 0.02),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                            child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
@@ -337,18 +441,21 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
-                                            SizedBox(
-                                              width: mediaQueryWidth,
-                                              height: mediaQueryHeight * 0.46,
-                                              child: SingleChildScrollView(
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Container(
+                                            width: mediaQueryWidth,
+                                            height: mediaQueryHeight * 0.46,
+                                            child: SingleChildScrollView(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                                    child: Text(
                                                       productCategory,
                                                       style: const TextStyle(
                                                         fontSize: 12,
@@ -359,8 +466,11 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                             Color(0xFF757B7B),
                                                       ),
                                                     ),
-                                                    const SizedBox(height: 8),
-                                                    Text(
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                                    child: Text(
                                                       product?.desc ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 11,
@@ -371,13 +481,15 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                             Color(0xFF757B7B),
                                                       ),
                                                     ),
-                                                    const SizedBox(height: 100),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  ...generateProductContainers(),
+                                                  const SizedBox(height: 100),
+                                                ],
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

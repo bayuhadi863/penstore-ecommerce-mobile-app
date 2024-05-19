@@ -31,7 +31,7 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: Container(
-          height: 80,
+           height: 80,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(

@@ -44,6 +44,7 @@ class AddCartController extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      Get.toNamed('/cart');
 
       return;
     } catch (e) {

@@ -1,25 +1,38 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
-class BuyListProfile extends StatefulWidget {
-  const BuyListProfile({super.key});
+class SaleListProfile extends StatefulWidget {
+  const SaleListProfile({super.key});
 
   @override
-  State<BuyListProfile> createState() => _BuyListProfileState();
+  State<SaleListProfile> createState() => _SaleListProfileState();
 }
 
-class _BuyListProfileState extends State<BuyListProfile> {
+class _SaleListProfileState extends State<SaleListProfile> {
+  bool isWaiting = true;
   bool isPaid = false;
   bool isReceived = false;
   bool isRating = false;
   bool isDone = false;
 
+  void changeIsWaiting() {
+    if (isWaiting == false) {
+      setState(() {
+        isPaid = !isDone;
+        isWaiting = !isWaiting;
+      });
+    } else {
+      setState(() {
+        isWaiting = !isWaiting;
+      });
+    }
+  }
+
   void changeIsPaid() {
     if (isPaid == false) {
       setState(() {
-        isRating = !isRating;
+        isWaiting = !isWaiting;
         isPaid = !isPaid;
       });
     } else {
@@ -220,27 +233,19 @@ class _BuyListProfileState extends State<BuyListProfile> {
                   Container(
                     height: 1,
                     width: mediaQueryWidth * 0.9,
-                    color: const Color(0xFF000000),
+                    color: const Color(0xFF757B7B),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: mediaQueryWidth * 0.46,
+                        width: mediaQueryWidth * 0.3,
                         child: RichText(
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: isPaid
-                                    ? 'Produk masih dalam penanganan'
-                                    : isReceived
-                                        ? 'Beri Nilai untuk produk ini'
-                                        : isRating
-                                            ? 'Terima kasih atas penilaiannya'
-                                            : isDone
-                                                ? 'Segera lakukan pembayaran agar pesanan diproses'
-                                                : 'Segera lakukan pembayaran agar pesanan diproses',
+                                text: 'Status pembelian',
                                 style: TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
@@ -253,33 +258,47 @@ class _BuyListProfileState extends State<BuyListProfile> {
                         ),
                       ),
                       SizedBox(
-                        width: mediaQueryWidth * 0.38,
+                        width: mediaQueryWidth * 0.5,
                         height: 40,
                         child: TextButton(
                           onPressed: () {
-                            isPaid
-                                ? changeIsReceived()
-                                : isReceived
-                                    ? changeIsRating()
-                                    : isRating
-                                        ? changeIsDone()
-                                        : changeIsPaid();
+                            isWaiting
+                                ? changeIsPaid()
+                                : isPaid
+                                    ? changeIsReceived()
+                                    : isReceived
+                                        ? changeIsRating()
+                                        : isRating
+                                            ? changeIsDone()
+                                            : changeIsWaiting();
                           },
                           child: RichText(
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: isPaid
-                                      ? 'Diterima'
-                                      : isReceived
-                                          ? 'Nilai'
-                                          : isRating
-                                              ? 'Beli Lagi'
-                                              : isDone
-                                                  ? 'Bayar Sekarang'
-                                                  : 'Bayar Sekarang',
+                                  text: isWaiting
+                                      ? 'Menunggu Pembayaran'
+                                      : isPaid
+                                          ? 'Konfirmasi Pembayaran'
+                                          : isReceived
+                                              ? 'Lunas'
+                                              : isRating
+                                                  ? 'Sudah Dinilai'
+                                                  : isDone
+                                                      ? 'Selesai'
+                                                      : 'Menunggu Pembayaran',
                                   style: TextStyle(
-                                    color: Color(0xFFFFFFFF),
+                                    color: isWaiting
+                                        ? Color(0xFF69A9F4)
+                                        : isPaid
+                                            ? Color(0xFF6BCCC9)
+                                            : isReceived
+                                                ? Color(0xFF69F477)
+                                                : isRating
+                                                    ? Color(0xFFF4CD69)
+                                                    : isDone
+                                                        ? Color(0xFFF46B69)
+                                                        : Color(0xFF69A9F4),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins',
@@ -289,15 +308,21 @@ class _BuyListProfileState extends State<BuyListProfile> {
                             ),
                           ),
                           style: TextButton.styleFrom(
-                            backgroundColor: isPaid
-                                ? Color(0xFFF46B69)
-                                : isReceived
-                                    ? Color(0xFFF4CD69)
-                                    : isRating
-                                        ? Color(0xFF6BCCC9)
-                                        : Color(0xFF69A9F4),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: isWaiting
+                                    ? Color(0xFF69A9F4)
+                                    : isPaid
+                                        ? Color(0xFF6BCCC9)
+                                        : isReceived
+                                            ? Color(0xFF69F477)
+                                            : isRating
+                                                ? Color(0xFFF4CD69)
+                                                : isDone
+                                                    ? Color(0xFFF46B69)
+                                                    : Color(0xFF69A9F4),
+                              ),
                             ),
                           ),
                         ),
@@ -311,6 +336,5 @@ class _BuyListProfileState extends State<BuyListProfile> {
         ),
       ),
     );
-  
   }
 }

@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     //widget banner slider
@@ -81,9 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     //widget list product
                     ListProductWidget(
                       selectedCategory: categoryId,
-                    ),
-                    const SizedBox(
-                      height: 100,
                     ),
                   ],
                 ),

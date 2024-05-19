@@ -36,10 +36,20 @@ class AppBarHome extends StatelessWidget {
                 ],
               ),
               child: IconButton(
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(
+                    Color(0xFF91E0DD),
+                  ),
+                ),
                 onPressed: () {
                   // Navigator.pop(context);
                 },
-                icon: const Icon(Icons.menu),
+                icon: Image.asset(
+                  'assets/images/logo_pens.png',
+                  height: 27,
+                  width: 32,
+                  filterQuality: FilterQuality.high,
+                ),
               ),
             ),
             Container(
