@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:penstore/widgets/chat/chat_body.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -14,9 +15,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: const Text('Chat'),
       ),
-      body: const Center(
-        child: Text('Chat Screen'),
-      ),
+      body: const ChatBody()
     );
   }
 }
