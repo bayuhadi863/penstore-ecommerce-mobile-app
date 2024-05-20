@@ -2,10 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/get_carts_controller.dart';
+import 'package:penstore/controller/cart/select_cart_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/cart_model.dart';
 import 'package:penstore/repository/cart_repository.dart';
+import 'package:penstore/screens/cart/order_screen.dart';
+import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/cart/appBar_cart_widget.dart';
+import 'package:skeletons/skeletons.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -20,6 +24,7 @@ class _CartScreenState extends State<CartScreen> {
   bool isAddButtonPressed = false;
   bool isRemoveButtonPressed = false;
   bool isCheckedAll = false;
+  int total = 1000000;
 
   // @override
   // void initState() {
@@ -28,6 +33,19 @@ class _CartScreenState extends State<CartScreen> {
   //     quantity = getCartsController.carts.length;
   //   });
   // }
+
+  // function to format int to Rupiah Currency
+  String formatRupiah(int number) {
+    final numberString = number.toString();
+    String result = '';
+    for (int i = 0; i < numberString.length; i++) {
+      if (i % 3 == 0 && i != 0) {
+        result = '.$result';
+      }
+      result = numberString[numberString.length - i - 1] + result;
+    }
+    return 'Rp$result';
+  }
 
   void _onCheckedAllChanged(bool? value) {
     setState(() {
@@ -43,6 +61,9 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       _isCheckedList[index] = value;
     });
+
+    // print
+    print('index: $index, value: $value');
   }
 
   //add quantity
@@ -73,6 +94,11 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
+  bool checked = false;
+
+  final SelectCartController selectCartController =
+      Get.put(SelectCartController());
+
   @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
@@ -87,8 +113,6 @@ class _CartScreenState extends State<CartScreen> {
         scrolledUnderElevation: 0, // Menghilangkan shadow pada AppBar
         title: const AppBarCartWidget(),
       ),
-      
-      
       body: Stack(
         children: [
           SizedBox(
@@ -106,7 +130,24 @@ class _CartScreenState extends State<CartScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
+                          return SkeletonItem(
+                            child: Column(
+                              children: List.generate(
+                                6,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 10, top: 10),
+                                  child: SkeletonAvatar(
+                                    style: SkeletonAvatarStyle(
+                                      width: double.infinity,
+                                      height: 100,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
                         } else if (snapshot.hasError) {
                           return Text(
                               'Error: ${snapshot.error}'); // Tampilkan pesan error jika terjadi kesalahan
@@ -149,14 +190,22 @@ class _CartScreenState extends State<CartScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(6),
                                           ),
-                                          child: Checkbox(
-                                            value: _isCheckedList[index],
-                                            onChanged: (value) {
-                                              _onChanged(index, value!);
-                                            },
-                                            activeColor: Colors.transparent,
-                                            checkColor: const Color(0xFF6BCCC9),
-                                            side: BorderSide.none,
+                                          child: Obx(
+                                            () => Checkbox(
+                                              value: selectCartController
+                                                  .selectedCart
+                                                  .contains(carts[index].id),
+                                              onChanged: (value) {
+                                                selectCartController.selectCart(
+                                                    carts[index].id!,
+                                                    carts[index].product.price,
+                                                    carts[index].quantity);
+                                              },
+                                              activeColor: Colors.transparent,
+                                              checkColor:
+                                                  const Color(0xFF6BCCC9),
+                                              side: BorderSide.none,
+                                            ),
                                           ),
                                         ),
                                         SizedBox(
@@ -227,8 +276,8 @@ class _CartScreenState extends State<CartScreen> {
                                               ),
                                             ),
                                             Text(
-                                              'Rp. ${carts[index].product.price
-                                                  .toString()},-',
+                                              Format.formatRupiah(
+                                                  carts[index].product.price),
                                               style: const TextStyle(
                                                 color: Color(0xFF91E0DD),
                                                 fontSize: 12,
@@ -260,11 +309,17 @@ class _CartScreenState extends State<CartScreen> {
                                                       //   isAddButtonPressed =
                                                       //       true;
                                                       // });
-                                                      await CartRepository
-                                                          .instance
-                                                          .addCartQuantity(
-                                                              carts[index].id!,
-                                                              1);
+                                                      try {
+                                                        await CartRepository
+                                                            .instance
+                                                            .addCartQuantity(
+                                                                carts[index]
+                                                                    .id!,
+                                                                1);
+                                                      } catch (e) {
+                                                        return;
+                                                      }
+
                                                       // setState(() {
                                                       //   isAddButtonPressed =
                                                       //       false;
@@ -296,11 +351,16 @@ class _CartScreenState extends State<CartScreen> {
                                                       //   isRemoveButtonPressed =
                                                       //       true;
                                                       // });
-                                                      await CartRepository
-                                                          .instance
-                                                          .subtractCartQuantity(
-                                                              carts[index].id!,
-                                                              1);
+                                                      try {
+                                                        await CartRepository
+                                                            .instance
+                                                            .subtractCartQuantity(
+                                                                carts[index]
+                                                                    .id!,
+                                                                1);
+                                                      } catch (e) {
+                                                        return;
+                                                      }
                                                       // setState(() {
                                                       //   isRemoveButtonPressed =
                                                       //       false;
@@ -336,108 +396,131 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
           ),
-          
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: mediaQueryWidth * 0.9,
-              height: mediaQueryHeight * 0.088,
-              margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF91E0DD).withOpacity(0.3),
-                    blurRadius: 16,
-                    offset: const Offset(1, 1),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF91E0DD).withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(6),
+          Obx(
+            () => Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: mediaQueryWidth * 0.9,
+                height: mediaQueryHeight * 0.088,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF91E0DD).withOpacity(0.3),
+                      blurRadius: 16,
+                      offset: const Offset(1, 1),
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF91E0DD).withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Checkbox(
+                            value: selectCartController.isAllSelected.value,
+                            onChanged: (value) {
+                              final cartIds = getCartsController.carts
+                                  .map((e) => e.id!)
+                                  .toList();
+
+                              // total price
+                              total = getCartsController.carts
+                                  .map((e) => e.product.price * e.quantity)
+                                  .reduce((value, element) => value + element);
+
+                              selectCartController.selectAll(cartIds, total);
+                            },
+                            activeColor: Colors.transparent,
+                            checkColor: const Color(0xFF6BCCC9),
+                            side: BorderSide.none,
+                          ),
                         ),
-                        child: Checkbox(
-                          value: isCheckedAll,
-                          onChanged: _onCheckedAllChanged,
-                          activeColor: Colors.transparent,
-                          checkColor: const Color(0xFF6BCCC9),
-                          side: BorderSide.none,
+                        SizedBox(width: mediaQueryWidth * 0.02),
+                        const Text(
+                          'Semua',
+                          style: TextStyle(
+                            color: Color(0xFF424242),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                        )
+                      ],
+                    ),
+                    Container(
+                      width: mediaQueryWidth * 0.351,
+                      height: mediaQueryHeight * 0.048,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: const Color(0xFF6BCCC9),
                         ),
                       ),
-                      SizedBox(width: mediaQueryWidth * 0.02),
-                      Text(
-                        'Semua',
-                        style: const TextStyle(
-                          color: Color(0xFF424242),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    width: mediaQueryWidth * 0.351,
-                    height: mediaQueryHeight * 0.048,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: const Color(0xFF6BCCC9),
-                      ),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: const Text(
-                        'Rp 80.000.000,-',
-                        style: TextStyle(
-                          color: Color(0xFF6BCCC9),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                        maxLines: 1,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: mediaQueryWidth * 0.251,
-                    height: mediaQueryHeight * 0.048,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6BCCC9),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Get.toNamed('/checkout');
-                      },
-                      child: const Text(
-                        'Periksa',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          formatRupiah(selectCartController.totalPrice.value),
+                          style: const TextStyle(
+                            color: Color(0xFF6BCCC9),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                          maxLines: 1,
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      width: mediaQueryWidth * 0.251,
+                      height: mediaQueryHeight * 0.048,
+                      decoration: BoxDecoration(
+                        color: selectCartController.selectedCart.isEmpty
+                            ? Colors.grey[400]
+                            : const Color(0xFF6BCCC9),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          if (selectCartController.selectedCart.isEmpty) {
+                            return;
+                          }
+
+                          Get.to(
+                            () => CheckoutScreen(
+                              totalPrice: selectCartController.totalPrice.value,
+                              cartIds:
+                                  selectCartController.selectedCart.toList(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Periksa',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           )
-        
         ],
       ),
     );

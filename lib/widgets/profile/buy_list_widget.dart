@@ -79,7 +79,6 @@ class _BuyListProfileState extends State<BuyListProfile> {
           10,
           (index) {
             return Container(
-              height: mediaQueryHeight * 0.23,
               width: mediaQueryWidth,
               margin: const EdgeInsets.only(
                   left: 20, right: 20, bottom: 10, top: 10),
@@ -97,6 +96,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
                     height: mediaQueryHeight * 0.1,
@@ -227,7 +227,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: mediaQueryWidth * 0.46,
+                        width: mediaQueryWidth * 0.45,
                         child: RichText(
                           text: TextSpan(
                             children: [
@@ -311,6 +311,5 @@ class _BuyListProfileState extends State<BuyListProfile> {
         ),
       ),
     );
-  
   }
 }

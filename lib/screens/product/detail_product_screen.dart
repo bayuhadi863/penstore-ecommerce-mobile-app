@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/add_cart_controller.dart';
+import 'package:penstore/controller/product/get_seller_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/product_model.dart';
+import 'package:penstore/models/user_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 import 'package:penstore/repository/product_repository.dart';
+import 'package:penstore/repository/user_repository.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class DetailProductScreen extends StatefulWidget {
@@ -19,6 +22,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   ProductModel? product;
   String productCategory = '';
   bool isLoading = false;
+  UserModel seller = UserModel.empty();
 
   //quantity
   int quantity = 0;
@@ -27,6 +31,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
 
   //add quantity
   void addQuantity() {
+    if (quantity >= product!.stock) {
+      return;
+    }
     setState(() {
       quantity++;
       isAddButtonPressed = true;
@@ -62,11 +69,15 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     final _product =
         await productRepository.getProductById(productId! as String);
     String _category_name = await _getCategoryName(_product.categoryId);
+    final UserRepository userRepository = Get.put(UserRepository());
+
+    final sellerData = await userRepository.fetchUser(_product.userId!);
 
     setState(() {
       product = _product;
       productCategory = _category_name;
       isLoading = false;
+      seller = sellerData;
     });
   }
 
@@ -93,6 +104,8 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
 
     final UserController userController = Get.put(UserController());
     final AddCartController addCartController = Get.put(AddCartController());
+    // final GetSellerController getSellerController =
+    //     Get.put(GetSellerController(product?.userId ?? ''));
 
     List<Widget> generateProductContainers() {
       return List.generate(10, (index) {
@@ -378,7 +391,8 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20.0),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -454,7 +468,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 20.0),
                                                     child: Text(
                                                       productCategory,
                                                       style: const TextStyle(
@@ -469,7 +485,26 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 20.0),
+                                                    child: Text(
+                                                      "Penjual: ${seller.name}",
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            Color(0xFF757B7B),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 20.0),
                                                     child: Text(
                                                       product?.desc ?? '',
                                                       style: const TextStyle(
@@ -495,160 +530,184 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                   ),
                                 ],
                               ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  margin: const EdgeInsets.only(bottom: 20),
-                                  height: mediaQueryHeight * 0.088,
-                                  width: mediaQueryWidth * 0.9,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFFFFF),
-                                    borderRadius: BorderRadius.circular(50),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF91E0DD)
-                                            .withOpacity(0.3),
-                                        blurRadius: 16,
-                                        offset: const Offset(1, 1),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        width: mediaQueryWidth * 0.259,
-                                        height: mediaQueryHeight * 0.048,
-                                        alignment: Alignment.center,
+                              seller.id == userController.user.value.id
+                                  ? Container()
+                                  : Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 20),
+                                        height: mediaQueryHeight * 0.088,
+                                        width: mediaQueryWidth * 0.9,
                                         decoration: BoxDecoration(
+                                          color: const Color(0xFFFFFFFF),
                                           borderRadius:
                                               BorderRadius.circular(50),
-                                          border: Border.all(
-                                            color: const Color(0xFFB3B3B3),
-                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: const Color(0xFF91E0DD)
+                                                  .withOpacity(0.3),
+                                              blurRadius: 16,
+                                              offset: const Offset(1, 1),
+                                            ),
+                                          ],
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            GestureDetector(
-                                              onTap: addQuantity,
-                                              onTapDown: (_) {
-                                                setState(() {
-                                                  isAddButtonPressed = true;
-                                                });
-                                              },
-                                              onTapUp: (_) {
-                                                setState(() {
-                                                  isAddButtonPressed = false;
-                                                });
-                                              },
-                                              child: Icon(
-                                                Icons.add,
-                                                size: 18,
-                                                color: isAddButtonPressed
-                                                    ? const Color(0xFF6BCCC9)
-                                                    : const Color(0xFFB3B3B3),
+                                            Container(
+                                              width: mediaQueryWidth * 0.259,
+                                              height: mediaQueryHeight * 0.048,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                border: Border.all(
+                                                  color:
+                                                      const Color(0xFFB3B3B3),
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              quantity.toString(),
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                                fontFamily: 'Poppins',
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: addQuantity,
+                                                    onTapDown: (_) {
+                                                      setState(() {
+                                                        isAddButtonPressed =
+                                                            true;
+                                                      });
+                                                    },
+                                                    onTapUp: (_) {
+                                                      setState(() {
+                                                        isAddButtonPressed =
+                                                            false;
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.add,
+                                                      size: 18,
+                                                      color: isAddButtonPressed
+                                                          ? const Color(
+                                                              0xFF6BCCC9)
+                                                          : const Color(
+                                                              0xFFB3B3B3),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    quantity.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontFamily: 'Poppins',
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: removeQuantity,
+                                                    onTapDown: (_) {
+                                                      setState(() {
+                                                        isRemoveButtonPressed =
+                                                            true;
+                                                      });
+                                                    },
+                                                    onTapUp: (_) {
+                                                      setState(() {
+                                                        isRemoveButtonPressed =
+                                                            false;
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.remove,
+                                                      size: 18,
+                                                      color:
+                                                          isRemoveButtonPressed
+                                                              ? const Color(
+                                                                  0xFF6BCCC9)
+                                                              : const Color(
+                                                                  0xFFB3B3B3),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                             InkWell(
-                                              onTap: removeQuantity,
-                                              onTapDown: (_) {
-                                                setState(() {
-                                                  isRemoveButtonPressed = true;
-                                                });
+                                              onTap: () {
+                                                Get.toNamed('/detail-chat');
                                               },
-                                              onTapUp: (_) {
-                                                setState(() {
-                                                  isRemoveButtonPressed = false;
-                                                });
+                                              child: Container(
+                                                width: mediaQueryWidth * 0.164,
+                                                height:
+                                                    mediaQueryHeight * 0.048,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFF6BCCC9),
+                                                  ),
+                                                ),
+                                                child: Image.asset(
+                                                  'assets/icons/chat_fill.png',
+                                                  height: 24,
+                                                  width: 24,
+                                                  filterQuality:
+                                                      FilterQuality.high,
+                                                  color:
+                                                      const Color(0xFF6BCCC9),
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                addCartController.createCart(
+                                                    userController.user.value,
+                                                    product!,
+                                                    quantity,
+                                                    context);
                                               },
-                                              child: Icon(
-                                                Icons.remove,
-                                                size: 18,
-                                                color: isRemoveButtonPressed
-                                                    ? const Color(0xFF6BCCC9)
-                                                    : const Color(0xFFB3B3B3),
+                                              child: Container(
+                                                width: mediaQueryWidth * 0.328,
+                                                height:
+                                                    mediaQueryHeight * 0.048,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xFF6BCCC9),
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                ),
+                                                child: const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.shopping_cart,
+                                                      color: Color(0xFFFFFFFF),
+                                                      size: 22,
+                                                    ),
+                                                    SizedBox(width: 8),
+                                                    Text(
+                                                      'Cart',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xFFFFFFFF),
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () {
-                                          Get.toNamed('/detail-chat');
-                                        },
-                                        child: Container(
-                                          width: mediaQueryWidth * 0.164,
-                                          height: mediaQueryHeight * 0.048,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            border: Border.all(
-                                              color: const Color(0xFF6BCCC9),
-                                            ),
-                                          ),
-                                          child: Image.asset(
-                                            'assets/icons/chat_fill.png',
-                                            height: 24,
-                                            width: 24,
-                                            filterQuality: FilterQuality.high,
-                                            color: const Color(0xFF6BCCC9),
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          addCartController.createCart(
-                                              userController.user.value,
-                                              product!,
-                                              quantity);
-                                        },
-                                        child: Container(
-                                          width: mediaQueryWidth * 0.328,
-                                          height: mediaQueryHeight * 0.048,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFF6BCCC9),
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                          ),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.shopping_cart,
-                                                color: Color(0xFFFFFFFF),
-                                                size: 22,
-                                              ),
-                                              SizedBox(width: 8),
-                                              Text(
-                                                'Cart',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFFFFFFFF),
-                                                  fontFamily: 'Poppins',
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                    ),
                             ],
                           ),
                         ),

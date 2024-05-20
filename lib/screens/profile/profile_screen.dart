@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
+import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
 import 'package:penstore/widgets/profile/profile_image_widget.dart';
@@ -20,6 +21,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   final userController = Get.put(UserController());
+  final userProductController = Get.put(UserProductsController());
   //final _formKey = GlobalKey<FormState>();
   final FocusNode _searchFocusNode = FocusNode();
   late TabController tabController;
@@ -47,6 +49,28 @@ class _ProfileScreenState extends State<ProfileScreen>
           const ProfileImage(),
           SizedBox(
             height: mediaQueryHeigth * 0.08,
+          ),
+          // logout button
+          ElevatedButton(
+            onPressed: () {
+              final logoutController = Get.put(LogoutController());
+              logoutController.logout();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF91E0DD),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+              ),
+            ),
           ),
           Column(
             children: [
@@ -230,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   width: 10,
                                 ),
                                 const Text(
-                                  'Penjualan Saya',
+                                  'Produk Saya',
                                   style: TextStyle(
                                     color: Color(0xFF424242),
                                     fontSize: 14,

@@ -3,12 +3,20 @@ import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/cart/get_selected_carts_controller.dart';
+import 'package:penstore/controller/cart/get_single_cart_controller.dart';
+import 'package:penstore/controller/product/get_single_product.dart';
+import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/add_rating_dialog.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:skeletons/skeletons.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({super.key});
+  // array of string
+  final List<String>? cartIds;
+  final int? totalPrice;
+  const CheckoutScreen({super.key, this.cartIds, this.totalPrice});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -32,6 +40,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool isPaidOff = false;
 
   bool isRating = false;
+
+  final int serviceFee = 1000;
 
   void checkPaid() {
     if (isPaidOff == true) {
@@ -129,6 +139,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     // image picker from gallery
 
+    final total = widget.totalPrice! + serviceFee;
+    final GetSelectedCartsController getSelectedCartsController =
+        Get.put(GetSelectedCartsController(widget.cartIds!));
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(onPressed: () {
@@ -217,177 +231,217 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 children: [
                   SizedBox(
                     width: mediaQueryWidth,
-                    child: Column(
-                      children: List.generate(
-                        isAllList == true ? 10 : 2,
-                        (index) {
-                          return Container(
-                            width: double.infinity,
-                            height: 100,
-                            margin: const EdgeInsets.only(
-                                left: 20, right: 20, bottom: 10, top: 10),
-                            child: Container(
-                              height: 100,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF91E0DD)
-                                        .withOpacity(0.3),
-                                    blurRadius: 16,
-                                    offset: const Offset(1, 1),
+                    child: Obx(() {
+                      final carts = getSelectedCartsController.selectedCart;
+                      // order by created at
+                      carts
+                          .sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+
+                      final isLoading =
+                          getSelectedCartsController.isLoading.value;
+
+                      // final isLoading = true;
+
+                      return isLoading
+                          ? SkeletonItem(
+                              child: Column(
+                                children: List.generate(
+                                  2,
+                                  (index) => Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        bottom: 10,
+                                        top: 10),
+                                    child: SkeletonAvatar(
+                                      style: SkeletonAvatarStyle(
+                                        width: double.infinity,
+                                        height: 100,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
                                   ),
-                                ],
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF91E0DD)
-                                          .withOpacity(0.3),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Checkbox(
-                                      value: _isCheckedList[index],
-                                      onChanged: (value) {
-                                        _onChanged(index, value!);
-                                      },
-                                      activeColor: Colors.transparent,
-                                      checkColor: const Color(0xFF6BCCC9),
-                                      side: BorderSide.none,
-                                    ),
-                                  ),
-                                  SizedBox(width: mediaQueryWidth * 0.040),
-                                  Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Get.toNamed('/detail-product');
-                                        },
-                                        child: Container(
-                                          width: 80,
-                                          height: 90,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                            )
+                          : Column(
+                              children: List.generate(
+                                isAllList == true
+                                    ? carts.length
+                                    : carts.length > 2
+                                        ? 2
+                                        : carts.length,
+                                (index) {
+                                  return Container(
+                                    width: double.infinity,
+                                    height: 100,
+                                    margin: const EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        bottom: 10,
+                                        top: 10),
+                                    child: Container(
+                                      height: 100,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFF91E0DD)
+                                                .withOpacity(0.3),
+                                            blurRadius: 16,
+                                            offset: const Offset(1, 1),
                                           ),
-                                          child: ClipRRect(
-                                            clipBehavior: Clip.hardEdge,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Image(
-                                              filterQuality: FilterQuality.high,
-                                              image: AssetImage(
-                                                imgList[0],
+                                        ],
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      '/detail-product');
+                                                },
+                                                child: Container(
+                                                  width: 80,
+                                                  height: 90,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                  child: ClipRRect(
+                                                    clipBehavior: Clip.hardEdge,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    child: Image(
+                                                      filterQuality:
+                                                          FilterQuality.high,
+                                                      image: AssetImage(
+                                                        imgList[0],
+                                                      ),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                              fit: BoxFit.cover,
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  carts[index].product.name,
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF424242),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Poppins',
+                                                  ),
+                                                  softWrap: true,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                ),
+                                                Text(
+                                                  'Jumlah : ${carts[index].quantity}',
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF757B7B),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Poppins',
+                                                  ),
+                                                ),
+                                                Text(
+                                                  Format.formatRupiah(
+                                                      carts[index]
+                                                          .product
+                                                          .price),
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF91E0DD),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Poppins',
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 10),
-                                  const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Pensil Staedler 2B',
-                                        style: TextStyle(
-                                          color: Color(0xFF424242),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                      Text(
-                                        'Jumlah : 10',
-                                        style: TextStyle(
-                                          color: Color(0xFF757B7B),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                      Text(
-                                        'Rp 40.000 -',
-                                        style: TextStyle(
-                                          color: Color(0xFF91E0DD),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          );
-                        
-                        },
-                      ),
-                    ),
+                            );
+                    }),
                   ),
-                  
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  isAllList == false
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isAllList = true;
-                              });
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              alignment: Alignment.centerRight,
-                              child: const Text(
-                                'Lebih Banyak',
-                                style: TextStyle(
-                                  color: Color(0xFF6BCCC9),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isAllList = false;
-                              });
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              alignment: Alignment.centerRight,
-                              child: const Text(
-                                'Lebih Sedikit',
-                                style: TextStyle(
-                                  color: Color(0xFF6BCCC9),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                          ),
+                  widget.cartIds!.length <= 2
+                      ? Container()
+                      : const SizedBox(
+                          height: 10,
                         ),
+                  widget.cartIds!.length <= 2
+                      ? Container()
+                      : isAllList == false
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isAllList = true;
+                                  });
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  alignment: Alignment.centerRight,
+                                  child: const Text(
+                                    'Lebih Banyak',
+                                    style: TextStyle(
+                                      color: Color(0xFF6BCCC9),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isAllList = false;
+                                  });
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  alignment: Alignment.centerRight,
+                                  child: const Text(
+                                    'Lebih Sedikit',
+                                    style: TextStyle(
+                                      color: Color(0xFF6BCCC9),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                   SizedBox(
                     height: mediaQueryHeight * 0.02,
                   ),
@@ -865,10 +919,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ],
                           ),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Subtotal Produk',
                                 style: TextStyle(
                                   color: Color(0xFF757B7B),
@@ -878,8 +932,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ),
                               Text(
-                                'Rp 80.000.000,-',
-                                style: TextStyle(
+                                Format.formatRupiah(widget.totalPrice!),
+                                style: const TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -888,10 +942,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ],
                           ),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Biaya Layanan',
                                 style: TextStyle(
                                   color: Color(0xFF757B7B),
@@ -901,8 +955,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ),
                               Text(
-                                'Rp 12.000,-',
-                                style: TextStyle(
+                                Format.formatRupiah(serviceFee),
+                                style: const TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -911,10 +965,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ],
                           ),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Total Pembayaran',
                                 style: TextStyle(
                                   color: Color(0xFF757B7B),
@@ -924,8 +978,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ),
                               Text(
-                                'Rp 80.012.000,-',
-                                style: TextStyle(
+                                Format.formatRupiah(total),
+                                style: const TextStyle(
                                   color: Color(0xFF91E0DD),
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -943,10 +997,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       height: mediaQueryHeight * 0.02,
                     ),
                     Container(
-                    height: 2,
-                    width: mediaQueryWidth * 0.9,
-                    color: const Color(0xFF757B7B),
-                  ),
+                      height: 2,
+                      width: mediaQueryWidth * 0.9,
+                      color: const Color(0xFF757B7B),
+                    ),
                     SizedBox(
                       height: mediaQueryHeight * 0.02,
                     ),
@@ -1094,35 +1148,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF91E0DD).withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Checkbox(
-                                value: isCheckedAll,
-                                onChanged: _onCheckedAllChanged,
-                                activeColor: Colors.transparent,
-                                checkColor: const Color(0xFF6BCCC9),
-                                side: BorderSide.none,
-                              ),
-                            ),
-                            SizedBox(width: mediaQueryWidth * 0.02),
-                            const Text(
-                              'Semua',
-                              style: TextStyle(
-                                color: Color(0xFF424242),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            )
-                          ],
-                        ),
                         Container(
                           width: 121,
                           height: 40,
@@ -1134,11 +1159,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               color: const Color(0xFF6BCCC9),
                             ),
                           ),
-                          child: const SingleChildScrollView(
+                          child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Text(
-                              'Rp 80.000.000,-',
-                              style: TextStyle(
+                              Format.formatRupiah(total),
+                              style: const TextStyle(
                                 color: Color(0xFF6BCCC9),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -1211,7 +1236,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               return const AddRatingDialog();
                             });
                         setState(() {
-                          isRating = true; 
+                          isRating = true;
                         });
                       },
                       child: const Center(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ListProductWidget extends StatefulWidget {
   final String? selectedCategory;
@@ -78,11 +79,21 @@ class _ListProductWidgetState extends State<ListProductWidget> {
   Widget build(BuildContext context) {
     return Column(children: [
       isLoading
-          ? const Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 50),
-                child: CircularProgressIndicator(
-                  color: Colors.grey,
+          ? SkeletonItem(
+              child: Column(
+                children: List.generate(
+                  4,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 10, top: 10),
+                    child: SkeletonAvatar(
+                      style: SkeletonAvatarStyle(
+                        width: double.infinity,
+                        height: 100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             )

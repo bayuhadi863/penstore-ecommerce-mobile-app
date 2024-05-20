@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class SaleListProfile extends StatefulWidget {
@@ -85,6 +86,7 @@ class _SaleListProfileState extends State<SaleListProfile> {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+
     return SizedBox(
       width: double.infinity,
       child: Column(

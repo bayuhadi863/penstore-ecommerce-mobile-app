@@ -12,7 +12,6 @@ class AddProductController extends GetxController {
 
   User? user = FirebaseAuth.instance.currentUser;
 
-
   // form variables
   File? selectedImage;
   Uint8List? image;
@@ -73,7 +72,8 @@ class AddProductController extends GetxController {
             int.parse(stockController.text),
             int.parse(priceController.text),
             imgUrl,
-            choosedCategory!);
+            choosedCategory!,
+            user!.uid);
 
         Navigator.of(context).pop();
 
