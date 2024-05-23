@@ -199,11 +199,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         children: [
                           TextSpan(
-                            text: !isOrdered ? 'Pesanan' : 'Pembayaran',
-                            style: const TextStyle(
+                            text: 'Pesanan',
+                            style: TextStyle(
                               color: Color(0xFF424242),
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -220,6 +220,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ),
       ),
+      
       body: Stack(
         children: [
           SizedBox(
@@ -720,6 +721,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
                           ],
+                       
                         ],
                         if (isWaiting == true) ...[
                           // const SizedBox(height: 20),
@@ -797,6 +799,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           )
                         ],
+                        
                         if (isPaidOff == true) ...[
                           Container(
                             width: double.infinity,
@@ -1182,7 +1185,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              Get.toNamed('/checkout');
+                              Get.toNamed('/payment-buyer');
                               checkMetode();
                             },
                             child: const Text(
@@ -1256,6 +1259,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               )
             ]
           ],
+        
         ],
       ),
     );

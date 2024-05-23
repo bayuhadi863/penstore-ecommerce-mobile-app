@@ -107,7 +107,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                     ProductModel product = products[index];
                     return Container(
                       width: double.infinity,
-                      height: 100,
+                      height: 100, 
                       margin: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 10, top: 10),
                       child: Stack(

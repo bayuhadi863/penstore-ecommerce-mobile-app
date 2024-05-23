@@ -10,6 +10,7 @@ import 'package:penstore/screens/bottom_navigation.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 import 'package:penstore/screens/cart/order_screen.dart';
 import 'package:penstore/screens/chat/chat_detail_screen.dart';
+import 'package:penstore/screens/payment/payment_buyer_screen.dart';
 import 'package:penstore/screens/product/detail_product_screen.dart';
 import 'package:penstore/widgets/decoration_input.dart';
 
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/cart', page: () => const CartScreen()),
         GetPage(name: '/detail-chat', page: () => const ChatDetailScreen()),
         GetPage(name: '/checkout', page: () => const CheckoutScreen()),
+        GetPage(name: '/payment-buyer', page: () => const PaymentBuyerScreen()),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
