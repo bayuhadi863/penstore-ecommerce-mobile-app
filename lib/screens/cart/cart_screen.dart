@@ -316,6 +316,18 @@ class _CartScreenState extends State<CartScreen> {
                                                                 carts[index]
                                                                     .id!,
                                                                 1);
+
+                                                        if (selectCartController
+                                                            .selectedCart
+                                                            .contains(
+                                                                carts[index]
+                                                                    .id)) {
+                                                          selectCartController
+                                                              .addTotalPrice(
+                                                                  carts[index]
+                                                                      .product
+                                                                      .price);
+                                                        }
                                                       } catch (e) {
                                                         return;
                                                       }
@@ -328,7 +340,11 @@ class _CartScreenState extends State<CartScreen> {
                                                     child: Icon(
                                                       Icons.add,
                                                       size: 18,
-                                                      color: isAddButtonPressed
+                                                      color: carts[index]
+                                                                  .quantity <
+                                                              carts[index]
+                                                                  .product
+                                                                  .stock
                                                           ? const Color(
                                                               0xFF6BCCC9)
                                                           : const Color(
@@ -358,6 +374,18 @@ class _CartScreenState extends State<CartScreen> {
                                                                 carts[index]
                                                                     .id!,
                                                                 1);
+
+                                                        if (selectCartController
+                                                            .selectedCart
+                                                            .contains(
+                                                                carts[index]
+                                                                    .id)) {
+                                                          selectCartController
+                                                              .removeTotalPrice(
+                                                                  carts[index]
+                                                                      .product
+                                                                      .price);
+                                                        }
                                                       } catch (e) {
                                                         return;
                                                       }
@@ -369,12 +397,12 @@ class _CartScreenState extends State<CartScreen> {
                                                     child: Icon(
                                                       Icons.remove,
                                                       size: 18,
-                                                      color:
-                                                          isRemoveButtonPressed
-                                                              ? const Color(
-                                                                  0xFF6BCCC9)
-                                                              : const Color(
-                                                                  0xFFB3B3B3),
+                                                      color: carts[index]
+                                                                  .quantity >
+                                                              1
+                                                          ? Colors.red
+                                                          : const Color(
+                                                              0xFFB3B3B3),
                                                     ),
                                                   ),
                                                 ],

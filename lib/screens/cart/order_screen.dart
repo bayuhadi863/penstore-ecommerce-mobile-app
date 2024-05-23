@@ -318,14 +318,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             12),
-                                                    child: Image(
-                                                      filterQuality:
-                                                          FilterQuality.high,
-                                                      image: AssetImage(
-                                                        imgList[0],
-                                                      ),
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                    child: (carts[index]
+                                                                    .product
+                                                                    .imageUrl !=
+                                                                null &&
+                                                            carts[index]
+                                                                .product
+                                                                .imageUrl!
+                                                                .isNotEmpty)
+                                                        ? Image.network(
+                                                            carts[index]
+                                                                .product
+                                                                .imageUrl!,
+                                                            height: 16,
+                                                            width: 16,
+                                                            filterQuality:
+                                                                FilterQuality
+                                                                    .high,
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : Image.asset(
+                                                            'assets/icons/cart_outline.png',
+                                                            height: 16,
+                                                            width: 16,
+                                                            filterQuality:
+                                                                FilterQuality
+                                                                    .high,
+                                                          ),
                                                   ),
                                                 ),
                                               ),

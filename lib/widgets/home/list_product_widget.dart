@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/cart/add_cart_controller.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
@@ -77,6 +79,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final UserController userController = Get.put(UserController());
+    final AddCartController addCartController = Get.put(AddCartController());
+
     return Column(children: [
       isLoading
           ? SkeletonItem(
@@ -265,7 +270,11 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                             alignment: Alignment.bottomRight,
                             child: GestureDetector(
                               onTap: () {
-                                Get.toNamed('/cart');
+                                addCartController.createCart(
+                                    userController.user.value,
+                                    product,
+                                    1,
+                                    context);
                               },
                               child: Container(
                                 width: 26,

@@ -54,7 +54,7 @@ class AddCartController extends GetxController {
 
       // show success snackbar
       Alerts.successSnackBar(
-        title: 'Berhasil menambah keranjang!',
+        title: 'Berhasil menambahkan keranjang!',
         message: 'Lanjutkan pemesanan Anda!',
       );
 
@@ -65,7 +65,7 @@ class AddCartController extends GetxController {
       isLoading(false);
       Navigator.of(context).pop();
       Alerts.errorSnackBar(
-        title: 'Gagal menambah keranjang!',
+        title: 'Gagal menambahkan keranjang!',
         message: e.toString(),
       );
       // throw e;

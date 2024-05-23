@@ -35,4 +35,12 @@ class SelectCartController extends GetxController {
   void clearAll() {
     selectedCart.clear();
   }
+
+  void addTotalPrice(int price) {
+    totalPrice.value += price;
+  }
+
+  void removeTotalPrice(int price) {
+    totalPrice.value -= price;
+  }
 }
