@@ -5,24 +5,19 @@ import 'package:get/get.dart';
 import 'package:penstore/models/user_model.dart';
 import 'package:penstore/repository/user_repository.dart';
 
-class UserController extends GetxController {
-  static UserController get instance => Get.find();
+class GetSingleUserController extends GetxController {
+  static GetSingleUserController get instance => Get.find();
 
   // User variable
   final Rx<UserModel> user = UserModel.empty().obs;
-  final Rx<UserModel> userById = UserModel.empty().obs;
 
-  // final String userId;
-  // UserController(this.userId);
-
-  // Current logged in user
-  final currentUser = FirebaseAuth.instance.currentUser;
+  final String userId;
+  GetSingleUserController(this.userId);
 
   @override
   void onInit() {
     super.onInit();
-    getUser(currentUser!.uid);
-    print("currentUser!.uid ${currentUser!.uid}");
+    getUser(userId);
   }
 
   // Get user by id
@@ -30,9 +25,20 @@ class UserController extends GetxController {
     try {
       final userRepository = Get.put(UserRepository());
       final user = await userRepository.fetchUser(uid);
-      userById.value = user;
+      this.user.value = user;
     } catch (e) {
       throw e;
     }
   }
+
+  // UserModel getUserById(String userId) async {
+  //   try {
+  //     final userRepository = Get.put(UserRepository());
+  //     final user = await userRepository.fetchUser(userId);
+
+  //     return user;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 }

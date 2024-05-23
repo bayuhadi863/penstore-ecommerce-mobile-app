@@ -136,7 +136,6 @@ class CartRepository extends GetxController {
       await db.collection('carts').doc(id).update({
         'quantity': cart.quantity + quantity,
       });
-
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {
@@ -233,6 +232,61 @@ class CartRepository extends GetxController {
       }
 
       return carts;
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // fetch carts by user id, get the carts.product.user.id distinct value
+  Future<List<String>> fetchDistinctSellerId(String uid) async {
+    try {
+      final QuerySnapshot querySnapshot =
+          await db.collection('carts').where('user.id', isEqualTo: uid).get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final List<String> sellerIds = querySnapshot.docs
+          .map((doc) => CartModel.fromSnapshot(doc).product.userId!)
+          .toSet()
+          .toList();
+
+      return sellerIds;
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // fetch carts by user id and seller id
+  Future<List<CartModel>> fetchCartBySellerId(
+      String uid, String sellerId) async {
+    try {
+      final QuerySnapshot querySnapshot = await db
+          .collection('carts')
+          .where('user.id', isEqualTo: uid)
+          .where('product.userId', isEqualTo: sellerId)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      return querySnapshot.docs
+          .map((doc) => CartModel.fromSnapshot(doc))
+          .toList();
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {

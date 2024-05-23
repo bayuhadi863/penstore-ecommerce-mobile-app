@@ -26,6 +26,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   final FocusNode _searchFocusNode = FocusNode();
   late TabController tabController;
 
+  bool isClick = false;
+  bool isClickLogout = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,28 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           SizedBox(
             height: mediaQueryHeigth * 0.08,
           ),
-          // logout button
-          ElevatedButton(
-            onPressed: () {
-              final logoutController = Get.put(LogoutController());
-              logoutController.logout();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF91E0DD),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: const Text(
-              'Logout',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
-              ),
-            ),
-          ),
           Column(
             children: [
               Obx(
@@ -83,6 +64,156 @@ class _ProfileScreenState extends State<ProfileScreen>
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                   ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                      },
+                      style: ElevatedButton.styleFrom(
+                        visualDensity: VisualDensity.comfortable,
+                        maximumSize: Size(110, 40),
+                        side: isClick
+                            ? BorderSide.none
+                            : BorderSide(
+                                color: Color(0xFF6BCCC9),
+                                width: 1,
+                              ),
+                        backgroundColor:
+                            isClick ? Color(0xFF6BCCC9) : Colors.transparent,
+                        foregroundColor: Colors.transparent,
+                        surfaceTintColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "Tagihan Anda",
+                              style: TextStyle(
+                                color:
+                                    isClick ? Colors.white : Color(0xFF6BCCC9),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
+                            color: isClick ? Colors.white : Color(0xFF6BCCC9),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                      },
+                      style: ElevatedButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        visualDensity: VisualDensity.comfortable,
+                        maximumSize: Size(110, 40),
+                        side: isClick
+                            ? BorderSide.none
+                            : BorderSide(
+                                color: Color(0xFF64DF70),
+                                width: 1,
+                              ),
+                        backgroundColor:
+                            isClick ? Color(0xFF64DF70) : Colors.transparent,
+                        foregroundColor: Colors.transparent,
+                        surfaceTintColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "Edit Profile",
+                              style: TextStyle(
+                                color:
+                                    isClick ? Colors.white : Color(0xFF64DF70),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
+                            color: isClick ? Colors.white : Color(0xFF64DF70),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          isClickLogout = !isClickLogout;
+                        });
+                        final logoutController = Get.put(LogoutController());
+                        logoutController.logout();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        visualDensity: VisualDensity.comfortable,
+                        maximumSize: Size(110, 40),
+                        side: isClickLogout
+                            ? BorderSide.none
+                            : BorderSide(
+                                color: Color(0xFFF46B69),
+                                width: 1,
+                              ),
+                        backgroundColor:
+                            isClickLogout ? Color(0xFFF46B69) : Colors.transparent,
+                        foregroundColor: Colors.transparent,
+                        surfaceTintColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "Logout",
+                              style: TextStyle(
+                                color:
+                                    isClickLogout ? Colors.white : Color(0xFFF46B69),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
+                            color: isClickLogout ? Colors.white : Color(0xFFF46B69),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const Padding(

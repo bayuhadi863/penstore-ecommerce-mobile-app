@@ -343,10 +343,10 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                     children: [
                                       Container(
                                         width: mediaQueryWidth,
-                                        height: mediaQueryHeight * 0.074,
+                                        // height: mediaQueryHeight * 0.074,
                                         alignment: Alignment.center,
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
+                                            horizontal: 20, vertical: 10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(32),
@@ -364,19 +364,24 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              product?.name ?? '',
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Poppins',
-                                                color: Color(0xFF424242),
+                                            Expanded(
+                                              child: Text(
+                                                product?.name ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF424242),
+                                                ),
                                               ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
                                             ),
                                             Text(
                                               'Rp.${product?.price ?? ''} -',
                                               style: const TextStyle(
-                                                fontSize: 16,
+                                                fontSize: 14,
                                                 color: Color(0xFF6BCCC9),
                                                 fontFamily: 'Poppins',
                                                 fontWeight: FontWeight.bold,

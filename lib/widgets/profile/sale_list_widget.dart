@@ -94,7 +94,7 @@ class _SaleListProfileState extends State<SaleListProfile> {
           10,
           (index) {
             return Container(
-              height: mediaQueryHeight * 0.23,
+              // height: mediaQueryHeight * 0.23,
               width: mediaQueryWidth,
               margin: const EdgeInsets.only(
                   left: 20, right: 20, bottom: 10, top: 10),
@@ -260,8 +260,8 @@ class _SaleListProfileState extends State<SaleListProfile> {
                         ),
                       ),
                       SizedBox(
-                        width: mediaQueryWidth * 0.5,
-                        height: 40,
+                        // width: mediaQueryWidth * 0.5,
+                        // height: 40,
                         child: TextButton(
                           onPressed: () {
                             isWaiting
@@ -301,7 +301,7 @@ class _SaleListProfileState extends State<SaleListProfile> {
                                                     : isDone
                                                         ? Color(0xFFF46B69)
                                                         : Color(0xFF69A9F4),
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins',
                                   ),
