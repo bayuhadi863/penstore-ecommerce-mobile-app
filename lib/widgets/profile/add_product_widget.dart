@@ -20,7 +20,7 @@ class AddProductForm extends StatefulWidget {
 class _AddProductFormState extends State<AddProductForm> {
   @override
   Widget build(BuildContext context) {
-    final mediaQueryHeigth = MediaQuery.of(context).size.height;
+    // final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
     return TextButton(
@@ -169,10 +169,10 @@ class _ProductFormState extends State<ProductForm> {
     });
 
     final CategoryRepository categoryRepository = CategoryRepository();
-    final List<CategoryModel> data_categories =
+    final List<CategoryModel> dataCategories =
         await categoryRepository.getCategories();
     setState(() {
-      categories = data_categories;
+      categories = dataCategories;
       isLoading = false;
       print(categories);
     });
@@ -203,7 +203,7 @@ class _ProductFormState extends State<ProductForm> {
   // UPLOAD GAMBAR  ==============================
   Future<void> pickImagesFromGallery() async {
     List<XFile>? returnImages = await ImagePicker().pickMultiImage();
-    if (returnImages == null || returnImages.isEmpty) {
+    if (returnImages.isEmpty) {
       print("gagal memilih gambar");
       return;
     }
@@ -218,7 +218,7 @@ class _ProductFormState extends State<ProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryHeigth = MediaQuery.of(context).size.height;
+    // final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
     return isLoading
@@ -296,14 +296,30 @@ class _ProductFormState extends State<ProductForm> {
 
                     // list gambar dipilih
                     Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
                       children: List.generate(
-                        selectedImages.length,
+                        images.length,
                         (index) => Stack(
                           children: [
-                            Image.memory(
-                              images[index],
-                              width: 100,
-                              height: 100,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey, width: 2),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.memory(
+                                    images[index],
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ),
                             Positioned(
                               top: 0,

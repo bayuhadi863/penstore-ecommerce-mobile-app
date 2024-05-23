@@ -4,7 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
-import 'dart:typed_data';
 import 'dart:io';
 
 class AddProductController extends GetxController {
@@ -28,12 +27,10 @@ class AddProductController extends GetxController {
   Future<void> getImageUrls(List<File> selectedImages) async {
     try {
       for (final File image in selectedImages) {
-        if (image != null) {
-          print("mengupload gambar...");
-          final productImageRepository = Get.put(ProductRepository());
-          final String imgUrl = await productImageRepository.uploadImage(image);
-          imgUrls.add(imgUrl);
-        }
+        print("mengupload gambar...");
+        final productImageRepository = Get.put(ProductRepository());
+        final String imgUrl = await productImageRepository.uploadImage(image);
+        imgUrls.add(imgUrl);
       }
 
       Alerts.successSnackBar(
