@@ -51,7 +51,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/cart', page: () => const CartScreen()),
         GetPage(name: '/detail-chat', page: () => const ChatDetailScreen()),
         GetPage(name: '/checkout', page: () => const CheckoutScreen()),
-        GetPage(name: '/payment-buyer', page: () => const PaymentBuyerScreen()),
+        GetPage(
+            name: '/payment-buyer',
+            page: () => const PaymentBuyerScreen()),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

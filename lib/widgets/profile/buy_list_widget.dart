@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/order/get_user_order_controller.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
+import 'package:skeletons/skeletons.dart';
 
 class BuyListProfile extends StatefulWidget {
   const BuyListProfile({super.key});
@@ -72,244 +74,286 @@ class _BuyListProfileState extends State<BuyListProfile> {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+
+    final GetUserOrderController getUserOrderController =
+        Get.put(GetUserOrderController());
+
     return SizedBox(
       width: double.infinity,
-      child: Column(
-        children: List.generate(
-          10,
-          (index) {
-            return Container(
-              width: mediaQueryWidth,
-              margin: const EdgeInsets.only(
-                  left: 20, right: 20, bottom: 10, top: 10),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF91E0DD).withOpacity(0.3),
-                    blurRadius: 16,
-                    offset: const Offset(1, 1),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: mediaQueryHeight * 0.1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.toNamed('/detail-product');
-                              },
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ClipRRect(
-                                  clipBehavior: Clip.hardEdge,
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image(
-                                    filterQuality: FilterQuality.high,
-                                    image: AssetImage(
-                                      imgList[0],
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+      child: Obx(() {
+        final orders = getUserOrderController.orders;
+        final loading = getUserOrderController.isLoading.value;
+
+        // sort order by createdAt
+        orders.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
+        return loading
+            ? SkeletonItem(
+                child: Column(
+                  children: List.generate(
+                    3,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10, top: 10),
+                      child: SkeletonAvatar(
+                        style: SkeletonAvatarStyle(
+                          width: double.infinity,
+                          height: 200,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(width: 10),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 5),
-                            Text(
-                              'Pensil Staedler 2B',
-                              style: TextStyle(
-                                color: Color(0xFF424242),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Jumlah : 10',
-                              style: TextStyle(
-                                color: Color(0xFF757B7B),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Rp 40.000 -',
-                              style: TextStyle(
-                                color: Color(0xFF91E0DD),
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '2 Produk',
-                              style: TextStyle(
-                                color: Color(0xFF757B7B),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Total Pesanan : ',
-                              style: TextStyle(
-                                color: Color(0xFF757B7B),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Rp 80.000, -',
-                              style: TextStyle(
-                                color: Color(0xFF91E0DD),
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Container(
-                    height: 1,
-                    width: mediaQueryWidth * 0.9,
-                    color: const Color(0xFF000000),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: mediaQueryWidth * 0.45,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: isPaid
-                                    ? 'Produk masih dalam penanganan'
-                                    : isReceived
-                                        ? 'Beri Nilai untuk produk ini'
-                                        : isRating
-                                            ? 'Terima kasih atas penilaiannya'
-                                            : isDone
-                                                ? 'Segera lakukan pembayaran agar pesanan diproses'
-                                                : 'Segera lakukan pembayaran agar pesanan diproses',
-                                style: TextStyle(
-                                  color: Color(0xFF757B7B),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  fontFamily: 'Poppins',
-                                ),
+                ),
+              )
+            : orders.isEmpty
+                ? const Text("Belum ada produk yang Anda jual")
+                : Column(
+                    children: List.generate(
+                      orders.length,
+                      (index) {
+                        return Container(
+                          width: mediaQueryWidth,
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, bottom: 10, top: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF91E0DD).withOpacity(0.3),
+                                blurRadius: 16,
+                                offset: const Offset(1, 1),
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: mediaQueryWidth * 0.38,
-                        height: 40,
-                        child: TextButton(
-                          onPressed: () {
-                            isPaid
-                                ? changeIsReceived()
-                                : isReceived
-                                    ? changeIsRating()
-                                    : isRating
-                                        ? changeIsDone()
-                                        : changeIsPaid();
-                          },
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: isPaid
-                                      ? 'Diterima'
-                                      : isReceived
-                                          ? 'Nilai'
-                                          : isRating
-                                              ? 'Beli Lagi'
-                                              : isDone
-                                                  ? 'Bayar Sekarang'
-                                                  : 'Bayar Sekarang',
-                                  style: TextStyle(
-                                    color: Color(0xFFFFFFFF),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Poppins',
-                                  ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: mediaQueryHeight * 0.1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Get.toNamed('/detail-product');
+                                          },
+                                          child: Container(
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: ClipRRect(
+                                              clipBehavior: Clip.hardEdge,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image(
+                                                filterQuality:
+                                                    FilterQuality.high,
+                                                image: AssetImage(
+                                                  imgList[0],
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 5),
+                                        Text(
+                                          'Pensil Staedler 2B',
+                                          style: TextStyle(
+                                            color: Color(0xFF424242),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          'Jumlah : 10',
+                                          style: TextStyle(
+                                            color: Color(0xFF757B7B),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          'Rp 40.000 -',
+                                          style: TextStyle(
+                                            color: Color(0xFF91E0DD),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: '2 Produk',
+                                          style: TextStyle(
+                                            color: Color(0xFF757B7B),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Total Pesanan : ',
+                                          style: TextStyle(
+                                            color: Color(0xFF757B7B),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: 'Rp 80.000, -',
+                                          style: TextStyle(
+                                            color: Color(0xFF91E0DD),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
+                              Container(
+                                height: 1,
+                                width: mediaQueryWidth * 0.9,
+                                color: const Color(0xFF000000),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: mediaQueryWidth * 0.45,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: isPaid
+                                                ? 'Produk masih dalam penanganan'
+                                                : isReceived
+                                                    ? 'Beri Nilai untuk produk ini'
+                                                    : isRating
+                                                        ? 'Terima kasih atas penilaiannya'
+                                                        : isDone
+                                                            ? 'Segera lakukan pembayaran agar pesanan diproses'
+                                                            : 'Segera lakukan pembayaran agar pesanan diproses',
+                                            style: TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: mediaQueryWidth * 0.38,
+                                    height: 40,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        isPaid
+                                            ? changeIsReceived()
+                                            : isReceived
+                                                ? changeIsRating()
+                                                : isRating
+                                                    ? changeIsDone()
+                                                    : changeIsPaid();
+                                      },
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: isPaid
+                                                  ? 'Diterima'
+                                                  : isReceived
+                                                      ? 'Nilai'
+                                                      : isRating
+                                                          ? 'Beli Lagi'
+                                                          : isDone
+                                                              ? 'Bayar Sekarang'
+                                                              : 'Bayar Sekarang',
+                                              style: TextStyle(
+                                                color: Color(0xFFFFFFFF),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: isPaid
+                                            ? Color(0xFFF46B69)
+                                            : isReceived
+                                                ? Color(0xFFF4CD69)
+                                                : isRating
+                                                    ? Color(0xFF6BCCC9)
+                                                    : Color(0xFF69A9F4),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
-                          style: TextButton.styleFrom(
-                            backgroundColor: isPaid
-                                ? Color(0xFFF46B69)
-                                : isReceived
-                                    ? Color(0xFFF4CD69)
-                                    : isRating
-                                        ? Color(0xFF6BCCC9)
-                                        : Color(0xFF69A9F4),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                        );
+                      },
+                    ),
+                  );
+      }),
     );
   }
 }

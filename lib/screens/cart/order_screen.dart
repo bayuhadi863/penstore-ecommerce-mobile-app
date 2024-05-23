@@ -1,13 +1,18 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/get_selected_carts_controller.dart';
 import 'package:penstore/controller/cart/get_single_cart_controller.dart';
+import 'package:penstore/controller/order/add_order_controller.dart';
+import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
 import 'package:penstore/controller/product/get_single_product.dart';
+import 'package:penstore/models/order_model.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/add_rating_dialog.dart';
+import 'package:penstore/widgets/alerts.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skeletons/skeletons.dart';
@@ -16,7 +21,9 @@ class CheckoutScreen extends StatefulWidget {
   // array of string
   final List<String>? cartIds;
   final int? totalPrice;
-  const CheckoutScreen({super.key, this.cartIds, this.totalPrice});
+  final String? sellerId;
+  const CheckoutScreen(
+      {super.key, this.cartIds, this.totalPrice, this.sellerId});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -109,30 +116,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-// List of payment methods
-  List<String> paymentMethods = [
-    'Pilih Metode Pembayaran',
-    'Transfer Bank',
-    'OVO',
-    'Dana',
-    'Gopay',
-  ];
-
-  final List<bool> _isCheckedList = List.generate(10, (index) => false);
-
-  void _onCheckedAllChanged(bool? value) {
-    setState(() {
-      isCheckedAll = value ?? false;
-      _isCheckedList.fillRange(0, _isCheckedList.length, isCheckedAll);
-    });
-  }
-
-  void _onChanged(int index, bool value) {
-    setState(() {
-      _isCheckedList[index] = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
@@ -143,14 +126,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final GetSelectedCartsController getSelectedCartsController =
         Get.put(GetSelectedCartsController(widget.cartIds!));
 
+    final GetUserPaymentMethodController getUserPaymentMethodController =
+        Get.put(GetUserPaymentMethodController(widget.sellerId!));
+
+    final AddOrderController addOrderController = Get.put(AddOrderController());
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        setState(() {
-          isPaidOff = true;
-        });
-        checkPaid();
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   setState(() {
+      //     isPaidOff = true;
+      //   });
+      //   checkPaid();
+      // }),
       appBar: AppBar(
         toolbarHeight: 74,
         automaticallyImplyLeading: false,
@@ -525,39 +513,55 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               color: const Color(0xFF757B7B),
                             ),
                           ),
-                          child: DropdownButton<String>(
-                            value: selectedPaymentMethod,
-                            hint: const Text(
-                              'Pilih Metode Pembayaran',
-                              style: TextStyle(
+                          child: Obx(() {
+                            final paymentMethods =
+                                getUserPaymentMethodController.paymentMethods;
+
+                            // array of string paymentMethodsId from paymentMethods
+                            final List<String> paymentMethodsId =
+                                paymentMethods.map((e) => e.id!).toList();
+
+                            // function to get payment method name by id
+                            String getPaymentMethodName(String id) {
+                              final paymentMethod = paymentMethods
+                                  .firstWhere((element) => element.id == id);
+                              return paymentMethod.name;
+                            }
+
+                            return DropdownButton<String>(
+                              value: selectedPaymentMethod,
+                              hint: const Text(
+                                'Pilih metode pembayaran',
+                                style: TextStyle(
+                                  color: Color(0xFF757B7B),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              isExpanded: true,
+                              underline: Container(),
+                              style: const TextStyle(
                                 color: Color(0xFF757B7B),
                                 fontSize: 12,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: 'Poppins',
                               ),
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            isExpanded: true,
-                            underline: Container(),
-                            style: const TextStyle(
-                              color: Color(0xFF757B7B),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                            ),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedPaymentMethod = newValue!;
-                              });
-                            },
-                            items: paymentMethods.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                enabled: value != 'Pilih Metode Pembayaran',
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedPaymentMethod = newValue!;
+                                });
+                              },
+                              items: paymentMethodsId.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  enabled: value != 'Pilih Metode Pembayaran',
+                                  child: Text(getPaymentMethodName(value)),
+                                );
+                              }).toList(),
+                            );
+                          }),
                         ),
                         if (isOrdered == true) ...[
                           if (selectedPaymentMethod != null) ...[
@@ -902,6 +906,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         left: 20, right: 20, bottom: 10, top: 10),
                     child: Container(
                       height: 100,
+                      margin: const EdgeInsets.only(bottom: 15),
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       decoration: BoxDecoration(
@@ -1200,9 +1205,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: TextButton(
-                            onPressed: () {
-                              Get.toNamed('/payment-buyer');
-                              checkMetode();
+                            onPressed: () async {
+                              if (selectedPaymentMethod == null) {
+                                Alerts.errorSnackBar(
+                                  title: 'Gagal!',
+                                  message:
+                                      'Pilih Metode Pembayaran terlebih dahulu!',
+                                );
+                                return;
+                              }
+
+                              final OrderModel order = OrderModel(
+                                userId: FirebaseAuth.instance.currentUser!.uid,
+                                sellerId: widget.sellerId!,
+                                cartIds: widget.cartIds!,
+                                totalProductPrice: widget.totalPrice!,
+                                serviceFee: serviceFee,
+                                totalPrice: total,
+                                paymentMethodId: selectedPaymentMethod!,
+                                status: 'Menunggu Pembayaran',
+                              );
+
+                              await addOrderController.createOrder(
+                                  order, context);
                             },
                             child: const Text(
                               'Pesan',
