@@ -603,6 +603,7 @@ class _ProductFormState extends State<ProductForm> {
                           await addProductController
                               .getImageUrls(selectedImages);
                           await addProductController.addProduct(context);
+                          Navigator.pop(context);
                         },
                         child: const Center(
                           child: Text(

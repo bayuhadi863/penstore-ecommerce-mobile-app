@@ -81,13 +81,14 @@ class AddProductController extends GetxController {
             title: 'Sukses', message: "Berhasil menambahkan produk");
 
         // Go to main route
-        // Get.offAllNamed('/');
+        Get.offAllNamed('/');
       }
     } catch (e) {
       Navigator.of(context).pop();
+      print(e);
       Alerts.errorSnackBar(
         title: 'Gagal',
-        message: ("Gagal menambah produk ${e.toString()}",),
+        message: "Gagal menambah produk ${e.toString()}",
       );
     }
   }
