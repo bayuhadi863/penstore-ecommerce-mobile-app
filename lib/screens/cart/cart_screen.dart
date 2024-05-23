@@ -337,7 +337,8 @@ class _CartScreenState extends State<CartScreen> {
                                                         cart.product.imageUrl!
                                                             .isNotEmpty)
                                                     ? Image.network(
-                                                        cart.product.imageUrl!,
+                                                        cart.product
+                                                            .imageUrl![0],
                                                         height: 16,
                                                         width: 16,
                                                         filterQuality:

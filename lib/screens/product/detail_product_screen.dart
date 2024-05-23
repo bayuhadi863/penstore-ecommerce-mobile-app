@@ -312,7 +312,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                           child: (product?.imageUrl != null &&
                                   product!.imageUrl!.isNotEmpty)
                               ? Image.network(
-                                  product!.imageUrl!,
+                                  product!.imageUrl![0],
                                   fit: BoxFit.cover,
                                   filterQuality: FilterQuality.medium,
                                 )

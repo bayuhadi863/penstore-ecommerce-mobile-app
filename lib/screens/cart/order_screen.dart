@@ -220,7 +220,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ),
       ),
-      
       body: Stack(
         children: [
           SizedBox(
@@ -330,7 +329,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                         ? Image.network(
                                                             carts[index]
                                                                 .product
-                                                                .imageUrl!,
+                                                                .imageUrl![0],
                                                             height: 16,
                                                             width: 16,
                                                             filterQuality:
@@ -817,7 +816,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           )
                         ],
-                        
                         if (isPaidOff == true) ...[
                           Container(
                             width: double.infinity,
@@ -883,7 +881,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           )
                         ]
-                      
                       ],
                     ),
                   ),
@@ -1278,7 +1275,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               )
             ]
           ],
-        
         ],
       ),
     );

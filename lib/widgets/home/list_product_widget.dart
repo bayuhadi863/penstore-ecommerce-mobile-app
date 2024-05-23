@@ -155,7 +155,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                                           child: (product.imageUrl != null &&
                                                   product.imageUrl!.isNotEmpty)
                                               ? Image.network(
-                                                  product.imageUrl!,
+                                                  product.imageUrl![0],
                                                   height: 16,
                                                   width: 16,
                                                   filterQuality:
