@@ -9,15 +9,34 @@ class GetCartsController extends GetxController {
 
   final isLoading = false.obs;
   final RxList<CartModel> carts = <CartModel>[].obs;
+  final RxList<String> cartSellerIds = <String>[].obs;
 
   final currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void onInit() {
     super.onInit();
-    fetchCart(currentUser!.uid);
+    // fetchCart(currentUser!.uid);
+    fetchCartSellerId(currentUser!.uid);
     // getUser(currentUser!.uid);
     // print(carts);
+  }
+
+  void fetchCartSellerId(String userId) async {
+    try {
+      isLoading(true);
+      final cartRepository = Get.put(CartRepository());
+      final carts = await cartRepository.fetchDistinctSellerId(userId);
+      cartSellerIds.value = carts;
+      // this.carts.value = carts;
+      print('carts ${carts.length}');
+      print('carts data ${carts}');
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      printError(info: e.toString());
+      rethrow;
+    }
   }
 
   void fetchCart(String uid) async {
@@ -26,15 +45,6 @@ class GetCartsController extends GetxController {
       final cartRepository = Get.put(CartRepository());
       final carts = await cartRepository.fetchCart(uid);
       this.carts.value = carts;
-
-      // format carts to array of object that grouping carts by carts.product.userId
-      final groupedCarts = <String, List<CartModel>>{};
-      for (final cart in carts) {
-        if (!groupedCarts.containsKey(cart.product.userId)) {
-          groupedCarts[cart.product.userId!] = <CartModel>[];
-        }
-        groupedCarts[cart.product.userId]!.add(cart);
-      }
 
       // print('grouped list = ${groupedCarts.values.toList()[1].length}');
 
