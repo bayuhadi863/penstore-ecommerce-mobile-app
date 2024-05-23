@@ -28,6 +28,7 @@ class CartRepository extends GetxController {
           .collection('carts')
           .where('user.id', isEqualTo: user.id)
           .where('product.id', isEqualTo: product.id)
+          .where('isOrdered', isEqualTo: false)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -246,8 +247,11 @@ class CartRepository extends GetxController {
   // fetch carts by user id, get the carts.product.user.id distinct value
   Future<List<String>> fetchDistinctSellerId(String uid) async {
     try {
-      final QuerySnapshot querySnapshot =
-          await db.collection('carts').where('user.id', isEqualTo: uid).get();
+      final QuerySnapshot querySnapshot = await db
+          .collection('carts')
+          .where('user.id', isEqualTo: uid)
+          .where('isOrdered', isEqualTo: false)
+          .get();
 
       if (querySnapshot.docs.isEmpty) {
         return [];
@@ -278,6 +282,7 @@ class CartRepository extends GetxController {
           .collection('carts')
           .where('user.id', isEqualTo: uid)
           .where('product.userId', isEqualTo: sellerId)
+          .where('isOrdered', isEqualTo: false)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
@@ -304,6 +309,7 @@ class CartRepository extends GetxController {
         .collection('carts')
         .where('user.id', isEqualTo: uid)
         .where('product.userId', isEqualTo: sellerId)
+        .where('isOrdered', isEqualTo: false)
         .snapshots()
         .map((query) =>
             query.docs.map((doc) => CartModel.fromSnapshot(doc)).toList());

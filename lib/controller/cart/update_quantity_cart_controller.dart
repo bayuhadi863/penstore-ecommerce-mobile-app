@@ -22,8 +22,8 @@ class UpdateQuantityCartController extends GetxController {
       await cartRepository.addCartQuantity(cartId, 1);
       quantity.value++;
     } catch (e) {
-      // throw e.toString();
-      return;
+      throw e.toString();
+      // return;
     }
   }
 
@@ -32,8 +32,8 @@ class UpdateQuantityCartController extends GetxController {
       await cartRepository.subtractCartQuantity(cartId, 1);
       quantity.value--;
     } catch (e) {
-      // throw e.toString();
-      return;
+      rethrow;
+      // return;
     }
   }
 

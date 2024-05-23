@@ -368,7 +368,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ),
                       BuyListProfile(),
                       const SizedBox(
-                        height: 100,
+                        height: 165,
                       ),
                     ],
                   ),
@@ -417,7 +417,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ),
                       SellListProfile(),
                       const SizedBox(
-                        height: 100,
+                        height: 165,
                       ),
                     ],
                   ),
@@ -463,7 +463,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ),
                       SaleListProfile(),
                       const SizedBox(
-                        height: 100,
+                        height: 165,
                       ),
                     ],
                   ),

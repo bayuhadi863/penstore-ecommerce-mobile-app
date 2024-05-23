@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/cart/delete_cart_controller.dart';
 import 'package:penstore/controller/cart/get_carts_controller.dart';
 import 'package:penstore/controller/cart/get_user_cart_by_seller_controller.dart';
 import 'package:penstore/controller/cart/select_cart_controller.dart';
@@ -108,6 +109,9 @@ class _CartScreenState extends State<CartScreen> {
     final SelectCartController selectCartController =
         Get.put(SelectCartController());
 
+    final DeleteCartController deleteCartController =
+        Get.put(DeleteCartController());
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 74,
@@ -125,338 +129,469 @@ class _CartScreenState extends State<CartScreen> {
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Obx(
-                () => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                      getCartsController.cartSellerIds.length, (index) {
-                    final cartSellerId =
-                        getCartsController.cartSellerIds[index];
-
-                    final getSingleUserController = Get.put(
-                      GetSingleUserController(cartSellerId),
-                      tag: cartSellerId
-                          .toString(), // Use unique tag for each instance
-                    );
-
-                    final GetUserCartBySellerController
-                        getUserCartBySellerController = Get.put(
-                      GetUserCartBySellerController(cartSellerId),
-                      tag: cartSellerId.toString(),
-                    );
-
-                    return Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(
-                          bottom: index ==
-                                  getCartsController.cartSellerIds.length - 1
-                              ? 100
-                              : 15),
-                      padding: const EdgeInsets.only(top: 20, bottom: 10),
-                      color: const Color(0xFF91E0DD).withOpacity(0.3),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                Obx(() {
-                                  final cartIds = getUserCartBySellerController
-                                      .carts
-                                      .map((e) => e.id!)
-                                      .toList();
-
-                                  // get total price of all carts
-                                  final totalPrice =
-                                      getUserCartBySellerController.carts
-                                          .fold<int>(
-                                              0,
-                                              (previousValue,
-                                                      element) =>
-                                                  previousValue +
-                                                  (element.product.price *
-                                                      element.quantity));
-
-                                  return Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 24,
-                                        height: 24,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                        child: Checkbox(
-                                          value: selectCartController
-                                                  .isAllSelected.value &&
-                                              selectCartController
-                                                      .sellerId.value ==
-                                                  cartSellerId,
-                                          onChanged: (value) {
-                                            selectCartController.selectAll(
-                                                cartIds,
-                                                totalPrice,
-                                                cartSellerId);
-                                          },
-                                          activeColor: Colors.transparent,
-                                          checkColor: const Color(0xFF6BCCC9),
-                                          side: BorderSide.none,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: mediaQueryWidth * 0.02,
-                                      ),
-                                      Image.asset(
-                                        'assets/icons/store_outline.png',
-                                        height: 18,
-                                        width: 18,
-                                        filterQuality: FilterQuality.high,
-                                      ),
-                                      SizedBox(
-                                        width: mediaQueryWidth * 0.02,
-                                      ),
-                                      Obx(() {
-                                        final sellerName =
-                                            getSingleUserController
-                                                .user.value.name;
-
-                                        return RichText(
-                                          text: TextSpan(
-                                            text: sellerName,
-                                            style: const TextStyle(
-                                              color: Color(0xFF424242),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                                    ],
-                                  );
-                                }),
-                              ],
+                () => getCartsController.isLoading.value
+                    // 1 == 1
+                    ? SkeletonItem(
+                        child: Column(
+                          children: List.generate(
+                            3,
+                            (index) => const Padding(
+                              padding: EdgeInsets.only(bottom: 15),
+                              child: SkeletonAvatar(
+                                style: SkeletonAvatarStyle(
+                                  width: double.infinity,
+                                  height: 300,
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: mediaQueryHeight * 0.02,
-                          ),
-                          Container(
-                            height: 2,
+                        ),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                            getCartsController.cartSellerIds.length, (index) {
+                          final cartSellerId =
+                              getCartsController.cartSellerIds[index];
+
+                          final getSingleUserController = Get.put(
+                            GetSingleUserController(cartSellerId),
+                            tag: cartSellerId
+                                .toString(), // Use unique tag for each instance
+                          );
+
+                          return Container(
                             width: double.infinity,
-                            color: const Color(0xFF757B7B),
-                          ),
-                          SizedBox(
-                            height: mediaQueryHeight * 0.02,
-                          ),
-                          Obx(() {
-                            final carts = getUserCartBySellerController.carts;
-                            return Column(
-                              children: List.generate(carts.length, (index) {
-                                final cart = carts[index];
-
-                                final UpdateQuantityCartController
-                                    updateQuantityCartController = Get.put(
-                                  UpdateQuantityCartController(cart.id!),
-                                  tag: cart.id.toString(),
-                                );
-
-                                return Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 10),
-                                  height: 100,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF91E0DD)
-                                            .withOpacity(0.3),
-                                        blurRadius: 16,
-                                        offset: const Offset(1, 1),
+                            margin: EdgeInsets.only(
+                                bottom: index ==
+                                        getCartsController
+                                                .cartSellerIds.length -
+                                            1
+                                    ? 100
+                                    : 15),
+                            padding: const EdgeInsets.only(top: 20, bottom: 10),
+                            color: const Color(0xFF91E0DD).withOpacity(0.3),
+                            child: StreamBuilder<List<CartModel>>(
+                              stream: CartRepository.instance
+                                  .streamCartsBySellerId(
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                      cartSellerId),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    // 1 == 1
+                                    ) {
+                                  return SkeletonItem(
+                                    child: Column(
+                                      children: List.generate(
+                                        2,
+                                        (index) => Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              bottom: 10,
+                                              top: 10),
+                                          child: SkeletonAvatar(
+                                            style: SkeletonAvatarStyle(
+                                              width: double.infinity,
+                                              height: 100,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                  child: Row(
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Tampilkan pesan error jika terjadi kesalahan
+                                } else {
+                                  final carts = snapshot.data!;
+
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Container(
-                                        width: 24,
-                                        height: 24,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF91E0DD)
-                                              .withOpacity(0.3),
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                        child: Checkbox(
-                                          value: selectCartController
-                                              .selectedCart
-                                              .contains(cart.id),
-                                          onChanged: (value) {
-                                            selectCartController.selectCart(
-                                                cart.id!,
-                                                cart.product.price,
-                                                cart.quantity,
-                                                cartSellerId);
-                                          },
-                                          activeColor: Colors.transparent,
-                                          checkColor: const Color(0xFF6BCCC9),
-                                          side: BorderSide.none,
-                                        ),
-                                      ),
-                                      SizedBox(width: mediaQueryWidth * 0.040),
-                                      Stack(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Get.toNamed('/detail-product');
-                                            },
-                                            child: Container(
-                                              width: 80,
-                                              height: 90,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFF91E0DD),
-                                                ),
-                                              ),
-                                              child: ClipRRect(
-                                                clipBehavior: Clip.hardEdge,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                child: (cart.product.imageUrl !=
-                                                            null &&
-                                                        cart.product.imageUrl!
-                                                            .isNotEmpty)
-                                                    ? Image.network(
-                                                        cart.product
-                                                            .imageUrl![0],
-                                                        height: 16,
-                                                        width: 16,
-                                                        filterQuality:
-                                                            FilterQuality.high,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Image.asset(
-                                                        'assets/icons/cart_outline.png',
-                                                        height: 16,
-                                                        width: 16,
-                                                        filterQuality:
-                                                            FilterQuality.high,
-                                                      ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            cart.product.name,
-                                            style: const TextStyle(
-                                              color: Color(0xFF424242),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                          Text(
-                                            Format.formatRupiah(
-                                                cart.product.price),
-                                            style: const TextStyle(
-                                              color: Color(0xFF91E0DD),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                          Container(
-                                            width: mediaQueryWidth * 0.259,
-                                            height: mediaQueryHeight * 0.038,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              border: Border.all(
-                                                color: const Color(0xFFB3B3B3),
-                                              ),
-                                            ),
-                                            child: Obx(() {
-                                              final quantity =
-                                                  updateQuantityCartController
-                                                      .quantity.value;
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                          children: [
+                                            Obx(() {
+                                              // final cartIds = getUserCartBySellerController
+                                              //     .carts
+                                              //     .map((e) => e.id!)
+                                              //     .toList();
+                                              final cartIds = carts
+                                                  .map((e) => e.id!)
+                                                  .toList();
+                                              // get total price of all carts
+                                              final totalPrice = carts.fold<
+                                                      int>(
+                                                  0,
+                                                  (previousValue, element) =>
+                                                      previousValue +
+                                                      (element.product.price *
+                                                          element.quantity));
+
                                               return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      updateQuantityCartController
-                                                          .increment(cart.id!);
-                                                    },
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      size: 18,
-                                                      color: quantity <
-                                                              cart.product.stock
-                                                          ? const Color(
-                                                              0xFF6BCCC9)
-                                                          : const Color(
-                                                              0xFFB3B3B3),
+                                                  Container(
+                                                    width: 24,
+                                                    height: 24,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
+                                                    ),
+                                                    child: Checkbox(
+                                                      value: selectCartController
+                                                              .isAllSelected
+                                                              .value &&
+                                                          selectCartController
+                                                                  .sellerId
+                                                                  .value ==
+                                                              cartSellerId,
+                                                      onChanged: (value) {
+                                                        selectCartController
+                                                            .selectAll(
+                                                                cartIds,
+                                                                totalPrice,
+                                                                cartSellerId);
+                                                      },
+                                                      activeColor:
+                                                          Colors.transparent,
+                                                      checkColor: const Color(
+                                                          0xFF6BCCC9),
+                                                      side: BorderSide.none,
                                                     ),
                                                   ),
-                                                  Text(
-                                                    quantity.toString(),
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontFamily: 'Poppins',
-                                                    ),
+                                                  SizedBox(
+                                                    width:
+                                                        mediaQueryWidth * 0.02,
                                                   ),
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      updateQuantityCartController
-                                                          .decrement(cart.id!);
-                                                    },
-                                                    child: Icon(
-                                                      Icons.remove,
-                                                      size: 18,
-                                                      color: quantity > 1
-                                                          ? Colors.red[300]
-                                                          : const Color(
-                                                              0xFFB3B3B3),
-                                                    ),
+                                                  Image.asset(
+                                                    'assets/icons/store_outline.png',
+                                                    height: 18,
+                                                    width: 18,
+                                                    filterQuality:
+                                                        FilterQuality.high,
                                                   ),
+                                                  SizedBox(
+                                                    width:
+                                                        mediaQueryWidth * 0.02,
+                                                  ),
+                                                  Obx(() {
+                                                    final sellerName =
+                                                        getSingleUserController
+                                                            .user.value.name;
+
+                                                    return RichText(
+                                                      text: TextSpan(
+                                                        text: sellerName,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF424242),
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
                                                 ],
                                               );
                                             }),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: mediaQueryHeight * 0.02,
+                                      ),
+                                      Container(
+                                        height: 2,
+                                        width: double.infinity,
+                                        color: const Color(0xFF757B7B),
+                                      ),
+                                      SizedBox(
+                                        height: mediaQueryHeight * 0.02,
+                                      ),
+                                      Column(
+                                        children: List.generate(carts.length,
+                                            (index) {
+                                          final cart = carts[index];
+
+                                          return Container(
+                                            width: double.infinity,
+                                            margin: const EdgeInsets.only(
+                                                left: 20,
+                                                right: 20,
+                                                bottom: 10),
+                                            height: 100,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 20),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: const Color(0xFF91E0DD)
+                                                      .withOpacity(0.3),
+                                                  blurRadius: 16,
+                                                  offset: const Offset(1, 1),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 24,
+                                                  height: 24,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF91E0DD)
+                                                            .withOpacity(0.3),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                  ),
+                                                  child: Obx(
+                                                    () => Checkbox(
+                                                      value:
+                                                          selectCartController
+                                                              .selectedCart
+                                                              .contains(
+                                                                  cart.id),
+                                                      onChanged: (value) {
+                                                        selectCartController
+                                                            .selectCart(
+                                                                cart.id!,
+                                                                cart.product
+                                                                    .price,
+                                                                cart.quantity,
+                                                                cartSellerId);
+                                                      },
+                                                      activeColor:
+                                                          Colors.transparent,
+                                                      checkColor: const Color(
+                                                          0xFF6BCCC9),
+                                                      side: BorderSide.none,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    width: mediaQueryWidth *
+                                                        0.040),
+                                                Stack(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                            '/detail-product');
+                                                      },
+                                                      child: Container(
+                                                        width: 80,
+                                                        height: 90,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          border: Border.all(
+                                                            color: const Color(
+                                                                0xFF91E0DD),
+                                                          ),
+                                                        ),
+                                                        child: ClipRRect(
+                                                          clipBehavior:
+                                                              Clip.hardEdge,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          child: (cart.product
+                                                                          .imageUrl !=
+                                                                      null &&
+                                                                  cart
+                                                                      .product
+                                                                      .imageUrl!
+                                                                      .isNotEmpty)
+                                                              ? Image.network(
+                                                                  cart.product
+                                                                      .imageUrl![0],
+                                                                  height: 16,
+                                                                  width: 16,
+                                                                  filterQuality:
+                                                                      FilterQuality
+                                                                          .high,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )
+                                                              : Image.asset(
+                                                                  'assets/icons/cart_outline.png',
+                                                                  height: 16,
+                                                                  width: 16,
+                                                                  filterQuality:
+                                                                      FilterQuality
+                                                                          .high,
+                                                                ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      cart.product.name,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            Color(0xFF424242),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: 'Poppins',
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      Format.formatRupiah(
+                                                          cart.product.price),
+                                                      style: const TextStyle(
+                                                        color:
+                                                            Color(0xFF91E0DD),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: 'Poppins',
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: mediaQueryWidth *
+                                                          0.259,
+                                                      height: mediaQueryHeight *
+                                                          0.038,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        border: Border.all(
+                                                          color: const Color(
+                                                              0xFFB3B3B3),
+                                                        ),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () async {
+                                                              try {
+                                                                await CartRepository
+                                                                    .instance
+                                                                    .addCartQuantity(
+                                                                        cart.id!,
+                                                                        1);
+
+                                                                if (selectCartController
+                                                                    .selectedCart
+                                                                    .contains(cart
+                                                                        .id)) {
+                                                                  selectCartController
+                                                                      .addTotalPrice(cart
+                                                                          .product
+                                                                          .price);
+                                                                }
+                                                              } catch (e) {
+                                                                return;
+                                                              }
+                                                            },
+                                                            child: Icon(
+                                                              Icons.add,
+                                                              size: 18,
+                                                              color: cart.quantity <
+                                                                      cart.product
+                                                                          .stock
+                                                                  ? const Color(
+                                                                      0xFF6BCCC9)
+                                                                  : const Color(
+                                                                      0xFFB3B3B3),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            cart.quantity
+                                                                .toString(),
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 12,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                            ),
+                                                          ),
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              try {
+                                                                await CartRepository
+                                                                    .instance
+                                                                    .subtractCartQuantity(
+                                                                        cart.id!,
+                                                                        1);
+
+                                                                if (selectCartController
+                                                                    .selectedCart
+                                                                    .contains(cart
+                                                                        .id)) {
+                                                                  selectCartController
+                                                                      .removeTotalPrice(
+                                                                    cart.product
+                                                                        .price,
+                                                                  );
+                                                                }
+                                                              } catch (e) {
+                                                                return;
+                                                              }
+                                                            },
+                                                            child: Icon(
+                                                              Icons.remove,
+                                                              size: 18,
+                                                              color: cart.quantity >
+                                                                      1
+                                                                  ? Colors
+                                                                      .red[300]
+                                                                  : const Color(
+                                                                      0xFFB3B3B3),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }),
                                       ),
                                     ],
-                                  ),
-                                );
-                              }),
-                            );
-                          }),
-                        ],
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        }),
                       ),
-                    );
-                  }),
-                ),
               ),
             ),
           ),
@@ -520,19 +655,18 @@ class _CartScreenState extends State<CartScreen> {
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (selectCartController.selectedCart.isEmpty) {
                                 return;
                               }
 
-                              Get.to(
-                                () => CheckoutScreen(
-                                  totalPrice:
-                                      selectCartController.totalPrice.value,
-                                  cartIds: selectCartController.selectedCart
-                                      .toList(),
-                                ),
-                              );
+                              deleteCartController.deleteCart(
+                                  selectCartController.selectedCart.toList(),
+                                  context);
+
+                              selectCartController.clearAll();
+
+                              getCartsController.fetchCartSellerId();
                             },
                             child: const Text(
                               'Hapus',
@@ -568,6 +702,7 @@ class _CartScreenState extends State<CartScreen> {
                                       selectCartController.totalPrice.value,
                                   cartIds: selectCartController.selectedCart
                                       .toList(),
+                                  sellerId: selectCartController.sellerId.value,
                                 ),
                               );
                             },
