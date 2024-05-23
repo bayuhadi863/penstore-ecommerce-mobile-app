@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
+import 'package:penstore/repository/user_repository.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 
 class AppBarHome extends StatelessWidget {
@@ -10,7 +13,8 @@ class AppBarHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
-    final userController = Get.put(UserController());
+
+    final UserController userController = Get.put(UserController());
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -71,8 +75,9 @@ class AppBarHome extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'Welcome',
+                    // authUser!.uid,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -113,6 +118,8 @@ class AppBarHome extends StatelessWidget {
                 onPressed: () {
                   // navigate to cart screen
                   Get.to(() => const CartScreen());
+                  // userController
+                  //     .getCurrentUser(userController.currentUser!.uid);
                 },
                 icon: Image.asset(
                   'assets/icons/cart_outline.png',

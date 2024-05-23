@@ -297,4 +297,15 @@ class CartRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  // Subscribe for stream carts by user id and seller id
+  Stream<List<CartModel>> streamCartsBySellerId(String uid, String sellerId) {
+    return db
+        .collection('carts')
+        .where('user.id', isEqualTo: uid)
+        .where('product.userId', isEqualTo: sellerId)
+        .snapshots()
+        .map((query) =>
+            query.docs.map((doc) => CartModel.fromSnapshot(doc)).toList());
+  }
 }
