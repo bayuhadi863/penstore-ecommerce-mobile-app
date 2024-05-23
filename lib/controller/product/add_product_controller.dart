@@ -13,9 +13,8 @@ class AddProductController extends GetxController {
   User? user = FirebaseAuth.instance.currentUser;
 
   // form variables
-  File? selectedImage;
-  Uint8List? image;
-  String imgUrl = "";
+  List<String> imgUrls = [];
+
   final productNameController = TextEditingController();
   final priceController = TextEditingController();
   final stockController = TextEditingController();
@@ -26,17 +25,20 @@ class AddProductController extends GetxController {
   final isLoading = false.obs;
 
   // upload image to get url
-  Future getImageUrl() async {
+  Future<void> getImageUrls(List<File> selectedImages) async {
     try {
-      if (selectedImage != null) {
-        print("mengupload gambar...");
-        // image = await selectedImage!.readAsBytes();
-        final productImageRepository = Get.put(ProductRepository());
-        imgUrl = await productImageRepository.uploadImage(selectedImage!);
+      for (final File image in selectedImages) {
+        if (image != null) {
+          print("mengupload gambar...");
+          final productImageRepository = Get.put(ProductRepository());
+          final String imgUrl = await productImageRepository.uploadImage(image);
+          imgUrls.add(imgUrl);
+        }
       }
 
       Alerts.successSnackBar(
           title: "Success", message: "Gambar berhasil diupload");
+      print("berhasil mengupload gambar");
     } catch (e) {
       Alerts.errorSnackBar(title: 'Gagal', message: "Gagal mengupload gambar");
       print("error : $e");
@@ -59,7 +61,7 @@ class AddProductController extends GetxController {
           barrierDismissible: false,
         );
 
-        if (imgUrl == "") {
+        if (imgUrls.isEmpty) {
           Alerts.errorSnackBar(
               title: 'Gagal', message: "Produk harus memiliki gambar");
           Navigator.of(context).pop();
@@ -71,7 +73,7 @@ class AddProductController extends GetxController {
             descController.text,
             int.parse(stockController.text),
             int.parse(priceController.text),
-            imgUrl,
+            imgUrls,
             choosedCategory!,
             user!.uid);
 

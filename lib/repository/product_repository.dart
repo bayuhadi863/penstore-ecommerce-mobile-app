@@ -14,13 +14,14 @@ class ProductRepository extends GetxController {
 
   // tambah produk
   Future<void> addProduct(String name, String desc, int stock, int price,
-      String imgUrl, String categoryId, String userId) async {
+      List<String> imgUrls, String categoryId, String userId) async {
     try {
       await db.collection('products').add({
         "name": name,
         "desc": desc,
         "stock": stock,
-        "imageUrl": imgUrl,
+        "imageUrl":
+            imgUrls, // Menggunakan field imageUrls untuk menyimpan array URL gambar
         "price": price,
         "categoryId": categoryId,
         "createdAt": FieldValue.serverTimestamp(),
@@ -29,7 +30,7 @@ class ProductRepository extends GetxController {
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {
-      throw 'Format exeption error';
+      throw 'Format exception error';
     } on PlatformException catch (e) {
       throw e.code;
     } catch (e) {
@@ -78,10 +79,10 @@ class ProductRepository extends GetxController {
 // get all data product
   Future<List<ProductModel>> getAllProducts() async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      final QuerySnapshot<Map<dynamic, dynamic>> querySnapshot =
           await db.collection('products').get();
       if (querySnapshot.docs.isNotEmpty) {
-        print("dataku $querySnapshot.docs");
+        print("dataku ${querySnapshot.docs}");
         return querySnapshot.docs
             .map((doc) => ProductModel.fromSnapshot(doc))
             .toList();

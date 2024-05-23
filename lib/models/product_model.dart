@@ -9,28 +9,34 @@ class ProductModel {
   String categoryId;
   DateTime? createdAt;
   String? userId;
-  String? imageUrl;
-  
-  ProductModel({
-    required this.id,
-    required this.name,
-    required this.desc,
-    required this.stock,
-    required this.price,
-    required this.categoryId,
-    required this.userId,
-    required this.imageUrl,
-    this.createdAt
-  });
+  List<String>? imageUrl;
 
-  static ProductModel empty() => 
-    ProductModel(id: '', name: '', desc: '', stock: 0, price: 0, categoryId: '', userId: '', imageUrl: '',createdAt: null);
-  
+  ProductModel(
+      {required this.id,
+      required this.name,
+      required this.desc,
+      required this.stock,
+      required this.price,
+      required this.categoryId,
+      required this.userId,
+      required this.imageUrl,
+      this.createdAt});
+
+  static ProductModel empty() => ProductModel(
+      id: '',
+      name: '',
+      desc: '',
+      stock: 0,
+      price: 0,
+      categoryId: '',
+      userId: '',
+      imageUrl: [],
+      createdAt: null);
 
   Map<String, dynamic> toJson(createdAt) {
     return {
       'name': name,
-      'desc' : desc,
+      'desc': desc,
       'price': price,
       'stock': stock,
       'categoryId': categoryId,
@@ -50,7 +56,9 @@ class ProductModel {
       price: data['price'],
       categoryId: data['categoryId'],
       userId: data['userId'],
-      imageUrl: data['imageUrl'],
+      imageUrl: data['imageUrl'] is Iterable
+          ? List<String>.from(data['imageUrl'])
+          : [],
       createdAt: data['createdAt']?.toDate(),
     );
   }
