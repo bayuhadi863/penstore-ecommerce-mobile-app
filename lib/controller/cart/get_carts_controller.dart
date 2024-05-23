@@ -26,12 +26,24 @@ class GetCartsController extends GetxController {
       final cartRepository = Get.put(CartRepository());
       final carts = await cartRepository.fetchCart(uid);
       this.carts.value = carts;
+
+      // format carts to array of object that grouping carts by carts.product.userId
+      final groupedCarts = <String, List<CartModel>>{};
+      for (final cart in carts) {
+        if (!groupedCarts.containsKey(cart.product.userId)) {
+          groupedCarts[cart.product.userId!] = <CartModel>[];
+        }
+        groupedCarts[cart.product.userId]!.add(cart);
+      }
+
+      // print('grouped list = ${groupedCarts.values.toList()[1].length}');
+
       isLoading(false);
-      print(carts.length);
+      // print(carts.length);
     } catch (e) {
       isLoading(false);
       printError(info: e.toString());
-      throw e;
+      rethrow;
     }
   }
 
@@ -41,7 +53,7 @@ class GetCartsController extends GetxController {
       final user = await userRepository.fetchUser(uid);
       // this.user.value = user;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

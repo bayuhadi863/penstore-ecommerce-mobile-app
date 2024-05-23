@@ -112,7 +112,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                     ProductModel product = products[index];
                     return Container(
                       width: double.infinity,
-                      height: 100, 
+                      height: 100,
                       margin: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 10, top: 10),
                       child: Stack(
@@ -266,36 +266,38 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: GestureDetector(
-                              onTap: () {
-                                addCartController.createCart(
-                                    userController.user.value,
-                                    product,
-                                    1,
-                                    context);
-                              },
-                              child: Container(
-                                width: 26,
-                                height: 26,
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(
-                                    right: 10, bottom: 10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color(0xFF91E0DD).withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(6),
+                          product.userId == userController.user.value.id
+                              ? Container()
+                              : Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      addCartController.createCart(
+                                          userController.user.value,
+                                          product,
+                                          1,
+                                          context);
+                                    },
+                                    child: Container(
+                                      width: 26,
+                                      height: 26,
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(
+                                          right: 10, bottom: 10),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF91E0DD)
+                                            .withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/icons/cart_outline.png',
+                                        height: 16,
+                                        width: 16,
+                                        filterQuality: FilterQuality.high,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                child: Image.asset(
-                                  'assets/icons/cart_outline.png',
-                                  height: 16,
-                                  width: 16,
-                                  filterQuality: FilterQuality.high,
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     );
