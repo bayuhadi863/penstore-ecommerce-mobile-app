@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/get_carts_controller.dart';
 import 'package:penstore/controller/cart/select_cart_controller.dart';
@@ -121,7 +122,507 @@ class _CartScreenState extends State<CartScreen> {
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    color: const Color(0xFF91E0DD).withOpacity(0.3),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Checkbox(
+                                      value: isCheckedAll,
+                                      onChanged: _onCheckedAllChanged,
+                                      activeColor: Colors.transparent,
+                                      checkColor: const Color(0xFF6BCCC9),
+                                      side: BorderSide.none,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: mediaQueryWidth * 0.02,
+                                  ),
+                                  Image.asset(
+                                    'assets/icons/store_outline.png',
+                                    height: 18,
+                                    width: 18,
+                                    filterQuality: FilterQuality.high,
+                                  ),
+                                  SizedBox(
+                                    width: mediaQueryWidth * 0.02,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Thania Store',
+                                      style: TextStyle(
+                                        color: const Color(0xFF424242),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: mediaQueryHeight * 0.02,
+                        ),
+                        Container(
+                          height: 2,
+                          width: double.infinity,
+                          color: const Color(0xFF757B7B),
+                        ),
+                        SizedBox(
+                          height: mediaQueryHeight * 0.02,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          height: 100,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF91E0DD).withOpacity(0.3),
+                                blurRadius: 16,
+                                offset: const Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xFF91E0DD).withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Checkbox(
+                                  value: isCheckedAll,
+                                  onChanged: _onCheckedAllChanged,
+                                  activeColor: Colors.transparent,
+                                  checkColor: const Color(0xFF6BCCC9),
+                                  side: BorderSide.none,
+                                ),
+                              ),
+                              SizedBox(width: mediaQueryWidth * 0.040),
+                              Stack(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed('/detail-product');
+                                    },
+                                    child: Container(
+                                      width: 80,
+                                      height: 90,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: const Color(0xFF91E0DD),
+                                        ),
+                                      ),
+                                      child: ClipRRect(
+                                        clipBehavior: Clip.hardEdge,
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.asset(
+                                          'assets/icons/cart_outline.png',
+                                          height: 16,
+                                          width: 16,
+                                          filterQuality: FilterQuality.high,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    // carts[index].product.name,
+                                    "Baju Kemeja Pria",
+                                    style: const TextStyle(
+                                      color: Color(0xFF424242),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  Text(
+                                    // Format.formatRupiah(
+                                    //     carts[index].product.price),
+                                    "Rp. 12.000",
+                                    style: const TextStyle(
+                                      color: Color(0xFF91E0DD),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  Container(
+                                    width: mediaQueryWidth * 0.259,
+                                    height: mediaQueryHeight * 0.038,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: const Color(0xFFB3B3B3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            // print(carts[index].id!);
+                                            // setState(() {
+                                            //   isAddButtonPressed =
+                                            //       true;
+                                            // });
+                                            // try {
+                                            //   await CartRepository.instance
+                                            //       .addCartQuantity(
+                                            //           carts[index].id!, 1);
+                                            // } catch (e) {
+                                            //   return;
+                                            // }
+
+                                            // setState(() {
+                                            //   isAddButtonPressed =
+                                            //       false;
+                                            // });
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                            size: 18,
+                                            color: isAddButtonPressed
+                                                ? const Color(0xFF6BCCC9)
+                                                : const Color(0xFFB3B3B3),
+                                          ),
+                                        ),
+                                        Text(
+                                          // carts[index].quantity.toString(),
+                                          "12",
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            // print(carts[index].id!);
+                                            // setState(() {
+                                            //   isRemoveButtonPressed =
+                                            //       true;
+                                            // });
+                                            // try {
+                                            //   await CartRepository.instance
+                                            //       .subtractCartQuantity(
+                                            //           carts[index].id!, 1);
+                                            // } catch (e) {
+                                            //   return;
+                                            // }
+                                            // setState(() {
+                                            //   isRemoveButtonPressed =
+                                            //       false;
+                                            // });
+                                          },
+                                          child: Icon(
+                                            Icons.remove,
+                                            size: 18,
+                                            color: isRemoveButtonPressed
+                                                ? const Color(0xFF6BCCC9)
+                                                : const Color(0xFFB3B3B3),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: mediaQueryHeight * 0.02,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    color: const Color(0xFF91E0DD).withOpacity(0.3),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Checkbox(
+                                      value: isCheckedAll,
+                                      onChanged: _onCheckedAllChanged,
+                                      activeColor: Colors.transparent,
+                                      checkColor: const Color(0xFF6BCCC9),
+                                      side: BorderSide.none,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: mediaQueryWidth * 0.02,
+                                  ),
+                                  Image.asset(
+                                    'assets/icons/store_outline.png',
+                                    height: 18,
+                                    width: 18,
+                                    filterQuality: FilterQuality.high,
+                                  ),
+                                  SizedBox(
+                                    width: mediaQueryWidth * 0.02,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Thania Store',
+                                      style: TextStyle(
+                                        color: const Color(0xFF424242),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: mediaQueryHeight * 0.02,
+                        ),
+                        Container(
+                          height: 2,
+                          width: double.infinity,
+                          color: const Color(0xFF757B7B),
+                        ),
+                        SizedBox(
+                          height: mediaQueryHeight * 0.02,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          height: 100,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF91E0DD).withOpacity(0.3),
+                                blurRadius: 16,
+                                offset: const Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xFF91E0DD).withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Checkbox(
+                                  value: isCheckedAll,
+                                  onChanged: _onCheckedAllChanged,
+                                  activeColor: Colors.transparent,
+                                  checkColor: const Color(0xFF6BCCC9),
+                                  side: BorderSide.none,
+                                ),
+                              ),
+                              SizedBox(width: mediaQueryWidth * 0.040),
+                              Stack(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed('/detail-product');
+                                    },
+                                    child: Container(
+                                      width: 80,
+                                      height: 90,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: const Color(0xFF91E0DD),
+                                        ),
+                                      ),
+                                      child: ClipRRect(
+                                        clipBehavior: Clip.hardEdge,
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.asset(
+                                          'assets/icons/cart_outline.png',
+                                          height: 16,
+                                          width: 16,
+                                          filterQuality: FilterQuality.high,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    // carts[index].product.name,
+                                    "Baju Kemeja Pria",
+                                    style: const TextStyle(
+                                      color: Color(0xFF424242),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  Text(
+                                    // Format.formatRupiah(
+                                    //     carts[index].product.price),
+                                    "Rp. 12.000",
+                                    style: const TextStyle(
+                                      color: Color(0xFF91E0DD),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  Container(
+                                    width: mediaQueryWidth * 0.259,
+                                    height: mediaQueryHeight * 0.038,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: const Color(0xFFB3B3B3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            // print(carts[index].id!);
+                                            // setState(() {
+                                            //   isAddButtonPressed =
+                                            //       true;
+                                            // });
+                                            // try {
+                                            //   await CartRepository.instance
+                                            //       .addCartQuantity(
+                                            //           carts[index].id!, 1);
+                                            // } catch (e) {
+                                            //   return;
+                                            // }
+
+                                            // setState(() {
+                                            //   isAddButtonPressed =
+                                            //       false;
+                                            // });
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                            size: 18,
+                                            color: isAddButtonPressed
+                                                ? const Color(0xFF6BCCC9)
+                                                : const Color(0xFFB3B3B3),
+                                          ),
+                                        ),
+                                        Text(
+                                          // carts[index].quantity.toString(),
+                                          "12",
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            // print(carts[index].id!);
+                                            // setState(() {
+                                            //   isRemoveButtonPressed =
+                                            //       true;
+                                            // });
+                                            // try {
+                                            //   await CartRepository.instance
+                                            //       .subtractCartQuantity(
+                                            //           carts[index].id!, 1);
+                                            // } catch (e) {
+                                            //   return;
+                                            // }
+                                            // setState(() {
+                                            //   isRemoveButtonPressed =
+                                            //       false;
+                                            // });
+                                          },
+                                          child: Icon(
+                                            Icons.remove,
+                                            size: 18,
+                                            color: isRemoveButtonPressed
+                                                ? const Color(0xFF6BCCC9)
+                                                : const Color(0xFFB3B3B3),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   StreamBuilder<List<CartModel>>(
                       stream: CartRepository.instance.streamCarts(FirebaseAuth
                           .instance
