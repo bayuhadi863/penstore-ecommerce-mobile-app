@@ -84,7 +84,7 @@ class AddProductController extends GetxController {
             title: 'Sukses', message: "Berhasil menambahkan produk");
 
         // Go to main route
-        Get.offAllNamed('/');
+        // Get.offAllNamed('/');
       }
     } catch (e) {
       Navigator.of(context).pop();

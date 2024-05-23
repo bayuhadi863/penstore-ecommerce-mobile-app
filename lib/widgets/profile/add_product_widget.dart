@@ -174,6 +174,7 @@ class _ProductFormState extends State<ProductForm> {
     setState(() {
       categories = data_categories;
       isLoading = false;
+      print(categories);
     });
   }
 

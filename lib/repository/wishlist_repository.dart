@@ -12,14 +12,16 @@ class WishlistRepository extends GetxController {
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   // create wishlist
-  Future<void> createWishlist(String wishlistName, String userId) async {
+  Future<String> createWishlist(String wishlistName, String userId) async {
     try {
-      await db.collection('wishlists').add({
+      DocumentReference docRef = await db.collection('wishlists').add({
         'name': wishlistName,
         'productId': [],
         'userId': userId,
         "createdAt": FieldValue.serverTimestamp(),
       });
+
+      return docRef.id;
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {
@@ -53,11 +55,38 @@ class WishlistRepository extends GetxController {
     } on PlatformException catch (e) {
       throw e.code;
     } catch (e) {
+      throw 'Something went wrong. Please try again ${e}';
+    }
+  }
+
+  // check if product is already in wishlist
+  Future<bool> isProductInWishlist(String productId, String userId) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('wishlists')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      // cek iterasi setiap dok wishlist
+      for (var doc in querySnapshot.docs) {
+        List<dynamic> productIds = doc.data()['productId'];
+        if (productIds.contains(productId)) {
+          return true;
+        }
+      }
+      return false;
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
       throw 'Something went wrong. Please try again';
     }
   }
 
-  // get wishlist products
+  // get all products in wishlist
   Future<List<ProductModel>> getWishlistProduct(String wishlistId) async {
     try {
       // Ambil dokumen wishlist berdasarkan wishlistId
