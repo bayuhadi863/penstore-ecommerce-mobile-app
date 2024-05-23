@@ -24,6 +24,17 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
   bool isPaidOff = false;
   bool isRating = false;
 
+  void checkPaid() {
+    if (isPaidOff == true) {
+      isWaiting = false;
+      Get.snackbar('Berhasil', 'Pembayaran Berhasil',
+          backgroundColor: Colors.green, colorText: Colors.white);
+    } else {
+      Get.snackbar('Gagal', 'Pembayaran Gagal',
+          backgroundColor: Colors.red, colorText: Colors.white);
+    }
+  }
+
   void sentBukti() {
     if (isSent == true) {
       Get.snackbar('Berhasil', 'Bukti Pembayaran Terkirim',
@@ -69,6 +80,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
         setState(() {
           isPaidOff = true;
         });
+        checkPaid();
       }),
       appBar: AppBar(
         toolbarHeight: 74,
@@ -762,6 +774,71 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                             ),
                           )
                         ],
+                        if (isPaidOff == true) ...[
+                          Container(
+                            width: double.infinity,
+                            height: 54,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF69F477).withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFF69F477).withOpacity(0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(1, 1),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.access_time,
+                                    color: Color(0xFF69F477),
+                                  ),
+                                  SizedBox(width: mediaQueryWidth * 0.04),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      RichText(
+                                        text: const TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: 'Pembayaran',
+                                              style: TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: ' LUNAS',
+                                              style: TextStyle(
+                                                color: Color(0xFF69F477),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ]
                       ],
                     ),
                   ),

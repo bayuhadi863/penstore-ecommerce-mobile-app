@@ -721,7 +721,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
                           ],
-                       
                         ],
                         if (isWaiting == true) ...[
                           // const SizedBox(height: 20),
@@ -865,6 +864,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           )
                         ]
+                      
                       ],
                     ),
                   ),
