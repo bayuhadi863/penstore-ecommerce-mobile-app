@@ -34,9 +34,38 @@ class UserRepository extends GetxController {
       final DocumentSnapshot documentSnapshot =
           await db.collection('users').doc(uid).get();
       if (documentSnapshot.exists) {
+        // print(UserModel.fromSnapshot(documentSnapshot));
         return UserModel.fromSnapshot(documentSnapshot);
       } else {
+        // print('error');
         throw UserModel.empty();
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // fetch users collection retur Map string any
+  Future<Map<String, dynamic>> fetchUsers() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await db.collection('users').get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs
+            .map((QueryDocumentSnapshot<Map<String, dynamic>> user) =>
+                MapEntry<String, dynamic>(user.id, user.data()))
+            .fold<Map<String, dynamic>>(
+                <String, dynamic>{},
+                (Map<String, dynamic> acc, MapEntry<String, dynamic> user) =>
+                    acc..addAll({user.key: user.value}));
+      } else {
+        return {};
       }
     } on FirebaseException catch (e) {
       throw e.code;

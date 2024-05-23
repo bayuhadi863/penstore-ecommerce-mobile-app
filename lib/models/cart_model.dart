@@ -71,7 +71,9 @@ class CartModel {
               stock: data['product']['stock'],
               categoryId: data['product']['categoryId'],
               userId: data['product']['userId'],
-              imageUrl: data['product']['imageUrl'],
+              imageUrl: data['product']['imageUrl'] is Iterable
+                  ? List<String>.from(data['product']['imageUrl'])
+                  : [],
               createdAt: data['product']['createdAt']?.toDate(),
             )
           : ProductModel.empty(),
