@@ -145,6 +145,31 @@ class WishlistRepository extends GetxController {
     }
   }
 
+  // remove product from wishlist
+  Future<void> removeFromWishlist(String productId, String userId) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('wishlists')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      // Iterasi melalui semua wishlist untuk menghapus productId
+      for (var doc in querySnapshot.docs) {
+        await db.collection('wishlists').doc(doc.id).update({
+          'productId': FieldValue.arrayRemove([productId]),
+        });
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
   // delete wishlist
   Future<void> deleteWishlist(String wishlistId) async {
     try {

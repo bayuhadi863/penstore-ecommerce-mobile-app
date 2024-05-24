@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:penstore/controller/product/add_product_controller.dart';
+import 'package:penstore/controller/product/product_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/repository/wishlist_repository.dart';
@@ -19,6 +19,7 @@ class AddCollectionDialog extends StatefulWidget {
 
 class _AddCollectionDialogState extends State<AddCollectionDialog> {
   final addProductWishlistController = Get.put(AddProductWishlistController());
+  final ProductController productController = Get.put(ProductController());
   bool isLoading = false;
 
   final FocusNode _nameFocusNode = FocusNode();
@@ -39,9 +40,16 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
   }
 
   @override
+  void dispose() {
+    _nameFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     getUserWishlists();
+
     isLoading = false;
   }
 
@@ -346,13 +354,14 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
                                 widget.productId, newWishlistId, context);
                           } else {
                             // jika memilih wishlist
-                            print(
-                                addProductWishlistController.choosedWishlist!);
                             await addProductWishlistController.addToWishlist(
                                 widget.productId,
                                 addProductWishlistController.choosedWishlist!,
                                 context);
                           }
+
+                          // refresh data
+                          productController.reloadGetData();
                         },
                         child: Container(
                           decoration: BoxDecoration(

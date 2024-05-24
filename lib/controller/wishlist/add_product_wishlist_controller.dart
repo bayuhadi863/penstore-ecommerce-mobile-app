@@ -14,25 +14,37 @@ class AddProductWishlistController extends GetxController {
   bool isAddNewWishlist = false;
   String? choosedWishlist;
 
+  final wishlistRepository = Get.put(WishlistRepository());
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final isLoading = false.obs;
+
+  Future<void> reloadVariable() async {
+    isAddNewWishlist = false;
+    choosedWishlist = null;
+    wishlistNameController.text = "";
+    formKey.currentState!.reset();
+  }
 
   // buat wishlist
   Future<String> createWishlist() async {
     try {
-      final wishlistRepository = Get.put(WishlistRepository());
       String wishlistId = await wishlistRepository.createWishlist(
-          user!.uid, wishlistNameController.text);
+        wishlistNameController.text,
+        user!.uid,
+      );
 
       // Show success snackbar
       Alerts.successSnackBar(
           title: 'Sukses', message: "Berhasil membuat wishlist");
 
+      await reloadVariable();
+
       return wishlistId;
     } catch (e) {
       Alerts.errorSnackBar(
         title: 'Gagal',
-        message: ("Gagal menambah produk ${e.toString()}",),
+        message: "Gagal menambah produk ${e.toString()}",
       );
       return "";
     }
@@ -41,7 +53,6 @@ class AddProductWishlistController extends GetxController {
   // check if product is already in wishlist
   Future<bool> checkWishlist(String productId) async {
     try {
-      final wishlistRepository = Get.put(WishlistRepository());
       bool isExist =
           await wishlistRepository.isProductInWishlist(productId, user!.uid);
 
@@ -49,7 +60,7 @@ class AddProductWishlistController extends GetxController {
     } catch (e) {
       Alerts.errorSnackBar(
         title: 'Gagal',
-        message: ("Gagal mengecek produk ${e.toString()}",),
+        message: "Gagal mengecek produk ${e.toString()}",
       );
       return false;
     }
@@ -59,27 +70,43 @@ class AddProductWishlistController extends GetxController {
   Future<void> addToWishlist(
       String productId, String wishlistId, BuildContext context) async {
     try {
-      final wishlistRepository = Get.put(WishlistRepository());
-      await wishlistRepository.addToWishlist(wishlistId, productId);
-
       if (await checkWishlist(productId)) {
         Alerts.errorSnackBar(
           title: 'Gagal',
-          message: ("Produk sudah ada pada wishlist ",),
+          message: "Produk sudah ada pada wishlist ",
         );
-      } else {
-        Navigator.of(context).pop();
-
-        // Show success snackbar
-        Alerts.successSnackBar(
-            title: 'Sukses',
-            message: "Berhasil menambahkan produk ke wishlist");
+        return;
       }
+
+      await wishlistRepository.addToWishlist(wishlistId, productId);
+
+      Navigator.of(context).pop();
+
+      // Show success snackbar
+      Alerts.successSnackBar(
+          title: 'Sukses', message: "Berhasil menambahkan produk ke wishlist");
+
+      // await reloadVariable();
     } catch (e) {
       Navigator.of(context).pop();
       Alerts.errorSnackBar(
         title: 'Gagal',
         message: "Gagal menambah produk ke wishlist ${e.toString()}",
+      );
+    }
+  }
+
+  Future<void> removeFromWishlist(String productId) async {
+    try {
+      await wishlistRepository.removeFromWishlist(productId, user!.uid);
+
+      Alerts.successSnackBar(
+          title: 'Sukses', message: "Berhasil menghapus produk dari wishlist");
+      // await reloadVariable();
+    } catch (e) {
+      Alerts.errorSnackBar(
+        title: 'Gagal',
+        message: "Gagal menghapus produk dari wishlist ${e.toString()}",
       );
     }
   }
