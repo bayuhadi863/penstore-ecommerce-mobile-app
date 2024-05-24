@@ -179,7 +179,9 @@ class _ListProductWidgetState extends State<ListProductWidget> {
                                             showDialog(
                                               context: context,
                                               builder: (context) {
-                                                return const AddCollectionDialog();
+                                                return AddCollectionDialog(
+                                                  productId: product.id,
+                                                );
                                               },
                                             );
                                             setState(() {});

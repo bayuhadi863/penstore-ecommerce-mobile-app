@@ -16,19 +16,14 @@ class WishlistModel {
       WishlistModel(id: '', name: '', products: [], createdAt: null);
 
   Map<String, dynamic> toJson(createdAt) {
-    return {
-      'id': id,
-      'name': name,
-      'productId': products,
-      'createdAt': createdAt
-    };
+    return {'name': name, 'productId': products, 'createdAt': createdAt};
   }
 
   factory WishlistModel.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
 
     return WishlistModel(
-      id: data['id'] as String,
+      id: snapshot.id,
       name: data['name'] as String,
       products: data['productId'] is Iterable
           ? List<String>.from(data['productId'])
