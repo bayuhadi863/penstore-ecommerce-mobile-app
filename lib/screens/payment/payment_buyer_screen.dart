@@ -12,6 +12,7 @@ import 'package:penstore/controller/cart/get_selected_carts_controller.dart';
 import 'package:penstore/controller/order/get_single_order_controller.dart';
 import 'package:penstore/controller/order_payment/add_order_payment_controller.dart';
 import 'package:penstore/controller/payment_method/get_single_payment_method_controller.dart';
+import 'package:penstore/controller/product/get_seller_controller.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/add_rating_dialog.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
@@ -179,7 +180,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
           final order = getSingleOrderController.order.value;
           final cartIds = order.cartIds;
           final loading = getSingleOrderController.isLoading.value;
-          // final cartIds = ['YYLAB7tJwne0TIzIoBZs'];
+          // final cartIds = ['YYLAB7tJwne0TIzIoBZs']
 
           return loading
               // 1 == 1
@@ -951,11 +952,14 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                           Container(
                                               width: double.infinity,
                                               height: 54,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16),
                                               decoration: BoxDecoration(
                                                 color: const Color(0xFF6BCCC9)
                                                     .withOpacity(0.3),
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                    BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color:
@@ -968,8 +972,8 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                               ),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                // crossAxisAlignment:
+                                                //     CrossAxisAlignment.center,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceEvenly,
@@ -1045,19 +1049,19 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                               ),
                                             )
                                           : Container(),
-                                      if (isPaidOff == true) ...[
+                                      if (order.status == 'on_process') ...[
                                         Container(
                                           width: double.infinity,
                                           height: 54,
                                           decoration: BoxDecoration(
                                             color: const Color(0xFF69F477)
-                                                .withOpacity(0.3),
+                                                .withOpacity(0.2),
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             boxShadow: [
                                               BoxShadow(
                                                 color: const Color(0xFF69F477)
-                                                    .withOpacity(0.3),
+                                                    .withOpacity(0.2),
                                                 blurRadius: 16,
                                                 offset: const Offset(1, 1),
                                               ),
@@ -1079,7 +1083,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                 ),
                                                 SizedBox(
                                                     width:
-                                                        mediaQueryWidth * 0.04),
+                                                        mediaQueryWidth * 0.03),
                                                 Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -1094,7 +1098,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                             style: TextStyle(
                                                               color: Color(
                                                                   0xFF757B7B),
-                                                              fontSize: 14,
+                                                              fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
@@ -1107,7 +1111,27 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                             style: TextStyle(
                                                               color: Color(
                                                                   0xFF69F477),
-                                                              fontSize: 14,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    RichText(
+                                                      text: const TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                'Pesanan Anda sedang diproses',
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF757B7B),
+                                                              fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
@@ -1130,7 +1154,145 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                 );
                               },
                             ),
-                            if (isRating) ...[
+                            SizedBox(
+                              height: mediaQueryHeight * 0.02,
+                            ),
+                            Container(
+                              height: 2,
+                              width: mediaQueryWidth * 0.9,
+                              color: const Color(0xFF757B7B),
+                            ),
+                            SizedBox(
+                              height: mediaQueryHeight * 0.02,
+                            ),
+                            Obx(() {
+                              final GetSellerController getSellerController =
+                                  Get.put(GetSellerController(order.sellerId));
+                              final seller = getSellerController.seller.value;
+                              return Container(
+                                width: double.infinity,
+                                height: 138,
+                                margin: const EdgeInsets.only(
+                                    left: 20, right: 20, bottom: 10, top: 10),
+                                child: Container(
+                                  height: 100,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0xFF91E0DD)
+                                            .withOpacity(0.3),
+                                        blurRadius: 16,
+                                        offset: const Offset(1, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Image.asset(
+                                            'assets/icons/note_outline.png',
+                                            width: 24,
+                                            height: 24,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          const Text(
+                                            'Detail Penjual',
+                                            style: TextStyle(
+                                              color: Color(0xFF424242),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Nama',
+                                            style: TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                          Text(
+                                            seller.name,
+                                            style: const TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Email',
+                                            style: TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                          Text(
+                                            seller.email,
+                                            style: const TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'No. Handphone',
+                                            style: TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                          Text(
+                                            seller.phone ?? '-',
+                                            style: const TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                            if (1 == 0) ...[
                               SizedBox(
                                 height: mediaQueryHeight * 0.02,
                               ),
@@ -1265,7 +1427,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                               ),
                             ],
                             SizedBox(
-                              height: mediaQueryHeight * 0.15,
+                              height: 10,
                             ),
                           ],
                         ),

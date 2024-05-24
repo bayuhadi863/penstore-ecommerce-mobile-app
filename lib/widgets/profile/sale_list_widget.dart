@@ -139,7 +139,12 @@ class _SaleListProfileState extends State<SaleListProfile> {
 
                         return InkWell(
                           onTap: () {
-                            Get.toNamed('/payment-seller');
+                            Get.toNamed('/payment-seller', arguments: {
+                              'orderId': order.id,
+                            })!
+                                .then((value) => getSellerOrderController
+                                    .getOrdersBySellerId(FirebaseAuth
+                                        .instance.currentUser!.uid));
                           },
                           child: Container(
                             // height: mediaQueryHeight * 0.23,

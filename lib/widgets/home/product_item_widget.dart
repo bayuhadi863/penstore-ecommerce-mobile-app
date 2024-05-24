@@ -36,9 +36,13 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
   Future<void> checkWishlist() async {
     bool isWishlist =
         await addWishlistController.checkWishlist(widget.product.id);
-    setState(() {
-      _isWishlist = isWishlist;
-    });
+
+    // fix bug
+    if (mounted) {
+      setState(() {
+        _isWishlist = isWishlist;
+      });
+    }
   }
 
   @override

@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:penstore/controller/cart/get_selected_carts_controller.dart';
 import 'package:penstore/controller/order/confirm_payment_controller.dart';
 import 'package:penstore/controller/order/get_single_order_controller.dart';
+import 'package:penstore/controller/order/refuse_payment_controller.dart';
 import 'package:penstore/controller/order_payment/get_order_id_payment_controller.dart';
 import 'package:penstore/controller/payment_method/get_single_payment_method_controller.dart';
 import 'package:penstore/utils/format.dart';
@@ -85,6 +86,9 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
 
     final ConfirmPaymentController confirmPaymentController =
         Get.put(ConfirmPaymentController());
+
+    final RefusePaymentController refusePaymentController =
+        Get.put(RefusePaymentController());
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -744,6 +748,100 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                     ],
                                   ),
                                   const SizedBox(height: 10),
+                                  order.status == 'unpaid'
+                                      ?
+                                      // const SizedBox(height: 20),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 54,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF6BCCC9)
+                                                .withOpacity(0.3),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: const Color(0xFF91E0DD)
+                                                    .withOpacity(0.4),
+                                                blurRadius: 16,
+                                                offset: const Offset(1, 1),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            // crossAxisAlignment:
+                                            //     CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              const Icon(
+                                                Icons.access_time,
+                                                color: Color(0xFF6BCCC9),
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  RichText(
+                                                    text: const TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Menunggu',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: ' Pembayaran',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF6BCCC9),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: const TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              'dari pembeli, kembali lagi nanti!',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
                                   if (order.status == 'waiting') ...[
                                     Obx(() {
                                       final orderPayment =
@@ -989,7 +1087,7 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 height: 20,
                                                               ),
                                                               Row(
@@ -1028,13 +1126,16 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                                                         ),
                                                                       ),
                                                                       onPressed:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          isExpired =
-                                                                              true;
-                                                                        });
-                                                                        Get.back();
+                                                                          () async {
+                                                                        await refusePaymentController.refusePayment(
+                                                                            orderId,
+                                                                            orderPayment.imageUrl,
+                                                                            context);
+
+                                                                        getSingleOrderController
+                                                                            .getOrderById(orderId);
+
+                                                                        // Get.back();
                                                                       },
                                                                       child:
                                                                           Center(
@@ -1365,8 +1466,8 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                               ),
                             ),
                           ],
-                          SizedBox(
-                            height: mediaQueryHeight * 0.15,
+                          const SizedBox(
+                            height: 10,
                           ),
                         ],
                       ),
