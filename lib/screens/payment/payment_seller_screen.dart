@@ -62,22 +62,6 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
     }
   }
 
-  Uint8List image = File(
-          '/data/user/0/com.example.penstore/cache/76fbec81-9234-4b63-acd0-1e008534f50e/1000113237.jpg')
-      .readAsBytesSync();
-
-  Future _pickImageFromGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-
-    setState(() {
-      selectedImage = File(returnImage.path);
-      image = File(returnImage.path).readAsBytesSync();
-      print('Image Path : ${selectedImage!.path}');
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
@@ -714,8 +698,8 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                                         ScrollDecelerationRate
                                                             .fast,
                                                   ),
-                                                  child: Image.memory(
-                                                    image,
+                                                  child: Image.asset(
+                                                    'assets/images/cover.jpg',
                                                     fit: BoxFit.contain,
                                                   ),
                                                 ),
