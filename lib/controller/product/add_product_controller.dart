@@ -74,11 +74,11 @@ class AddProductController extends GetxController {
             choosedCategory!,
             user!.uid);
 
-        Navigator.of(context).pop();
-
         // Show success snackbar
         Alerts.successSnackBar(
             title: 'Sukses', message: "Berhasil menambahkan produk");
+
+        Navigator.of(context).pop();
 
         // Go to main route
         Get.offAllNamed('/');

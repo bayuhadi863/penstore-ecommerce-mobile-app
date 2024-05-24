@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:penstore/controller/product/product_controller.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/repository/wishlist_repository.dart';
