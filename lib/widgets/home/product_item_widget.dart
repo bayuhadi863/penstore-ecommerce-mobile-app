@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/add_cart_controller.dart';
-import 'package:penstore/controller/product/product_controller.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/models/product_model.dart';
@@ -112,7 +112,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                               });
                             } else {
                               // jika belum maka pop up tambahkan ke wishlist
-                              showDialog(
+                              await showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AddCollectionDialog(
@@ -120,6 +120,9 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                   );
                                 },
                               );
+                              setState(() {
+                                checkWishlist();
+                              });
                             }
                           },
                           child: Container(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:penstore/controller/product/product_controller.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/widgets/home/product_item_widget.dart';
+import 'package:penstore/widgets/no_product.dart';
 import 'package:skeletons/skeletons.dart';
 
 class ListProductWidget extends StatelessWidget {
@@ -40,7 +41,7 @@ class ListProductWidget extends StatelessWidget {
           ),
         );
       } else if (productController.products.isEmpty) {
-        return const Text("data tidak ada");
+        return const NoProduct();
       } else {
         return ListView.builder(
           itemCount: productController.products.length,

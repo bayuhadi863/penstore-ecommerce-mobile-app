@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:penstore/controller/product/product_controller.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/repository/wishlist_repository.dart';
@@ -59,6 +59,8 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return AlertDialog(
+      insetPadding: const EdgeInsets.all(20),
+      titlePadding: const EdgeInsets.all(20),
       surfaceTintColor: Colors.white,
       backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -140,9 +142,9 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
           : Form(
               child: SizedBox(
                 width: mediaQueryWidth,
-                height: mediaQueryHeight * 0.25,
                 child: SingleChildScrollView(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Column(
                         children: [
@@ -359,9 +361,6 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
                                 addProductWishlistController.choosedWishlist!,
                                 context);
                           }
-
-                          // refresh data
-                          productController.reloadGetData();
                         },
                         child: Container(
                           decoration: BoxDecoration(

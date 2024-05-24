@@ -5,8 +5,11 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
+import 'package:penstore/widgets/Logout_confirm.dart';
+import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
+import 'package:penstore/widgets/profile/form_tagihan.dart';
 import 'package:penstore/widgets/profile/profile_image_widget.dart';
 import 'package:penstore/widgets/profile/sale_list_widget.dart';
 import 'package:penstore/widgets/profile/sell_list_widget.dart';
@@ -73,7 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.dialog(
+                          const FormTagihanWidget()
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         visualDensity: VisualDensity.comfortable,
                         maximumSize: Size(110, 40),
@@ -173,11 +180,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            isClickLogout = !isClickLogout;
-                          });
-                          final logoutController = Get.put(LogoutController());
-                          logoutController.logout();
+                          // setState(() {
+                          //   isClickLogout = !isClickLogout;
+                          // });
+                          Get.dialog(
+                            const ConfirmLogoutWidget()
+                          );
+                          
                         },
                         style: ElevatedButton.styleFrom(
                           visualDensity: VisualDensity.comfortable,
@@ -392,6 +401,259 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   height: 32,
                                   width: 32,
                                   filterQuality: FilterQuality.high,
+                                  color: const Color(0xFFF4CD69),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                RichText(
+                                  text: const TextSpan(
+                                    text: 'Metode Pembayaran',
+                                    style: TextStyle(
+                                      color: Color(0xFF424242),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Align(
+                              alignment: Alignment.topRight,
+                              child: AddPaymentMethodWidget(),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 100,
+                        margin: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 10, top: 10),
+                        child: Container(
+                          height: 100,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF91E0DD).withOpacity(0.3),
+                                blurRadius: 16,
+                                offset: const Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "Bank BRI",
+                                      style: TextStyle(
+                                        color: Color(0xFF605B57),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "Thania Store",
+                                      style: TextStyle(
+                                        color: Color(0xFF605B57),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "166736292390290902483",
+                                      style: TextStyle(
+                                        color: Color(0xFF6BCCC9),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 26,
+                                        height: 26,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF91E0DD)
+                                              .withOpacity(0.3),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {},
+                                          icon: Image.asset(
+                                            'assets/icons/edit_icon.png',
+                                            height: 16,
+                                            width: 16,
+                                            filterQuality: FilterQuality.high,
+                                          ),
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                            ),
+                                            padding: MaterialStateProperty.all(
+                                              const EdgeInsets.all(0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Container(
+                                        width: 26,
+                                        height: 26,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFF46B69)
+                                              .withOpacity(0.3),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {},
+                                          icon: Image.asset(
+                                            'assets/icons/delete_icon.png',
+                                            height: 16,
+                                            width: 16,
+                                            filterQuality: FilterQuality.high,
+                                          ),
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                            ),
+                                            padding: MaterialStateProperty.all(
+                                              const EdgeInsets.all(0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 10, top: 10),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF91E0DD).withOpacity(0.3),
+                                blurRadius: 16,
+                                offset: const Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "COD (Bayar di Tempat)",
+                                      style: TextStyle(
+                                        color: Color(0xFF605B57),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 26,
+                                    height: 26,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFF46B69)
+                                          .withOpacity(0.3),
+                                      borderRadius:
+                                          BorderRadius.circular(6),
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: Image.asset(
+                                        'assets/icons/delete_icon.png',
+                                        height: 16,
+                                        width: 16,
+                                        filterQuality: FilterQuality.high,
+                                      ),
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                        ),
+                                        padding: MaterialStateProperty.all(
+                                          const EdgeInsets.all(0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/description_outline.png',
+                                  height: 32,
+                                  width: 32,
+                                  filterQuality: FilterQuality.high,
                                   color: const Color(0xFF91E0DD),
                                 ),
                                 const SizedBox(
@@ -416,8 +678,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                       SellListProfile(),
-                      const SizedBox(
-                        height: 165,
+                      SizedBox(
+                        height: mediaQueryHeigth * 0.21,
                       ),
                     ],
                   ),
