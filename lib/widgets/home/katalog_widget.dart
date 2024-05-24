@@ -74,8 +74,9 @@ class _KatalogWidgetState extends State<KatalogWidget> {
                               print("tekan category");
                               setState(() {
                                 _selectedCategory = index;
-                                widget.onCategorySelected(
-                                    category.id == 'semua' ? '' : category.id);
+                                widget.onCategorySelected(category.id == 'semua'
+                                    ? 'semua'
+                                    : category.id);
                               });
                             },
                             child: Container(
