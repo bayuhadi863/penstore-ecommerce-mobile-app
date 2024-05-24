@@ -56,7 +56,7 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
-    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    // final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return AlertDialog(
       insetPadding: const EdgeInsets.all(20),
@@ -270,76 +270,81 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
                             height: 20,
                           ),
                           // dropdown wishlist
-                          SizedBox(
-                            width: mediaQueryWidth * 0.8,
-                            child: DropdownButtonFormField<String>(
-                              hint: const Text(
-                                "Pilih Wishlist",
-                              ),
-                              style: const TextStyle(
-                                color: Color(0xFF757B7B),
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Poppins',
-                              ),
-                              decoration: InputDecoration(
-                                errorBorder: DecoratedInputBorder(
-                                  child: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(12.0),
+                          if (!addProductWishlistController.isAddNewWishlist &&
+                              addProductWishlistController
+                                      .wishlistNameController.text ==
+                                  '') ...[
+                            SizedBox(
+                              width: mediaQueryWidth * 0.8,
+                              child: DropdownButtonFormField<String>(
+                                hint: const Text(
+                                  "Pilih Wishlist",
+                                ),
+                                style: const TextStyle(
+                                  color: Color(0xFF757B7B),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  fontFamily: 'Poppins',
+                                ),
+                                decoration: InputDecoration(
+                                  errorBorder: DecoratedInputBorder(
+                                    child: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12.0),
+                                      ),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
                                     ),
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
+                                    shadow: BoxShadow(
+                                      color: const Color(0xFF6BCCC9)
+                                          .withOpacity(0.3),
+                                      blurRadius: 16,
+                                      offset: const Offset(1, 1),
                                     ),
                                   ),
-                                  shadow: BoxShadow(
-                                    color: const Color(0xFF6BCCC9)
-                                        .withOpacity(0.3),
-                                    blurRadius: 16,
-                                    offset: const Offset(1, 1),
+                                  prefixIcon: Container(
+                                    height: 54,
+                                    width: 54,
+                                    alignment: Alignment.center,
+                                    child: Image.asset(
+                                      'assets/icons/category_outline.png',
+                                      color: const Color(0xFF6BCCC9),
+                                      height: 24,
+                                      width: 24,
+                                      filterQuality: FilterQuality.high,
+                                    ),
                                   ),
                                 ),
-                                prefixIcon: Container(
-                                  height: 54,
-                                  width: 54,
-                                  alignment: Alignment.center,
-                                  child: Image.asset(
-                                    'assets/icons/category_outline.png',
-                                    color: const Color(0xFF6BCCC9),
-                                    height: 24,
-                                    width: 24,
-                                    filterQuality: FilterQuality.high,
-                                  ),
-                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    addProductWishlistController
+                                        .choosedWishlist = value!;
+                                    addProductWishlistController
+                                        .isAddNewWishlist = false;
+
+                                    addProductWishlistController
+                                        .wishlistNameController.text = '';
+                                  });
+                                },
+                                value: addProductWishlistController
+                                    .choosedWishlist,
+                                items: _wishlists.map((wishlist) {
+                                  return DropdownMenuItem<String>(
+                                    value: wishlist.id,
+                                    child: Text(wishlist.name),
+                                  );
+                                }).toList(),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Nama Wishlist tidak boleh kosong";
+                                  }
+
+                                  return null;
+                                },
                               ),
-                              onChanged: (value) {
-                                setState(() {
-                                  addProductWishlistController.choosedWishlist =
-                                      value!;
-                                  addProductWishlistController
-                                      .isAddNewWishlist = false;
-
-                                  addProductWishlistController
-                                      .wishlistNameController.text = '';
-                                });
-                              },
-                              value:
-                                  addProductWishlistController.choosedWishlist,
-                              items: _wishlists.map((wishlist) {
-                                return DropdownMenuItem<String>(
-                                  value: wishlist.id,
-                                  child: Text(wishlist.name),
-                                );
-                              }).toList(),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Kategori tidak boleh kosong";
-                                }
-
-                                return null;
-                              },
                             ),
-                          ),
+                          ]
                         ],
                       ),
                       const SizedBox(

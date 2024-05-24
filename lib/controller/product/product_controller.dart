@@ -5,6 +5,7 @@ import 'package:penstore/models/user_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/repository/user_repository.dart';
+import 'package:penstore/repository/wishlist_repository.dart';
 
 class OneProductController extends GetxController {
   static OneProductController get to => Get.put(OneProductController());
@@ -12,6 +13,7 @@ class OneProductController extends GetxController {
   final ProductRepository productRepository = Get.put(ProductRepository());
   final CategoryRepository categoryRepository = Get.put(CategoryRepository());
   final UserRepository userRepository = Get.put(UserRepository());
+  final WishlistRepository wishlistRepository = Get.put(WishlistRepository());
 
   var isLoading = false.obs;
   var product = ProductModel.empty().obs;

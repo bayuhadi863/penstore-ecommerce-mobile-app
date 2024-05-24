@@ -1,15 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/add_cart_controller.dart';
 import 'package:penstore/controller/product/product_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
-import 'package:penstore/models/product_model.dart';
-import 'package:penstore/models/user_model.dart';
-import 'package:penstore/repository/category_repository.dart';
-import 'package:penstore/repository/product_repository.dart';
-import 'package:penstore/repository/user_repository.dart';
+import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
+import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 
 class DetailProductScreen extends StatefulWidget {
@@ -24,7 +19,10 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
       Get.put(OneProductController());
   final UserController userController = Get.put(UserController());
   final AddCartController addCartController = Get.put(AddCartController());
+  final AddProductWishlistController addWishlistController =
+      Get.put(AddProductWishlistController());
 
+  bool _isWishlist = false;
   String? productId = '';
 
   //quantity
@@ -63,11 +61,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     });
   }
 
-  // get product category_name
-  Future<String> _getCategoryName(String categoryId) async {
-    final CategoryRepository categoryRepository = CategoryRepository();
-    final _category = await categoryRepository.getCategoryById(categoryId);
-    return _category.category_name;
+  Future<void> checkWishlist() async {
+    bool isWishlist = await addWishlistController
+        .checkWishlist(oneProductController.product.value.id);
+    setState(() {
+      _isWishlist = isWishlist;
+    });
   }
 
   @override
@@ -76,8 +75,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     // Mendapatkan nilai parameter saat widget diinisialisasi
     final Map<String, dynamic> arguments = Get.arguments;
     productId = arguments['productId'];
-    // _getDetailProduct();
+
     oneProductController.getDetailProduct(productId!);
+    checkWishlist();
   }
 
   @override
@@ -257,9 +257,35 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                             color: Colors.transparent,
                             alignment: Alignment.center,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                if (_isWishlist) {
+                                  // jika sudah langsung hapus
+                                  await addWishlistController
+                                      .removeFromWishlist(oneProductController
+                                          .product.value.id);
+                                  setState(() {
+                                    checkWishlist();
+                                  });
+                                } else {
+                                  // jika belum maka pop up tambahkan ke wishlist
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AddCollectionDialog(
+                                        productId: oneProductController
+                                            .product.value.id,
+                                      );
+                                    },
+                                  );
+                                  setState(() {
+                                    checkWishlist();
+                                  });
+                                }
+                              },
                               icon: Image.asset(
-                                'assets/icons/favorite_fill.png',
+                                _isWishlist
+                                    ? 'assets/icons/favorite_fill.png'
+                                    : 'assets/icons/favorite_outline.png',
                                 height: 24,
                                 width: 24,
                                 filterQuality: FilterQuality.high,
@@ -356,8 +382,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                             Expanded(
                                               child: Text(
                                                 oneProductController
-                                                        .product.value.name ??
-                                                    '',
+                                                    .product.value.name,
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold,
@@ -370,7 +395,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Rp.${oneProductController.product.value.price ?? ''} -',
+                                              'Rp.${oneProductController.product.value.price} -',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Color(0xFF6BCCC9),
@@ -439,7 +464,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                             8),
                                                   ),
                                                   child: Text(
-                                                    'Stock: ${oneProductController.product.value.stock ?? ''}',
+                                                    'Stock: ${oneProductController.product.value.stock}',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight:
@@ -506,10 +531,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                         horizontal: 20.0),
                                                     child: Text(
                                                       oneProductController
-                                                              .product
-                                                              .value
-                                                              .desc ??
-                                                          '',
+                                                          .product.value.desc,
                                                       style: const TextStyle(
                                                         fontSize: 11,
                                                         fontWeight:
