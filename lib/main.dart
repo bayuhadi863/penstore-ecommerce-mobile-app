@@ -11,7 +11,10 @@ import 'package:penstore/screens/cart/cart_screen.dart';
 import 'package:penstore/screens/cart/order_screen.dart';
 import 'package:penstore/screens/chat/chat_detail_screen.dart';
 import 'package:penstore/screens/payment/payment_buyer_screen.dart';
+import 'package:penstore/screens/payment/payment_seller_screen.dart';
 import 'package:penstore/screens/product/detail_product_screen.dart';
+import 'package:penstore/screens/wishlist/wishlist_detail_screen.dart';
+import 'package:penstore/screens/wishlist/wishlist_screen.dart';
 import 'package:penstore/widgets/decoration_input.dart';
 
 Future<void> main() async {
@@ -51,9 +54,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/cart', page: () => const CartScreen()),
         GetPage(name: '/detail-chat', page: () => const ChatDetailScreen()),
         GetPage(name: '/checkout', page: () => const CheckoutScreen()),
+        GetPage(name: '/payment-buyer', page: () => const PaymentBuyerScreen()),
         GetPage(
-            name: '/payment-buyer',
-            page: () => const PaymentBuyerScreen()),
+            name: '/payment-seller', page: () => const PaymentSellerScreen()),
+        GetPage(name: '/wishlist', page: () => const WishlistScreen()),
+        GetPage(
+            name: '/detail-wishlist', page: () => const WishlistDetailScreen()),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

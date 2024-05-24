@@ -1223,7 +1223,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 serviceFee: serviceFee,
                                 totalPrice: total,
                                 paymentMethodId: selectedPaymentMethod!,
-                                status: 'Menunggu Pembayaran',
+                                status: 'unpaid',
                               );
 
                               await addOrderController.createOrder(

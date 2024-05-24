@@ -59,6 +59,8 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return AlertDialog(
+      insetPadding: const EdgeInsets.all(20),
+      titlePadding: const EdgeInsets.all(20),
       surfaceTintColor: Colors.white,
       backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -140,9 +142,9 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
           : Form(
               child: SizedBox(
                 width: mediaQueryWidth,
-                height: mediaQueryHeight * 0.25,
                 child: SingleChildScrollView(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Column(
                         children: [

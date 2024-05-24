@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:get/get.dart';
+import 'package:penstore/widgets/add_kategori_wishlist.dart';
+import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({Key? key}) : super(key: key);
@@ -11,102 +15,136 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 30.0), // Jarak antara bagian atas layar dan teks "Wishlist"
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Pusatkan secara horizontal
-              children: [
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center, // Pusatkan teks ke tengah
-                    child: Text(
-                      '                       Wishlist', // Teks "Wishlist"
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
-                      ),
-                    ),
-                  ),
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
+    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final int itemCount = 1; // Number of initial items
+
+    final List<Widget> gridItems = List.generate(
+      itemCount,
+      (index) {
+        return Container(
+          height: mediaQueryHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.toNamed('/detail-wishlist');
+                },
+                child: Image.asset(
+                  'assets/images/gambar_wishlist.png',
+                  fit: BoxFit.cover,
                 ),
-                SizedBox(width: 100.0), // Jarak antara teks "Wishlist" dan ikon keranjang dengan tepi kanan layar
-                // Container di bawah ini menambahkan bingkai di luar ikon keranjang
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1), // Warna bayangan sedikit lebih gelap
-                        spreadRadius: 4,
-                        blurRadius: 3,
-                        offset: Offset(0, 4), // Sesuaikan posisi bayangan
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                "Semua Wishlist",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  color: Color(0xFF424242),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                    text: "2 barang",
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 10,
+                        color: Color(0xFF424242),
+                        fontWeight: FontWeight.normal)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 74,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        title: const AppBarHome(),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.75,
+                shrinkWrap: true,
+                physics:
+                    const NeverScrollableScrollPhysics(), // Make GridView non-scrollable
+                children: [
+                  ...gridItems,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      DottedBorder(
+                        color: const Color(0xFF6BCCC9),
+                        strokeWidth: 1,
+                        borderType: BorderType.RRect,
+                        dashPattern: const [7, 7],
+                        strokeCap: StrokeCap.butt,
+                        radius: const Radius.circular(12),
+                        borderPadding: const EdgeInsets.all(1.0),
+                        child: InkWell(
+                          onTap: () {
+                            Get.dialog(const AddKategoriWishlistWidget());
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 168,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Koleksi Baru',
+                                    style: TextStyle(
+                                      color: Color(0xFF757B7B),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15.0),
+                                  Container(
+                                    padding: const EdgeInsets.all(4.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(
+                                          color: const Color(0xFF91E0DD)),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: const Icon(Icons.add,
+                                        color: Color(0xFF91E0DD), size: 20.0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                      const SizedBox(height: 20.0),
                     ],
                   ),
-                  child: Container(
-                    padding: EdgeInsets.all(9.0), // Margin untuk bingkai luar
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.withOpacity(0.1), width: 1.0), // Warna dan ketebalan garis bingkai
-                    ),
-                    child: Image.asset(
-                      'assets/icons/cart_outline.png', // Lokasi gambar
-                      color: Color(0xFF6BCCC9), // Warna ikon keranjang
-                      width: 24.0, // Ukuran ikon keranjang
-                      height: 24.0, // Ukuran ikon keranjang
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 36.0), // Jarak antara judul dan kotak koleksi baru
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start, // Pusatkan ke kiri
-              children: [
-                DottedBorder(
-                  color: Color(0xFF91E0DD),
-                  borderType: BorderType.RRect,
-                  radius: Radius.circular(12.0), // Lebarkan bingkai
-                  dashPattern: [6, 3],
-                  child: Container(
-                    width: 170, // Lebar kotak koleksi baru diperbesar
-                    height: 170, // Tinggi kotak koleksi baru diperbesar
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Koleksi Baru', // Teks "Koleksi Baru"
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 15.0),
-                          Container(
-                            padding: EdgeInsets.all(4.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              border: Border.all(color: Color(0xFF91E0DD)),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Icon(Icons.add, color: Color(0xFF91E0DD), size: 20.0),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Tambahkan widget lain di sini jika diperlukan
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
