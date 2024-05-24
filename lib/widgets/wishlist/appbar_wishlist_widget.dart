@@ -24,7 +24,6 @@ class AppBarHome extends StatelessWidget {
             Container(
               width: 48,
               height: 48,
-              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(50),
@@ -37,16 +36,7 @@ class AppBarHome extends StatelessWidget {
                   ),
                 ],
               ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back_ios_new,
-                  size: 20,
-                  color: Color(0xFF6BCCC9),
-                ),
-              ),
+              child: Center()
             ),
             Container(
               decoration: const BoxDecoration(
