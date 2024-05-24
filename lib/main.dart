@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/cart', page: () => const CartScreen()),
         GetPage(name: '/detail-chat', page: () => const ChatDetailScreen()),
         GetPage(name: '/checkout', page: () => const CheckoutScreen()),
-        GetPage(name: '/payment-buyer', page: () => const PaymentBuyerScreen()),
+        GetPage(
+            name: '/payment-buyer',
+            page: () => const PaymentBuyerScreen()),
         GetPage(name: '/payment-seller', page: () => const PaymentSellerScreen()),
         GetPage(name: '/wishlist', page: () => const WishlistScreen()),
       ],

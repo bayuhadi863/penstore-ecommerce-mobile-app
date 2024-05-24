@@ -22,4 +22,26 @@ class PaymentMethodRepository extends GetxController {
       throw e.toString();
     }
   }
+
+  // fetch payment methods from payment_methods collection by userId
+  Future<List<PaymentMethodModel>> fetchPaymentMethodsByUserId(String userId) async {
+    try {
+      final QuerySnapshot querySnapshot = await db
+          .collection('paymentMethods')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => PaymentMethodModel.fromSnapshot(doc))
+          .toList();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

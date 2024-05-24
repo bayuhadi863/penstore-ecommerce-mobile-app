@@ -7,6 +7,7 @@ class CartModel {
   UserModel user;
   ProductModel product;
   int quantity;
+  bool isOrdered;
   DateTime? createdAt;
 
   CartModel({
@@ -14,6 +15,7 @@ class CartModel {
     required this.user,
     required this.product,
     required this.quantity,
+    this.isOrdered = false,
     this.createdAt,
   });
 
@@ -22,6 +24,7 @@ class CartModel {
         user: UserModel.empty(),
         product: ProductModel.empty(),
         quantity: 0,
+        isOrdered: false,
         createdAt: null,
       );
 
@@ -45,6 +48,7 @@ class CartModel {
         'createdAt': product.createdAt,
       },
       'quantity': quantity,
+      'isOrdered': isOrdered,
       'createdAt': createdAt,
     };
   }
@@ -78,6 +82,7 @@ class CartModel {
             )
           : ProductModel.empty(),
       quantity: data['quantity'],
+      isOrdered: data['isOrdered'],
       createdAt: data['createdAt']?.toDate(),
     );
   }

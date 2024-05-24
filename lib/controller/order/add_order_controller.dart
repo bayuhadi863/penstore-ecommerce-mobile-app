@@ -11,6 +11,7 @@ class AddOrderController extends GetxController {
   static AddOrderController get instance => Get.find();
 
   final isLoading = false.obs;
+  final Rx<OrderModel> orderData = OrderModel.empty().obs;
 
   // create order from OrderRepository
   Future<void> createOrder(OrderModel order, BuildContext context) async {
@@ -32,7 +33,8 @@ class AddOrderController extends GetxController {
 
       // create order from OrderRepository
       final OrderRepository orderRepository = Get.put(OrderRepository());
-      await orderRepository.createOrder(order);
+      final OrderModel orderData = await orderRepository.createOrder(order);
+      this.orderData.value = orderData;
 
       isLoading(false);
 
@@ -43,6 +45,12 @@ class AddOrderController extends GetxController {
         title: 'Berhasil menambahkan pesanan!',
         message: 'Segera lakukan pembayaran!',
       );
+
+      // Get.toNamed('/payment-buyer', arguments: {'orderId': orderData.id!});
+      Get.offNamedUntil(
+          '/payment-buyer',
+          arguments: {'orderId': orderData.id!},
+          (route) => route.isFirst);
     } catch (e) {
       isLoading(false);
       Navigator.of(context).pop();

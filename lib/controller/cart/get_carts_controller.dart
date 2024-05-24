@@ -17,20 +17,19 @@ class GetCartsController extends GetxController {
   void onInit() {
     super.onInit();
     // fetchCart(currentUser!.uid);
-    fetchCartSellerId(currentUser!.uid);
+    fetchCartSellerId();
     // getUser(currentUser!.uid);
     // print(carts);
   }
 
-  void fetchCartSellerId(String userId) async {
+  void fetchCartSellerId() async {
     try {
       isLoading(true);
       final cartRepository = Get.put(CartRepository());
-      final carts = await cartRepository.fetchDistinctSellerId(userId);
+      final carts =
+          await cartRepository.fetchDistinctSellerId(currentUser!.uid);
       cartSellerIds.value = carts;
-      // this.carts.value = carts;
-      print('carts ${carts.length}');
-      print('carts data ${carts}');
+
       isLoading(false);
     } catch (e) {
       isLoading(false);
