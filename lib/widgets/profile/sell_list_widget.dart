@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
+import 'package:penstore/widgets/no_product_sell.dart';
 import 'package:skeletons/skeletons.dart';
 
 class SellListProfile extends StatefulWidget {
@@ -53,7 +54,7 @@ class _SellListProfileState extends State<SellListProfile> {
                   ),
                 )
               : products.isEmpty
-                  ? const Text("Belum ada produk yang Anda jual")
+                  ? const NoProductSell()
                   : Column(
                       children: List.generate(
                         products.length,
@@ -265,6 +266,7 @@ class _SellListProfileState extends State<SellListProfile> {
                                 ),
                               ),
                             ),
+                          
                           );
                         },
                       ),

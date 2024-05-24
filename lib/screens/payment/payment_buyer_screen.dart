@@ -1032,7 +1032,8 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
               )
             ]
           ],
-        ],
+       
+       ],
       ),
     );
   }

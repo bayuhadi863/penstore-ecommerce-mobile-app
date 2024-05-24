@@ -5,6 +5,7 @@ import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
+import 'package:penstore/widgets/no_product.dart';
 import 'package:skeletons/skeletons.dart';
 
 class ListProductWidget extends StatefulWidget {
@@ -82,7 +83,8 @@ class _ListProductWidgetState extends State<ListProductWidget> {
     final UserController userController = Get.put(UserController());
     final AddCartController addCartController = Get.put(AddCartController());
 
-    return Column(children: [
+    return Column(
+      children: [
       isLoading
           ? SkeletonItem(
               child: Column(
@@ -103,7 +105,7 @@ class _ListProductWidgetState extends State<ListProductWidget> {
               ),
             )
           : products.isEmpty
-              ? const Text("data tidak ada")
+              ? const NoProduct()
               : ListView.builder(
                   itemCount: products.length,
                   shrinkWrap: true,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:penstore/widgets/add_kategori_wishlist.dart';
 
-class AddCollectionDialog extends StatelessWidget {
-  const AddCollectionDialog({
+class AddKategoriWishlistWidget extends StatelessWidget {
+  const AddKategoriWishlistWidget({
     super.key,
   });
 
@@ -14,7 +12,9 @@ class AddCollectionDialog extends StatelessWidget {
 
     return AlertDialog(
       insetPadding: const EdgeInsets.all(20),
-      titlePadding: const EdgeInsets.all(20),
+      alignment: Alignment.center,
+      titlePadding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+      contentPadding: const EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
       surfaceTintColor: Colors.white,
       backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -39,7 +39,7 @@ class AddCollectionDialog extends StatelessWidget {
                   width: 10,
                 ),
                 const Text(
-                  'Tersimpan di wishlist!',
+                  'Buat Koleksi Baru',
                   style: TextStyle(
                     color: Color(0xFF424242),
                     fontSize: 14,
@@ -92,88 +92,95 @@ class AddCollectionDialog extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  const Text(
-                    'Kelompok kan barang dengan rapi, coba buatlah koleksi kategori baru! (Optional). ',
-                    style: TextStyle(
-                      color: Color(0xFF757B7B),
-                      fontSize: 11,
-                      fontWeight: FontWeight.normal,
-                      fontFamily: 'Poppins',
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    width: mediaQueryWidth * 0.8,
+                    child: TextFormField(
+                      keyboardType: TextInputType.name,
+                      onFieldSubmitted: (_) {},
+                      decoration: InputDecoration(
+                        prefixIcon: Container(
+                          height: 54,
+                          width: 54,
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'assets/icons/product_outline.png',
+                            color: const Color(0xFF6BCCC9),
+                            height: 24,
+                            width: 24,
+                            filterQuality: FilterQuality.high,
+                          ),
+                        ),
+                        hintText: 'Nama Kategori',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Nama tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                      cursorColor: const Color(0xFF6BCCC9),
+                      style: const TextStyle(
+                        color: Color(0xFF424242),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.dialog(
-                        const AddKategoriWishlistWidget()
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFFFFF),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: const Color(0xFF91E0DD),
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 54,
-                            height: 54,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Image.asset(
-                              'assets/icons/add_outline.png',
-                              height: 24,
-                              width: 24,
-                              filterQuality: FilterQuality.high,
-                            ),
-                          ),
-                          const Text(
-                            'koleksi Baru',
-                            style: TextStyle(
-                              color: Color(0xFF757B7B),
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                        ],
+                  RichText(
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    text: const TextSpan(
+                      text:
+                          'Buat kategori koleksi baru, hanya kamu yang bisa melihat koleksi ini',
+                      style: TextStyle(
+                        color: Color(0xFF757B7B),
+                        fontFamily: 'Poppins',
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
               const SizedBox(
                 height: 20,
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed('/wishlist');
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF91E0DD),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color(0xFF91E0DD),
-                      width: 1,
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF91E0DD),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF91E0DD).withOpacity(0.3),
+                      blurRadius: 16,
+                      offset: const Offset(1, 1),
+                    ),
+                  ],
+                ),
+                width: double.infinity,
+                height: 54,
+                child: TextButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                  width: double.infinity,
-                  height: 54,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: const Center(
                     child: Text(
-                      'Lihat WishList',
+                      'Tambah Produk',
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 12,
