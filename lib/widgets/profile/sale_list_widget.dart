@@ -387,7 +387,7 @@ class _SaleListProfileState extends State<SaleListProfile> {
                                                         ? 'Konfirmasi Pembayaran'
                                                         : order.status ==
                                                                 'on_process'
-                                                            ? 'Kirim Barang'
+                                                            ? 'Lunas'
                                                             : order.status ==
                                                                     'received'
                                                                 ? 'Diterima'

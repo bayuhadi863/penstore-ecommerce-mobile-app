@@ -155,46 +155,38 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                     children: [
                                       Stack(
                                         children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Get.toNamed('/detail-product');
-                                            },
-                                            child: Container(
-                                              width: 80,
-                                              height: 80,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              child: ClipRRect(
-                                                clipBehavior: Clip.hardEdge,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                child: (cart.value.product
-                                                                .imageUrl !=
-                                                            null &&
-                                                        cart
-                                                            .value
-                                                            .product
-                                                            .imageUrl!
-                                                            .isNotEmpty)
-                                                    ? Image.network(
-                                                        cart.value.product
-                                                            .imageUrl![0],
-                                                        height: 16,
-                                                        width: 16,
-                                                        filterQuality:
-                                                            FilterQuality.high,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Image.asset(
-                                                        'assets/icons/cart_outline.png',
-                                                        height: 16,
-                                                        width: 16,
-                                                        filterQuality:
-                                                            FilterQuality.high,
-                                                      ),
-                                              ),
+                                          Container(
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: ClipRRect(
+                                              clipBehavior: Clip.hardEdge,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: (cart.value.product
+                                                              .imageUrl !=
+                                                          null &&
+                                                      cart.value.product
+                                                          .imageUrl!.isNotEmpty)
+                                                  ? Image.network(
+                                                      cart.value.product
+                                                          .imageUrl![0],
+                                                      height: 16,
+                                                      width: 16,
+                                                      filterQuality:
+                                                          FilterQuality.high,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.asset(
+                                                      'assets/icons/cart_outline.png',
+                                                      height: 16,
+                                                      width: 16,
+                                                      filterQuality:
+                                                          FilterQuality.high,
+                                                    ),
                                             ),
                                           ),
                                         ],
@@ -360,13 +352,13 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       },
                                       style: TextButton.styleFrom(
                                         backgroundColor: order.status ==
-                                                'received'
+                                                'on_process'
                                             ? const Color(0xFFF46B69)
-                                            : order.status == 'on_process'
+                                            : order.status == 'reveived'
                                                 ? const Color(0xFF69F477)
-                                                : order.status == 'rated'
+                                                : order.status == 'waiting'
                                                     ? const Color(0xFFF4CD69)
-                                                    : order.status == 'waiting'
+                                                    : order.status == 'rated'
                                                         ? const Color(
                                                             0xFF6BCCC9)
                                                         : const Color(

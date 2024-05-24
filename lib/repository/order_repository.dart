@@ -111,4 +111,19 @@ class OrderRepository extends GetxController {
       throw e.toString();
     }
   }
+
+  // update order status by orderId
+  Future<void> updateOrderStatus(String orderId, String status) async {
+    try {
+      await db.collection('orders').doc(orderId).update({'status': status});
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
