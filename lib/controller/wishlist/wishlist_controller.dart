@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/models/product_model.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/repository/wishlist_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
@@ -12,6 +13,7 @@ class WishlistController extends GetxController {
   var isLoading = false.obs;
   var wishlist = <WishlistModel>[].obs;
   var wishlistImage = <String>[].obs;
+  var products = <ProductModel>[].obs;
   final wishlistNameController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 

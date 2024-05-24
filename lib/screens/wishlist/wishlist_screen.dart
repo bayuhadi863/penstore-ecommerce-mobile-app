@@ -45,7 +45,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             children: [
               Obx(() {
                 if (wishlistController.isLoading.value) {
-                  return const Center(child: const CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (wishlistController.wishlist.isEmpty) {
                   return const Center(child: Text('No Wishlist Found'));
                 } else {
@@ -93,8 +93,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
+            onLongPress: () {
+              // pop up delete
+            },
             onTap: () {
-              Get.toNamed('/detail-wishlist');
+              Get.toNamed('/detail-wishlist',
+                  arguments: {'wishlistId': wishlistItem.id});
             },
             child: imageUrl.isNotEmpty
                 ? Image.network(
