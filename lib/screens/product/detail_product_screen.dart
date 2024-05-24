@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/add_cart_controller.dart';
+import 'package:penstore/controller/product/product_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/models/user_model.dart';
@@ -17,11 +20,12 @@ class DetailProductScreen extends StatefulWidget {
 }
 
 class _DetailProductScreenState extends State<DetailProductScreen> {
+  final OneProductController oneProductController =
+      Get.put(OneProductController());
+  final UserController userController = Get.put(UserController());
+  final AddCartController addCartController = Get.put(AddCartController());
+
   String? productId = '';
-  ProductModel? product;
-  String productCategory = '';
-  bool isLoading = false;
-  UserModel seller = UserModel.empty();
 
   //quantity
   int quantity = 0;
@@ -30,7 +34,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
 
   //add quantity
   void addQuantity() {
-    if (quantity >= product!.stock) {
+    if (quantity >= oneProductController.product.value.stock) {
       return;
     }
     setState(() {
@@ -59,27 +63,6 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     });
   }
 
-  // get detail porduct data
-  Future<void> _getDetailProduct() async {
-    setState(() {
-      isLoading = true;
-    });
-    final ProductRepository productRepository = ProductRepository();
-    final _product =
-        await productRepository.getProductById(productId! as String);
-    String _category_name = await _getCategoryName(_product.categoryId);
-    final UserRepository userRepository = Get.put(UserRepository());
-
-    final sellerData = await userRepository.fetchUser(_product.userId!);
-
-    setState(() {
-      product = _product;
-      productCategory = _category_name;
-      isLoading = false;
-      seller = sellerData;
-    });
-  }
-
   // get product category_name
   Future<String> _getCategoryName(String categoryId) async {
     final CategoryRepository categoryRepository = CategoryRepository();
@@ -93,18 +76,14 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     // Mendapatkan nilai parameter saat widget diinisialisasi
     final Map<String, dynamic> arguments = Get.arguments;
     productId = arguments['productId'];
-    _getDetailProduct();
+    // _getDetailProduct();
+    oneProductController.getDetailProduct(productId!);
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
-
-    final UserController userController = Get.put(UserController());
-    final AddCartController addCartController = Get.put(AddCartController());
-    // final GetSellerController getSellerController =
-    //     Get.put(GetSellerController(product?.userId ?? ''));
 
     List<Widget> generateProductContainers() {
       return List.generate(10, (index) {
@@ -210,16 +189,18 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
       });
     }
 
-    return isLoading
-        ? const Center(
-            child: Padding(
-              padding: EdgeInsets.all(25),
-              child: CircularProgressIndicator(
-                color: Colors.grey,
-              ),
+    return Obx(() {
+      if (oneProductController.isLoading.value) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.all(25),
+            child: CircularProgressIndicator(
+              color: Colors.grey,
             ),
-          )
-        : product.isBlank == true
+          ),
+        );
+      } else {
+        return oneProductController.product.isBlank!
             ? const Text("data tidak ada")
             : Scaffold(
                 extendBodyBehindAppBar: true,
@@ -308,12 +289,21 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                           decoration: const BoxDecoration(
                             color: Colors.white,
                           ),
-                          child: (product?.imageUrl != null &&
-                                  product!.imageUrl!.isNotEmpty)
-                              ? Image.network(
-                                  product!.imageUrl![0],
-                                  fit: BoxFit.cover,
-                                  filterQuality: FilterQuality.medium,
+                          child: (oneProductController.product.value.imageUrl !=
+                                      [] &&
+                                  oneProductController
+                                      .product.value.imageUrl!.isNotEmpty)
+                              ? PageView.builder(
+                                  itemCount: oneProductController
+                                      .product.value.imageUrl!.length,
+                                  itemBuilder: (context, index) {
+                                    return Image.network(
+                                      oneProductController
+                                          .product.value.imageUrl![index],
+                                      fit: BoxFit.cover,
+                                      filterQuality: FilterQuality.medium,
+                                    );
+                                  },
                                 )
                               : Image.asset(
                                   'assets/icons/cart_outline.png',
@@ -365,7 +355,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                product?.name ?? '',
+                                                oneProductController
+                                                        .product.value.name ??
+                                                    '',
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold,
@@ -378,7 +370,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Rp.${product?.price ?? ''} -',
+                                              'Rp.${oneProductController.product.value.price ?? ''} -',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Color(0xFF6BCCC9),
@@ -447,7 +439,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                             8),
                                                   ),
                                                   child: Text(
-                                                    'Stock: ${product?.stock ?? ''}',
+                                                    'Stock: ${oneProductController.product.value.stock ?? ''}',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight:
@@ -476,7 +468,10 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                         .symmetric(
                                                         horizontal: 20.0),
                                                     child: Text(
-                                                      productCategory,
+                                                      oneProductController
+                                                          .productCategory
+                                                          .value
+                                                          .category_name,
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         fontWeight:
@@ -493,7 +488,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                         .symmetric(
                                                         horizontal: 20.0),
                                                     child: Text(
-                                                      "Penjual: ${seller.name}",
+                                                      "Penjual: ${oneProductController.seller.value.name}",
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         fontWeight:
@@ -510,7 +505,11 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                         .symmetric(
                                                         horizontal: 20.0),
                                                     child: Text(
-                                                      product?.desc ?? '',
+                                                      oneProductController
+                                                              .product
+                                                              .value
+                                                              .desc ??
+                                                          '',
                                                       style: const TextStyle(
                                                         fontSize: 11,
                                                         fontWeight:
@@ -534,7 +533,8 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                   ),
                                 ],
                               ),
-                              seller.id == userController.user.value.id
+                              oneProductController.seller.value.id ==
+                                      userController.user.value.id
                                   ? Container()
                                   : Align(
                                       alignment: Alignment.bottomCenter,
@@ -668,7 +668,8 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                               onTap: () {
                                                 addCartController.createCart(
                                                     userController.user.value,
-                                                    product!,
+                                                    oneProductController
+                                                        .product.value,
                                                     quantity,
                                                     context);
                                               },
@@ -719,5 +720,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                     ],
                   ),
                 ));
+      }
+    });
   }
 }
