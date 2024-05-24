@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:penstore/widgets/add_kategori_wishlist.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -15,23 +16,50 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
-    final int itemCount = 10; // Number of initial items
+    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final int itemCount = 1; // Number of initial items
+
     final List<Widget> gridItems = List.generate(
       itemCount,
       (index) {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(
-              height: 179,
-              width: 179,
-              child: Image.asset(
-                'assets/images/semua.png',
-                filterQuality: FilterQuality.high,
-                fit: BoxFit.cover,
+        return Container(
+          height: mediaQueryHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.toNamed('/detail-wishlist');
+                },
+                child: Image.asset(
+                  'assets/images/gambar_wishlist.png',
+                  fit: BoxFit.cover,
+                ),
               ),
-            )
-          ],
+              const SizedBox(height: 5),
+              const Text(
+                "Semua Wishlist",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  color: Color(0xFF424242),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                    text: "2 barang",
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 10,
+                        color: Color(0xFF424242),
+                        fontWeight: FontWeight.normal)),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -57,46 +85,61 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
+                childAspectRatio: 0.75,
                 shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
+                physics:
+                    const NeverScrollableScrollPhysics(), // Make GridView non-scrollable
                 children: [
                   ...gridItems,
-                  DottedBorder(
-                    color: const Color(0xFF91E0DD),
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12.0),
-                    dashPattern: [6, 3],
-                    child: Container(
-                      width: (mediaQueryWidth - 60) /
-                          2, // Adjust width to match grid items
-                      height: 170,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Koleksi Baru',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      DottedBorder(
+                        color: const Color(0xFF6BCCC9),
+                        strokeWidth: 1,
+                        borderType: BorderType.RRect,
+                        dashPattern: const [7, 7],
+                        strokeCap: StrokeCap.butt,
+                        radius: const Radius.circular(12),
+                        borderPadding: const EdgeInsets.all(1.0),
+                        child: InkWell(
+                          onTap: () {
+                            Get.dialog(const AddKategoriWishlistWidget());
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 168,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Koleksi Baru',
+                                    style: TextStyle(
+                                      color: Color(0xFF757B7B),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15.0),
+                                  Container(
+                                    padding: const EdgeInsets.all(4.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(
+                                          color: const Color(0xFF91E0DD)),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: const Icon(Icons.add,
+                                        color: Color(0xFF91E0DD), size: 20.0),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 15.0),
-                            Container(
-                              padding: const EdgeInsets.all(4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                border:
-                                    Border.all(color: const Color(0xFF91E0DD)),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: const Icon(Icons.add,
-                                  color: Color(0xFF91E0DD), size: 20.0),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 20.0),
+                    ],
                   ),
                 ],
               ),
