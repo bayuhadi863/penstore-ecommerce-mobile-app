@@ -170,6 +170,53 @@ class WishlistRepository extends GetxController {
     }
   }
 
+  // get wishlist first product images
+  Future<String> getWishlistFirstProductImages(String wishlistId) async {
+    try {
+      // Ambil dokumen wishlist berdasarkan wishlistId
+      final DocumentSnapshot<Map<String, dynamic>> wishlistSnapshot =
+          await db.collection('wishlists').doc(wishlistId).get();
+
+      if (!wishlistSnapshot.exists) {
+        return '';
+      }
+
+      // Ambil daftar productId dari dokumen wishlist
+      final List<dynamic> productIds =
+          wishlistSnapshot.data()?['productId'] ?? [];
+
+      if (productIds.isEmpty) {
+        return '';
+      }
+
+      // Ambil produk pertama dari daftar productId
+      final String firstProductId = productIds.first;
+
+      // Ambil detail produk berdasarkan firstProductId
+      final DocumentSnapshot<Map<String, dynamic>> productSnapshot =
+          await db.collection('products').doc(firstProductId).get();
+
+      if (productSnapshot.exists) {
+        // Ambil imageUrl pertama dari produk
+        final List<dynamic> imageUrls =
+            productSnapshot.data()?['imageUrl'] ?? [];
+        if (imageUrls.isNotEmpty) {
+          return imageUrls.first;
+        }
+      }
+
+      return '';
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
   // delete wishlist
   Future<void> deleteWishlist(String wishlistId) async {
     try {

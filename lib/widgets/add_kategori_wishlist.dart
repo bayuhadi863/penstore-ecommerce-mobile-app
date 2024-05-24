@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 
 class AddKategoriWishlistWidget extends StatelessWidget {
   const AddKategoriWishlistWidget({
@@ -7,14 +9,17 @@ class AddKategoriWishlistWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final WishlistController wishlistController = Get.put(WishlistController());
+
     final mediaQueryWidth = MediaQuery.of(context).size.width;
-    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    // final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return AlertDialog(
       insetPadding: const EdgeInsets.all(20),
       alignment: Alignment.center,
       titlePadding: const EdgeInsets.only(top: 20, right: 20, left: 20),
-      contentPadding: const EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
+      contentPadding:
+          const EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
       surfaceTintColor: Colors.white,
       backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -96,6 +101,7 @@ class AddKategoriWishlistWidget extends StatelessWidget {
                     margin: const EdgeInsets.only(top: 15),
                     width: mediaQueryWidth * 0.8,
                     child: TextFormField(
+                      controller: wishlistController.wishlistNameController,
                       keyboardType: TextInputType.name,
                       onFieldSubmitted: (_) {},
                       decoration: InputDecoration(
@@ -175,8 +181,10 @@ class AddKategoriWishlistWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    await wishlistController.createWishlist(context);
+                    wishlistController.wishlistNameController.clear();
+                    await wishlistController.getAllWishlist();
                   },
                   child: const Center(
                     child: Text(
