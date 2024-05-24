@@ -89,4 +89,26 @@ class OrderRepository extends GetxController {
       throw e.toString();
     }
   }
+
+  // fetch orders by sellerId
+  Future<List<OrderModel>> fetchOrdersBySellerId(String sellerId) async {
+    try {
+      final QuerySnapshot querySnapshot = await db
+          .collection('orders')
+          .where('sellerId', isEqualTo: sellerId)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => OrderModel.fromSnapshot(doc))
+          .toList();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

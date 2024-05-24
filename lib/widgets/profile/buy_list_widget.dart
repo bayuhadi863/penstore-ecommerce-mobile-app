@@ -116,7 +116,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
                       (index) {
                         final GetSingleCartController getSingleCartController =
                             Get.put(
-                          GetSingleCartController(orders[index].cartIds[0]!),
+                          GetSingleCartController(orders[index].cartIds[0]),
                           tag: orders[index]
                               .cartIds[0], // Use unique tag for each instance
                         );
@@ -360,13 +360,13 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       },
                                       style: TextButton.styleFrom(
                                         backgroundColor: order.status ==
-                                                'waiting'
+                                                'received'
                                             ? const Color(0xFFF46B69)
                                             : order.status == 'on_process'
-                                                ? const Color(0xFF69F4D2)
-                                                : order.status == 'received'
+                                                ? const Color(0xFF69F477)
+                                                : order.status == 'rated'
                                                     ? const Color(0xFFF4CD69)
-                                                    : order.status == 'rated'
+                                                    : order.status == 'waiting'
                                                         ? const Color(
                                                             0xFF6BCCC9)
                                                         : const Color(
