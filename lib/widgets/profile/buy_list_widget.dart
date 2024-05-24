@@ -116,50 +116,54 @@ class _BuyListProfileState extends State<BuyListProfile> {
                       (index) {
                         final GetSingleCartController getSingleCartController =
                             Get.put(
-                          GetSingleCartController(orders[index].cartIds[0]!),
+                          GetSingleCartController(orders[index].cartIds[0]),
                           tag: orders[index]
                               .cartIds[0], // Use unique tag for each instance
                         );
 
                         final order = orders[index];
 
-                        return Container(
-                          width: mediaQueryWidth,
-                          margin: const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 10, top: 10),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF91E0DD).withOpacity(0.3),
-                                blurRadius: 16,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                height: mediaQueryHeight * 0.1,
-                                child: Obx(() {
-                                  final cart = getSingleCartController.cart;
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Get.toNamed('/detail-product');
-                                            },
-                                            child: Container(
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed('/payment-buyer', arguments: {
+                              'orderId': order.id,
+                            });
+                          },
+                          child: Container(
+                            width: mediaQueryWidth,
+                            margin: const EdgeInsets.only(
+                                left: 20, right: 20, bottom: 10, top: 10),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFF91E0DD).withOpacity(0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(1, 1),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: mediaQueryHeight * 0.1,
+                                  child: Obx(() {
+                                    final cart = getSingleCartController.cart;
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
                                               width: 80,
                                               height: 80,
                                               decoration: BoxDecoration(
@@ -196,29 +200,63 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                                       ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 5),
-                                          Text(
-                                            cart.value.product.name,
-                                            style: const TextStyle(
-                                              color: Color(0xFF424242),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: 'Poppins',
+                                          ],
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 5),
+                                            Text(
+                                              cart.value.product.name,
+                                              style: const TextStyle(
+                                                color: Color(0xFF424242),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Poppins',
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 5),
-                                          Text(
-                                            'Jumlah : ${cart.value.quantity}',
+                                            const SizedBox(height: 5),
+                                            Text(
+                                              'Jumlah : ${cart.value.quantity}',
+                                              style: const TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Text(
+                                              Format.formatRupiah(
+                                                  cart.value.product.price),
+                                              style: const TextStyle(
+                                                color: Color(0xFF91E0DD),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                '${order.cartIds.length} Produk',
                                             style: const TextStyle(
                                               color: Color(0xFF757B7B),
                                               fontSize: 12,
@@ -226,10 +264,24 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                               fontFamily: 'Poppins',
                                             ),
                                           ),
-                                          const SizedBox(height: 5),
-                                          Text(
-                                            Format.formatRupiah(
-                                                cart.value.product.price),
+                                        ],
+                                      ),
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'Total Pesanan : ',
+                                            style: TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: Format.formatRupiah(
+                                                order.totalPrice),
                                             style: const TextStyle(
                                               color: Color(0xFF91E0DD),
                                               fontSize: 12,
@@ -239,165 +291,44 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  );
-                                }),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${order.cartIds.length} Produk',
-                                          style: const TextStyle(
-                                            color: Color(0xFF757B7B),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        const TextSpan(
-                                          text: 'Total Pesanan : ',
-                                          style: TextStyle(
-                                            color: Color(0xFF757B7B),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: Format.formatRupiah(
-                                              order.totalPrice),
-                                          style: const TextStyle(
-                                            color: Color(0xFF91E0DD),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 5),
-                              Container(
-                                height: 1,
-                                width: mediaQueryWidth * 0.9,
-                                color: const Color(0xFF000000),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: mediaQueryWidth * 0.45,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: order.status == 'waiting'
-                                                ? 'Menunggu konfirmasi dari penjual'
-                                                : order.status == 'on_process'
-                                                    ? 'Pesanan Anda sedang diproses'
-                                                    : order.status == 'received'
-                                                        ? 'Beri Nilai untuk produk ini'
-                                                        : order.status ==
-                                                                'rated'
-                                                            ? 'Terima kasih atas penilaiannya'
-                                                            : order.status ==
-                                                                    'unpaid'
-                                                                ? 'Segera lakukan pembayaran agar pesanan diproses'
-                                                                : 'Segera lakukan pembayaran agar pesanan diproses',
-                                            style: const TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.normal,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: mediaQueryWidth * 0.38,
-                                    height: 40,
-                                    child: TextButton(
-                                      onPressed: () {
-                                        if (order.status == 'waiting') {
-                                          Get.toNamed('/payment-buyer',
-                                              arguments: {
-                                                'orderId': order.id!
-                                              });
-                                        }
-                                        if (order.status == 'received') {
-                                          changeIsReceived();
-                                          return;
-                                        }
-                                        if (order.status == 'rated') {
-                                          changeIsRating();
-                                          return;
-                                        }
-                                        if (order.status == 'unpaid') {
-                                          Get.toNamed('/payment-buyer',
-                                              arguments: {
-                                                'orderId': order.id!
-                                              });
-                                        }
-                                      },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: order.status ==
-                                                'waiting'
-                                            ? const Color(0xFFF46B69)
-                                            : order.status == 'on_process'
-                                                ? const Color(0xFF69F4D2)
-                                                : order.status == 'received'
-                                                    ? const Color(0xFFF4CD69)
-                                                    : order.status == 'rated'
-                                                        ? const Color(
-                                                            0xFF6BCCC9)
-                                                        : const Color(
-                                                            0xFF69A9F4),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                      ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  height: 1,
+                                  width: mediaQueryWidth * 0.9,
+                                  color: const Color(0xFF000000),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: mediaQueryWidth * 0.45,
                                       child: RichText(
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
                                               text: order.status == 'waiting'
-                                                  ? 'Lihat Detail'
+                                                  ? 'Menunggu konfirmasi dari penjual'
                                                   : order.status == 'on_process'
-                                                      ? 'Diterima'
+                                                      ? 'Pesanan Anda sedang diproses'
                                                       : order.status ==
                                                               'received'
-                                                          ? 'Nilai'
+                                                          ? 'Beri Nilai untuk produk ini'
                                                           : order.status ==
                                                                   'rated'
-                                                              ? 'Beli Lagi'
+                                                              ? 'Terima kasih atas penilaiannya'
                                                               : order.status ==
                                                                       'unpaid'
-                                                                  ? 'Bayar Sekarang'
-                                                                  : 'Bayar Sekarang',
+                                                                  ? 'Segera lakukan pembayaran agar pesanan diproses'
+                                                                  : 'Segera lakukan pembayaran agar pesanan diproses',
                                               style: const TextStyle(
-                                                color: Color(0xFFFFFFFF),
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal,
                                                 fontFamily: 'Poppins',
                                               ),
                                             ),
@@ -405,10 +336,85 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                         ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ],
+                                    SizedBox(
+                                      width: mediaQueryWidth * 0.38,
+                                      height: 40,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          if (order.status == 'waiting') {
+                                            Get.toNamed('/payment-buyer',
+                                                arguments: {
+                                                  'orderId': order.id!
+                                                });
+                                          }
+                                          if (order.status == 'received') {
+                                            changeIsReceived();
+                                            return;
+                                          }
+                                          if (order.status == 'rated') {
+                                            changeIsRating();
+                                            return;
+                                          }
+                                          if (order.status == 'unpaid') {
+                                            Get.toNamed('/payment-buyer',
+                                                arguments: {
+                                                  'orderId': order.id!
+                                                });
+                                          }
+                                        },
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: order.status ==
+                                                  'on_process'
+                                              ? const Color(0xFFF46B69)
+                                              : order.status == 'reveived'
+                                                  ? const Color(0xFF69F477)
+                                                  : order.status == 'waiting'
+                                                      ? const Color(0xFFF4CD69)
+                                                      : order.status == 'rated'
+                                                          ? const Color(
+                                                              0xFF6BCCC9)
+                                                          : const Color(
+                                                              0xFF69A9F4),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: order.status == 'waiting'
+                                                    ? 'Lihat Detail'
+                                                    : order.status ==
+                                                            'on_process'
+                                                        ? 'Diterima'
+                                                        : order.status ==
+                                                                'received'
+                                                            ? 'Nilai'
+                                                            : order.status ==
+                                                                    'rated'
+                                                                ? 'Beli Lagi'
+                                                                : order.status ==
+                                                                        'unpaid'
+                                                                    ? 'Bayar Sekarang'
+                                                                    : 'Bayar Sekarang',
+                                                style: const TextStyle(
+                                                  color: Color(0xFFFFFFFF),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: 'Poppins',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

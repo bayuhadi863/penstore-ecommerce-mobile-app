@@ -69,4 +69,68 @@ class OrderPaymentRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  // delete image by url
+  Future<void> deleteImage(String imageUrl) async {
+    try {
+      await storage.refFromURL(imageUrl).delete();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // fetch order payment by orderId
+  Future<OrderPaymentModel> fetchOrderPaymentByOrderId(String orderId) async {
+    try {
+      final QuerySnapshot querySnapshot = await db
+          .collection('order_payments')
+          .where('orderId', isEqualTo: orderId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return OrderPaymentModel.fromSnapshot(querySnapshot.docs.first);
+      } else {
+        return OrderPaymentModel.empty();
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // delete order payment by orderId
+  Future<void> deleteOrderPaymentByOrderId(String orderId) async {
+    try {
+      final QuerySnapshot querySnapshot = await db
+          .collection('order_payments')
+          .where('orderId', isEqualTo: orderId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        await db
+            .collection('order_payments')
+            .doc(querySnapshot.docs.first.id)
+            .delete();
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
