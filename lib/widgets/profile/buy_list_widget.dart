@@ -308,16 +308,19 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: order.status == 'paid'
-                                                ? 'Produk masih dalam penanganan'
-                                                : order.status == 'received'
-                                                    ? 'Beri Nilai untuk produk ini'
-                                                    : order.status == 'rated'
-                                                        ? 'Terima kasih atas penilaiannya'
+                                            text: order.status == 'waiting'
+                                                ? 'Menunggu konfirmasi dari penjual'
+                                                : order.status == 'on_process'
+                                                    ? 'Pesanan Anda sedang diproses'
+                                                    : order.status == 'received'
+                                                        ? 'Beri Nilai untuk produk ini'
                                                         : order.status ==
-                                                                'unpaid'
-                                                            ? 'Segera lakukan pembayaran agar pesanan diproses'
-                                                            : 'Segera lakukan pembayaran agar pesanan diproses',
+                                                                'rated'
+                                                            ? 'Terima kasih atas penilaiannya'
+                                                            : order.status ==
+                                                                    'unpaid'
+                                                                ? 'Segera lakukan pembayaran agar pesanan diproses'
+                                                                : 'Segera lakukan pembayaran agar pesanan diproses',
                                             style: const TextStyle(
                                               color: Color(0xFF757B7B),
                                               fontSize: 12,
@@ -334,9 +337,11 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                     height: 40,
                                     child: TextButton(
                                       onPressed: () {
-                                        if (order.status == 'paid') {
-                                          changeIsPaid();
-                                          return;
+                                        if (order.status == 'waiting') {
+                                          Get.toNamed('/payment-buyer',
+                                              arguments: {
+                                                'orderId': order.id!
+                                              });
                                         }
                                         if (order.status == 'received') {
                                           changeIsReceived();
@@ -354,13 +359,18 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                         }
                                       },
                                       style: TextButton.styleFrom(
-                                        backgroundColor: order.status == 'paid'
+                                        backgroundColor: order.status ==
+                                                'waiting'
                                             ? const Color(0xFFF46B69)
-                                            : order.status == 'received'
-                                                ? const Color(0xFFF4CD69)
-                                                : order.status == 'rated'
-                                                    ? const Color(0xFF6BCCC9)
-                                                    : const Color(0xFF69A9F4),
+                                            : order.status == 'on_process'
+                                                ? const Color(0xFF69F4D2)
+                                                : order.status == 'received'
+                                                    ? const Color(0xFFF4CD69)
+                                                    : order.status == 'rated'
+                                                        ? const Color(
+                                                            0xFF6BCCC9)
+                                                        : const Color(
+                                                            0xFF69A9F4),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -370,19 +380,23 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
-                                              text: order.status == 'paid'
-                                                  ? 'Diterima'
-                                                  : order.status == 'received'
-                                                      ? 'Nilai'
-                                                      : order.status == 'rated'
-                                                          ? 'Beli Lagi'
+                                              text: order.status == 'waiting'
+                                                  ? 'Lihat Detail'
+                                                  : order.status == 'on_process'
+                                                      ? 'Diterima'
+                                                      : order.status ==
+                                                              'received'
+                                                          ? 'Nilai'
                                                           : order.status ==
-                                                                  'unpaid'
-                                                              ? 'Bayar Sekarang'
-                                                              : 'Bayar Sekarang',
+                                                                  'rated'
+                                                              ? 'Beli Lagi'
+                                                              : order.status ==
+                                                                      'unpaid'
+                                                                  ? 'Bayar Sekarang'
+                                                                  : 'Bayar Sekarang',
                                               style: const TextStyle(
                                                 color: Color(0xFFFFFFFF),
-                                                fontSize: 14,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.w600,
                                                 fontFamily: 'Poppins',
                                               ),

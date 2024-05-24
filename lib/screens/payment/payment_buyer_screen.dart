@@ -1,14 +1,16 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:penstore/controller/cart/get_selected_carts_controller.dart';
 import 'package:penstore/controller/order/get_single_order_controller.dart';
+import 'package:penstore/controller/order_payment/add_order_payment_controller.dart';
 import 'package:penstore/controller/payment_method/get_single_payment_method_controller.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/add_rating_dialog.dart';
@@ -86,6 +88,9 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
 
     final GetSingleOrderController getSingleOrderController =
         Get.put(GetSingleOrderController(orderId));
+
+    final AddOrderPaymentController addOrderPaymentController =
+        Get.put(AddOrderPaymentController());
 
     return WillPopScope(
       onWillPop: () async {
@@ -671,7 +676,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 15),
-                                      if (isSent == false) ...[
+                                      if (order.status == 'unpaid') ...[
                                         if (selectedImage != null) ...[
                                           Stack(
                                             children: [
@@ -794,10 +799,25 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                     BorderRadius.circular(12),
                                               ),
                                             ),
-                                            onPressed: () {
-                                              setState(() {
-                                                checkBukti();
-                                              });
+                                            onPressed: () async {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return const Center(
+                                                    child: SpinKitFadingCircle(
+                                                      color: Colors.white,
+                                                      size: 50.0,
+                                                    ),
+                                                  );
+                                                },
+                                                barrierDismissible: false,
+                                              );
+                                              await addOrderPaymentController
+                                                  .uploadImage(selectedImage!);
+                                              await addOrderPaymentController
+                                                  .addOrderPayment(orderId);
+
+                                              Navigator.of(context).pop();
                                             },
                                             child: const Center(
                                               child: Text(
@@ -813,98 +833,106 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                           ),
                                         ),
                                       ],
-                                      if (isWaiting == true) ...[
-                                        // const SizedBox(height: 20),
-                                        Container(
-                                          width: double.infinity,
-                                          height: 54,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFF6BCCC9)
-                                                .withOpacity(0.3),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: const Color(0xFF91E0DD)
-                                                    .withOpacity(0.4),
-                                                blurRadius: 16,
-                                                offset: const Offset(1, 1),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              const Icon(
-                                                Icons.access_time,
-                                                color: Color(0xFF6BCCC9),
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  RichText(
-                                                    text: const TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: 'Menunggu',
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF757B7B),
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                'Poppins',
-                                                          ),
-                                                        ),
-                                                        TextSpan(
-                                                          text:
-                                                              ' Konfirmasi Pembayaran',
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF6BCCC9),
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                'Poppins',
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  RichText(
-                                                    text: const TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              'dari penjual, kembali lagi nanti!',
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF757B7B),
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                'Poppins',
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                      order.status == 'waiting'
+                                          ?
+                                          // const SizedBox(height: 20),
+                                          Container(
+                                              width: double.infinity,
+                                              height: 54,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFF6BCCC9)
+                                                    .withOpacity(0.3),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color:
+                                                        const Color(0xFF91E0DD)
+                                                            .withOpacity(0.4),
+                                                    blurRadius: 16,
+                                                    offset: const Offset(1, 1),
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.access_time,
+                                                    color: Color(0xFF6BCCC9),
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      RichText(
+                                                        text: const TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: 'Menunggu',
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF757B7B),
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                              ),
+                                                            ),
+                                                            TextSpan(
+                                                              text:
+                                                                  ' Konfirmasi Pembayaran',
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF6BCCC9),
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      RichText(
+                                                        text: const TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  'dari penjual, kembali lagi nanti!',
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF757B7B),
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : Container(),
                                       if (isPaidOff == true) ...[
                                         Container(
                                           width: double.infinity,
