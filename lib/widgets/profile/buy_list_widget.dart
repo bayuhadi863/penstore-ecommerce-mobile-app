@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/cart/get_single_cart_controller.dart';
 import 'package:penstore/controller/order/get_user_order_controller.dart';
+import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -107,11 +109,20 @@ class _BuyListProfileState extends State<BuyListProfile> {
                 ),
               )
             : orders.isEmpty
-                ? const Text("Belum ada produk yang Anda jual")
+                ? const Text("Belum ada produk yang Anda beli")
                 : Column(
                     children: List.generate(
                       orders.length,
                       (index) {
+                        final GetSingleCartController getSingleCartController =
+                            Get.put(
+                          GetSingleCartController(orders[index].cartIds[0]!),
+                          tag: orders[index]
+                              .cartIds[0], // Use unique tag for each instance
+                        );
+
+                        final order = orders[index];
+
                         return Container(
                           width: mediaQueryWidth,
                           margin: const EdgeInsets.only(
@@ -135,81 +146,102 @@ class _BuyListProfileState extends State<BuyListProfile> {
                             children: [
                               SizedBox(
                                 height: mediaQueryHeight * 0.1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            Get.toNamed('/detail-product');
-                                          },
-                                          child: Container(
-                                            width: 80,
-                                            height: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: ClipRRect(
-                                              clipBehavior: Clip.hardEdge,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image(
-                                                filterQuality:
-                                                    FilterQuality.high,
-                                                image: AssetImage(
-                                                  imgList[0],
-                                                ),
-                                                fit: BoxFit.cover,
+                                child: Obx(() {
+                                  final cart = getSingleCartController.cart;
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Get.toNamed('/detail-product');
+                                            },
+                                            child: Container(
+                                              width: 80,
+                                              height: 80,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: ClipRRect(
+                                                clipBehavior: Clip.hardEdge,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                child: (cart.value.product
+                                                                .imageUrl !=
+                                                            null &&
+                                                        cart
+                                                            .value
+                                                            .product
+                                                            .imageUrl!
+                                                            .isNotEmpty)
+                                                    ? Image.network(
+                                                        cart.value.product
+                                                            .imageUrl![0],
+                                                        height: 16,
+                                                        width: 16,
+                                                        filterQuality:
+                                                            FilterQuality.high,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Image.asset(
+                                                        'assets/icons/cart_outline.png',
+                                                        height: 16,
+                                                        width: 16,
+                                                        filterQuality:
+                                                            FilterQuality.high,
+                                                      ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 10),
-                                    const Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(height: 5),
-                                        Text(
-                                          'Pensil Staedler 2B',
-                                          style: TextStyle(
-                                            color: Color(0xFF424242),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
+                                        ],
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            cart.value.product.name,
+                                            style: const TextStyle(
+                                              color: Color(0xFF424242),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          'Jumlah : 10',
-                                          style: TextStyle(
-                                            color: Color(0xFF757B7B),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            'Jumlah : ${cart.value.quantity}',
+                                            style: const TextStyle(
+                                              color: Color(0xFF757B7B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          'Rp 40.000 -',
-                                          style: TextStyle(
-                                            color: Color(0xFF91E0DD),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Poppins',
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            Format.formatRupiah(
+                                                cart.value.product.price),
+                                            style: const TextStyle(
+                                              color: Color(0xFF91E0DD),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Poppins',
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                }),
                               ),
                               const SizedBox(height: 10),
                               Row(
@@ -220,8 +252,9 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: '2 Produk',
-                                          style: TextStyle(
+                                          text:
+                                              '${order.cartIds.length} Produk',
+                                          style: const TextStyle(
                                             color: Color(0xFF757B7B),
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
@@ -234,7 +267,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                   RichText(
                                     text: TextSpan(
                                       children: [
-                                        TextSpan(
+                                        const TextSpan(
                                           text: 'Total Pesanan : ',
                                           style: TextStyle(
                                             color: Color(0xFF757B7B),
@@ -244,8 +277,9 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                           ),
                                         ),
                                         TextSpan(
-                                          text: 'Rp 80.000, -',
-                                          style: TextStyle(
+                                          text: Format.formatRupiah(
+                                              order.totalPrice),
+                                          style: const TextStyle(
                                             color: Color(0xFF91E0DD),
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
@@ -274,16 +308,17 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: isPaid
+                                            text: order.status == 'paid'
                                                 ? 'Produk masih dalam penanganan'
-                                                : isReceived
+                                                : order.status == 'received'
                                                     ? 'Beri Nilai untuk produk ini'
-                                                    : isRating
+                                                    : order.status == 'rated'
                                                         ? 'Terima kasih atas penilaiannya'
-                                                        : isDone
+                                                        : order.status ==
+                                                                'unpaid'
                                                             ? 'Segera lakukan pembayaran agar pesanan diproses'
                                                             : 'Segera lakukan pembayaran agar pesanan diproses',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Color(0xFF757B7B),
                                               fontSize: 12,
                                               fontWeight: FontWeight.normal,
@@ -299,28 +334,53 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                     height: 40,
                                     child: TextButton(
                                       onPressed: () {
-                                        isPaid
-                                            ? changeIsReceived()
-                                            : isReceived
-                                                ? changeIsRating()
-                                                : isRating
-                                                    ? changeIsDone()
-                                                    : changeIsPaid();
+                                        if (order.status == 'paid') {
+                                          changeIsPaid();
+                                          return;
+                                        }
+                                        if (order.status == 'received') {
+                                          changeIsReceived();
+                                          return;
+                                        }
+                                        if (order.status == 'rated') {
+                                          changeIsRating();
+                                          return;
+                                        }
+                                        if (order.status == 'unpaid') {
+                                          Get.toNamed('/payment-buyer',
+                                              arguments: {
+                                                'orderId': order.id!
+                                              });
+                                        }
                                       },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: order.status == 'paid'
+                                            ? const Color(0xFFF46B69)
+                                            : order.status == 'received'
+                                                ? const Color(0xFFF4CD69)
+                                                : order.status == 'rated'
+                                                    ? const Color(0xFF6BCCC9)
+                                                    : const Color(0xFF69A9F4),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
                                       child: RichText(
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
-                                              text: isPaid
+                                              text: order.status == 'paid'
                                                   ? 'Diterima'
-                                                  : isReceived
+                                                  : order.status == 'received'
                                                       ? 'Nilai'
-                                                      : isRating
+                                                      : order.status == 'rated'
                                                           ? 'Beli Lagi'
-                                                          : isDone
+                                                          : order.status ==
+                                                                  'unpaid'
                                                               ? 'Bayar Sekarang'
                                                               : 'Bayar Sekarang',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color(0xFFFFFFFF),
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
@@ -328,19 +388,6 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: isPaid
-                                            ? Color(0xFFF46B69)
-                                            : isReceived
-                                                ? Color(0xFFF4CD69)
-                                                : isRating
-                                                    ? Color(0xFF6BCCC9)
-                                                    : Color(0xFF69A9F4),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),

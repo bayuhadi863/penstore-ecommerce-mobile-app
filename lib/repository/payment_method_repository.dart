@@ -24,7 +24,8 @@ class PaymentMethodRepository extends GetxController {
   }
 
   // fetch payment methods from payment_methods collection by userId
-  Future<List<PaymentMethodModel>> fetchPaymentMethodsByUserId(String userId) async {
+  Future<List<PaymentMethodModel>> fetchPaymentMethodsByUserId(
+      String userId) async {
     try {
       final QuerySnapshot querySnapshot = await db
           .collection('paymentMethods')
@@ -34,6 +35,25 @@ class PaymentMethodRepository extends GetxController {
       return querySnapshot.docs
           .map((doc) => PaymentMethodModel.fromSnapshot(doc))
           .toList();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // fetch payment method by paymentMethodId
+  Future<PaymentMethodModel> fetchPaymentMethodById(
+      String paymentMethodId) async {
+    try {
+      final DocumentSnapshot doc =
+          await db.collection('paymentMethods').doc(paymentMethodId).get();
+
+      return PaymentMethodModel.fromSnapshot(doc);
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {
