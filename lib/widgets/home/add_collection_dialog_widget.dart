@@ -359,9 +359,6 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
                                 addProductWishlistController.choosedWishlist!,
                                 context);
                           }
-
-                          // refresh data
-                          productController.reloadGetData();
                         },
                         child: Container(
                           decoration: BoxDecoration(

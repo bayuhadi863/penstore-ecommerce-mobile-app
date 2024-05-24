@@ -112,7 +112,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                               });
                             } else {
                               // jika belum maka pop up tambahkan ke wishlist
-                              showDialog(
+                              await showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AddCollectionDialog(
@@ -120,6 +120,9 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                   );
                                 },
                               );
+                              setState(() {
+                                checkWishlist();
+                              });
                             }
                           },
                           child: Container(
