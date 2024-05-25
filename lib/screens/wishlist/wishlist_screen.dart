@@ -5,6 +5,7 @@ import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 import 'package:penstore/widgets/add_kategori_wishlist.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 import 'package:penstore/models/wishlist_model.dart';
+import 'package:penstore/widgets/wishlist/delete_confirmation.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({Key? key}) : super(key: key);
@@ -93,8 +94,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            onLongPress: () {
+            onLongPress: () async {
               // pop up delete
+              showDeleteConfirmationDialog(context, wishlistItem.id, () {
+                wishlistController.deleteWishlist(wishlistItem.id);
+              });
             },
             onTap: () {
               Get.toNamed('/detail-wishlist',

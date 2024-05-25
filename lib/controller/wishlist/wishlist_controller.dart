@@ -80,4 +80,19 @@ class WishlistController extends GetxController {
       rethrow;
     }
   }
+
+  Future<void> deleteWishlist(String wishlistId) async {
+    try {
+      await wishlistRepository.deleteWishlist(wishlistId);
+
+      // Show success snackbar
+      Alerts.successSnackBar(
+          title: 'Sukses', message: "Berhasil menghapus wishlist");
+    } catch (e) {
+      Alerts.errorSnackBar(
+        title: 'Gagal',
+        message: ("Gagal menghapus wishlist ${e.toString()}",),
+      );
+    }
+  }
 }
