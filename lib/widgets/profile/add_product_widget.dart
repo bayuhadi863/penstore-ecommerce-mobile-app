@@ -5,6 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
 import 'package:penstore/controller/product/add_product_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/models/category_model.dart';
@@ -24,119 +25,131 @@ class _AddProductFormState extends State<AddProductForm> {
     // final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
-    return TextButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          const Color(0xFF6BCCC9),
-        ),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+    final GetUserPaymentMethodController getUserPaymentMethodController =
+        Get.put(GetUserPaymentMethodController(
+            FirebaseAuth.instance.currentUser!.uid));
+
+    return Obx(() {
+      final paymentMethods = getUserPaymentMethodController.paymentMethods;
+      return TextButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+            paymentMethods.isEmpty
+                ? Colors.grey[400]!
+                : const Color(0xFF6BCCC9),
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+            const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 14,
+            ),
           ),
         ),
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 20,
-          ),
-        ),
-      ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: ((context) => AlertDialog(
-                insetPadding: const EdgeInsets.all(20),
-                titlePadding: const EdgeInsets.all(20),
-                contentPadding: EdgeInsets.zero,
-                surfaceTintColor: Colors.white,
-                backgroundColor: const Color(0xFFFFFFFF),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                title: SizedBox(
-                  width: mediaQueryWidth,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(
-                            Icons.list_alt_outlined,
-                            color: Color(0xFF91E0DD),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Tambah produk',
-                            style: TextStyle(
-                              color: Color(0xFF424242),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
+        onPressed: () {
+          if (paymentMethods.isEmpty) {
+            return;
+          }
+          showDialog(
+            context: context,
+            builder: ((context) => AlertDialog(
+                  insetPadding: const EdgeInsets.all(20),
+                  titlePadding: const EdgeInsets.all(20),
+                  contentPadding: EdgeInsets.zero,
+                  surfaceTintColor: Colors.white,
+                  backgroundColor: const Color(0xFFFFFFFF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  title: SizedBox(
+                    width: mediaQueryWidth,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons.list_alt_outlined,
+                              color: Color(0xFF91E0DD),
                             ),
-                          ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 32,
-                            width: 32,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF91E0DD)
-                                        .withOpacity(0.3),
-                                    blurRadius: 16,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ]),
-                            child: Image.asset(
-                              'assets/icons/close_fill.png',
-                              height: 24,
-                              width: 24,
-                              color: const Color(
-                                0xFF91E0DD,
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Tambah produk',
+                              style: TextStyle(
+                                color: Color(0xFF424242),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
                               ),
-                              filterQuality: FilterQuality.high,
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFF91E0DD)
+                                          .withOpacity(0.3),
+                                      blurRadius: 16,
+                                      offset: const Offset(1, 1),
+                                    ),
+                                  ]),
+                              child: Image.asset(
+                                'assets/icons/close_fill.png',
+                                height: 24,
+                                width: 24,
+                                color: const Color(
+                                  0xFF91E0DD,
+                                ),
+                                filterQuality: FilterQuality.high,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                content: const ProductForm(),
-              )),
-        );
-      },
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(
-            Icons.add,
-            color: Color(0xFFFFFFFF),
-          ),
-          Text(
-            'Tambah',
-            style: TextStyle(
+                  content: const ProductForm(),
+                )),
+          );
+        },
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              Icons.add,
               color: Color(0xFFFFFFFF),
-              fontFamily: 'poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
             ),
-          ),
-        ],
-      ),
-    );
+            Text(
+              'Tambah',
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontFamily: 'poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 

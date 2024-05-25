@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:penstore/widgets/chat/appBar_detail_chat.dart';
 import 'package:penstore/widgets/chat/message_body.dart';
 
 class ChatDetailScreen extends StatefulWidget {
@@ -12,48 +13,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
-      body: MessageBody(),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      title: const Row(
-        children: [
-          // BackButton(),
-          CircleAvatar(
-            backgroundImage: AssetImage('assets/images/profile.jpeg'),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Kristin Watson",
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                "Active 3m ago",
-                style: TextStyle(fontSize: 12),
-              )
-            ],
-          ),
-        ],
+      appBar: AppBar(
+        toolbarHeight: 74,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        title: const AppBarDetailChat(),
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.local_phone),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: const Icon(Icons.videocam),
-          onPressed: () {},
-        ),
-        const SizedBox(width: 10),
-      ],
+      body: MessageBody(),
     );
   }
 }

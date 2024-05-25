@@ -1,11 +1,14 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/payment_method/delete_payment_method_controller.dart';
+import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
-import 'package:penstore/widgets/Logout_confirm.dart';
+import 'package:penstore/widgets/logout_confirm.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
@@ -14,6 +17,7 @@ import 'package:penstore/widgets/profile/form_tagihan.dart';
 import 'package:penstore/widgets/profile/profile_image_widget.dart';
 import 'package:penstore/widgets/profile/sale_list_widget.dart';
 import 'package:penstore/widgets/profile/sell_list_widget.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -33,6 +37,8 @@ class _ProfileScreenState extends State<ProfileScreen>
   bool isClick = false;
   bool isClickLogout = false;
 
+  bool isAllList = false;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +55,13 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
+    final GetUserPaymentMethodController getUserPaymentMethodController =
+        Get.put(GetUserPaymentMethodController(
+            FirebaseAuth.instance.currentUser!.uid));
+
+    final DeletePaymentMethodController deletePaymentMethodController =
+        Get.put(DeletePaymentMethodController());
 
     return SingleChildScrollView(
       child: Column(
@@ -424,220 +437,481 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ],
                         ),
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 100,
-                        margin: const EdgeInsets.only(
-                            left: 20, right: 20, bottom: 10, top: 10),
-                        child: Container(
-                          height: 100,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF91E0DD).withOpacity(0.3),
-                                blurRadius: 16,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "Bank BRI",
-                                      style: TextStyle(
-                                        color: Color(0xFF605B57),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Poppins',
+                      Obx(() {
+                        final paymentMethods =
+                            getUserPaymentMethodController.paymentMethods;
+
+                        // sort by name
+                        // paymentMethods.sort((a, b) {
+                        //   return a.name.compareTo(b.name);
+                        // });
+
+                        final loading =
+                            getUserPaymentMethodController.isLoading.value;
+
+                        return loading
+                            ? SkeletonItem(
+                                child: Column(
+                                  children: List.generate(
+                                    3,
+                                    (index) => Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          bottom: 10,
+                                          top: 10),
+                                      child: SkeletonAvatar(
+                                        style: SkeletonAvatarStyle(
+                                          width: double.infinity,
+                                          height: 100,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "Thania Store",
-                                      style: TextStyle(
-                                        color: Color(0xFF605B57),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "166736292390290902483",
-                                      style: TextStyle(
-                                        color: Color(0xFF6BCCC9),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
+                                ),
+                              )
+                            : paymentMethods.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                        "Belum ada metode pembayaran. Tambahkan metode pembayaran untuk menjual produk"),
+                                  )
+                                : Column(
                                     children: [
-                                      Container(
-                                        width: 26,
-                                        height: 26,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF91E0DD)
-                                              .withOpacity(0.3),
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                        child: IconButton(
-                                          onPressed: () {},
-                                          icon: Image.asset(
-                                            'assets/icons/edit_icon.png',
-                                            height: 16,
-                                            width: 16,
-                                            filterQuality: FilterQuality.high,
-                                          ),
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                            padding: MaterialStateProperty.all(
-                                              const EdgeInsets.all(0),
-                                            ),
-                                          ),
-                                        ),
+                                      Column(
+                                        children: List.generate(
+                                            isAllList == true
+                                                ? paymentMethods.length
+                                                : paymentMethods.length > 1
+                                                    ? 1
+                                                    : paymentMethods.length,
+                                            (index) {
+                                          // paymentMethods.sort((a, b) {
+                                          //   return a.name.compareTo(b.name);
+                                          // });
+                                          final paymentMethod =
+                                              paymentMethods[index];
+
+                                          return paymentMethod.name ==
+                                                  "COD (Bayar di tempat)"
+                                              ? Container(
+                                                  width: double.infinity,
+                                                  margin: const EdgeInsets.only(
+                                                      left: 20,
+                                                      right: 20,
+                                                      bottom: 10,
+                                                      top: 10),
+                                                  child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 10),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: const Color(
+                                                                  0xFF91E0DD)
+                                                              .withOpacity(0.3),
+                                                          blurRadius: 16,
+                                                          offset: const Offset(
+                                                              1, 1),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text:
+                                                                    "COD (Bayar di tempat)",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
+                                                                      0xFF605B57),
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              width: 26,
+                                                              height: 26,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                        0xFFF46B69)
+                                                                    .withOpacity(
+                                                                        0.3),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            6),
+                                                              ),
+                                                              child: IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await deletePaymentMethodController.deletePaymentMethod(
+                                                                      paymentMethod
+                                                                          .id!,
+                                                                      context);
+
+                                                                  getUserPaymentMethodController.getPaymentMethodByUserId(
+                                                                      FirebaseAuth
+                                                                          .instance
+                                                                          .currentUser!
+                                                                          .uid);
+                                                                },
+                                                                icon:
+                                                                    Image.asset(
+                                                                  'assets/icons/delete_icon.png',
+                                                                  height: 16,
+                                                                  width: 16,
+                                                                  filterQuality:
+                                                                      FilterQuality
+                                                                          .high,
+                                                                ),
+                                                                style:
+                                                                    ButtonStyle(
+                                                                  shape:
+                                                                      MaterialStateProperty
+                                                                          .all(
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              6),
+                                                                    ),
+                                                                  ),
+                                                                  padding:
+                                                                      MaterialStateProperty
+                                                                          .all(
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  width: double.infinity,
+                                                  height: 100,
+                                                  margin: const EdgeInsets.only(
+                                                      left: 20,
+                                                      right: 20,
+                                                      bottom: 10,
+                                                      top: 10),
+                                                  child: Container(
+                                                    height: 100,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 10),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: const Color(
+                                                                  0xFF91E0DD)
+                                                              .withOpacity(0.3),
+                                                          blurRadius: 16,
+                                                          offset: const Offset(
+                                                              1, 1),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text:
+                                                                    paymentMethod
+                                                                        .name,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
+                                                                      0xFF605B57),
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text: paymentMethod
+                                                                    .recipientName
+                                                                    .toUpperCase(),
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
+                                                                      0xFF605B57),
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text:
+                                                                    paymentMethod
+                                                                        .number,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
+                                                                      0xFF6BCCC9),
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Container(
+                                                                  width: 26,
+                                                                  height: 26,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: const Color(
+                                                                            0xFF91E0DD)
+                                                                        .withOpacity(
+                                                                            0.3),
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(6),
+                                                                  ),
+                                                                  child:
+                                                                      IconButton(
+                                                                    onPressed:
+                                                                        () {},
+                                                                    icon: Image
+                                                                        .asset(
+                                                                      'assets/icons/edit_icon.png',
+                                                                      height:
+                                                                          16,
+                                                                      width: 16,
+                                                                      filterQuality:
+                                                                          FilterQuality
+                                                                              .high,
+                                                                    ),
+                                                                    style:
+                                                                        ButtonStyle(
+                                                                      shape: MaterialStateProperty
+                                                                          .all(
+                                                                        RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(6),
+                                                                        ),
+                                                                      ),
+                                                                      padding:
+                                                                          MaterialStateProperty
+                                                                              .all(
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            0),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 8.0),
+                                                                Container(
+                                                                  width: 26,
+                                                                  height: 26,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: const Color(
+                                                                            0xFFF46B69)
+                                                                        .withOpacity(
+                                                                            0.3),
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(6),
+                                                                  ),
+                                                                  child:
+                                                                      IconButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await deletePaymentMethodController.deletePaymentMethod(
+                                                                          paymentMethod
+                                                                              .id!,
+                                                                          context);
+
+                                                                      getUserPaymentMethodController.getPaymentMethodByUserId(FirebaseAuth
+                                                                          .instance
+                                                                          .currentUser!
+                                                                          .uid);
+                                                                    },
+                                                                    icon: Image
+                                                                        .asset(
+                                                                      'assets/icons/delete_icon.png',
+                                                                      height:
+                                                                          16,
+                                                                      width: 16,
+                                                                      filterQuality:
+                                                                          FilterQuality
+                                                                              .high,
+                                                                    ),
+                                                                    style:
+                                                                        ButtonStyle(
+                                                                      shape: MaterialStateProperty
+                                                                          .all(
+                                                                        RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(6),
+                                                                        ),
+                                                                      ),
+                                                                      padding:
+                                                                          MaterialStateProperty
+                                                                              .all(
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            0),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                        }),
                                       ),
-                                      const SizedBox(width: 8.0),
-                                      Container(
-                                        width: 26,
-                                        height: 26,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFF46B69)
-                                              .withOpacity(0.3),
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                        child: IconButton(
-                                          onPressed: () {},
-                                          icon: Image.asset(
-                                            'assets/icons/delete_icon.png',
-                                            height: 16,
-                                            width: 16,
-                                            filterQuality: FilterQuality.high,
-                                          ),
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                            padding: MaterialStateProperty.all(
-                                              const EdgeInsets.all(0),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      paymentMethods.length <= 1
+                                          ? Container()
+                                          : isAllList == false
+                                              ? Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20.0),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isAllList = true;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: const Text(
+                                                        'Lebih Banyak',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF6BCCC9),
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20.0),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isAllList = false;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: const Text(
+                                                        'Lebih Sedikit',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF6BCCC9),
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                     ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(
-                            left: 20, right: 20, bottom: 10, top: 10),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF91E0DD).withOpacity(0.3),
-                                blurRadius: 16,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "COD (Bayar di Tempat)",
-                                      style: TextStyle(
-                                        color: Color(0xFF605B57),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 26,
-                                    height: 26,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF46B69)
-                                          .withOpacity(0.3),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: Image.asset(
-                                        'assets/icons/delete_icon.png',
-                                        height: 16,
-                                        width: 16,
-                                        filterQuality: FilterQuality.high,
-                                      ),
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                        padding: MaterialStateProperty.all(
-                                          const EdgeInsets.all(0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                                  );
+                      }),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 10.0),

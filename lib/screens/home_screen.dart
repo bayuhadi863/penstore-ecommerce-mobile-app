@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  @override
+  @override 
   void initState() {
     super.initState();
     _setCategory;
@@ -69,8 +69,11 @@ class _HomeScreenState extends State<HomeScreen> {
             // widget search
             const SearchWidget(),
             // widget katalog
-            KatalogWidget(
-              onCategorySelected: _setCategory,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: KatalogWidget(
+                onCategorySelected: _setCategory,
+              ),
             ),
             Expanded(
               child: SingleChildScrollView(

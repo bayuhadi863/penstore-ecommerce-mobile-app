@@ -1,11 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:penstore/controller/payment_method/add_payment_method_controller.dart';
+import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
 import 'package:penstore/controller/product/add_product_controller.dart';
 import 'package:penstore/models/category_model.dart';
+import 'package:penstore/models/payment_method_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 
 class AddPaymentMethodWidget extends StatefulWidget {
@@ -21,6 +26,9 @@ class _AddPaymentMethodWidgetState extends State<AddPaymentMethodWidget> {
     final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
+    final AddPaymentMethodController addPaymentMethodController =
+        Get.put(AddPaymentMethodController());
+
     return TextButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
@@ -33,8 +41,8 @@ class _AddPaymentMethodWidgetState extends State<AddPaymentMethodWidget> {
         ),
         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
           const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 20,
+            vertical: 8,
+            horizontal: 14,
           ),
         ),
       ),
@@ -151,15 +159,21 @@ class _ProductFormState extends State<ProductForm> {
   bool isLoading = false;
   String? selectedPaymentMethod;
 
+  String? paymentMethodError;
+
   List<String> paymentMethods = [
-    'COD (Bayar di tempat)',
+    'Bank Mandiri',
+    'Bank BCA',
     'Bank BRI',
-    'OVO',
-    'Dana',
+    'DANA',
     'Gopay',
+    'OVO',
+    'ShopeePay',
+    'LinkAja',
+    'COD (Bayar di tempat)',
   ];
 
-  final addProductController = Get.put(AddProductController());
+  // final addPaymentMethodController = Get.put(addPaymentMethodController());
 
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
@@ -227,6 +241,9 @@ class _ProductFormState extends State<ProductForm> {
     final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
+    final AddPaymentMethodController addPaymentMethodController =
+        Get.put(AddPaymentMethodController());
+
     return isLoading
         ? const Center(
             child: Padding(
@@ -240,13 +257,13 @@ class _ProductFormState extends State<ProductForm> {
             width: mediaQueryWidth,
             child: SingleChildScrollView(
               child: Form(
-                key: addProductController.formKey,
+                key: addPaymentMethodController.formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                           text: "Tambah Metode",
                           style: TextStyle(
                             color: Color(0xFF605B57),
@@ -257,7 +274,7 @@ class _ProductFormState extends State<ProductForm> {
                     ),
                     RichText(
                       maxLines: 2,
-                      text: TextSpan(
+                      text: const TextSpan(
                         children: [
                           TextSpan(
                             text: "Tambahkan metode pembayaran yang bisa",
@@ -273,7 +290,7 @@ class _ProductFormState extends State<ProductForm> {
                     ),
                     RichText(
                       maxLines: 2,
-                      text: TextSpan(
+                      text: const TextSpan(
                         children: [
                           TextSpan(
                             text: "digunakan oleh customer",
@@ -334,21 +351,25 @@ class _ProductFormState extends State<ProductForm> {
                           ),
                           Container(
                             width: double.infinity,
-                            height: 40,
+                            height: 48,
                             margin: const EdgeInsets.only(top: 10),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: const Color(0xFF757B7B),
+                                color: paymentMethodError != null
+                                    ? Colors.red
+                                    : const Color(0xFF757B7B),
                               ),
                             ),
                             child: DropdownButton<String>(
                               value: selectedPaymentMethod,
-                              hint: const Text(
+                              hint: Text(
                                 'Pilih Metode Pembayaran',
                                 style: TextStyle(
-                                  color: Color(0xFF757B7B),
+                                  color: paymentMethodError != null
+                                      ? Colors.red
+                                      : const Color(0xFF757B7B),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                   fontFamily: 'Poppins',
@@ -367,6 +388,10 @@ class _ProductFormState extends State<ProductForm> {
                                 setState(() {
                                   selectedPaymentMethod = newValue!;
                                 });
+
+                                setState(() {
+                                  paymentMethodError = null;
+                                });
                               },
                               items: paymentMethods.map((String value) {
                                 return DropdownMenuItem<String>(
@@ -378,13 +403,22 @@ class _ProductFormState extends State<ProductForm> {
                           ),
                           const SizedBox(height: 10),
                           if (selectedPaymentMethod !=
-                              'COD (Bayar di tempat)' && selectedPaymentMethod != null) ...[
+                                  'COD (Bayar di tempat)' &&
+                              selectedPaymentMethod != null) ...[
                             SizedBox(
                               width: mediaQueryWidth * 0.8,
                               child: TextFormField(
+                                controller:
+                                    addPaymentMethodController.recipientName,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Nama Pemilik wajib diisi';
+                                  }
+                                  return null;
+                                },
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 0),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -399,10 +433,10 @@ class _ProductFormState extends State<ProductForm> {
                                       ),
                                     ),
                                     hintText: 'Nama Pemilik Rekening',
-                                    constraints: BoxConstraints(
-                                      maxHeight: 40,
+                                    constraints: const BoxConstraints(
+                                      minHeight: 40,
                                     )),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -410,15 +444,23 @@ class _ProductFormState extends State<ProductForm> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             SizedBox(
                               width: mediaQueryWidth * 0.8,
+                              // height: 70,
                               child: TextFormField(
+                                controller: addPaymentMethodController.number,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Nomor Rekening wajib diisi';
+                                  }
+                                  return null;
+                                },
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 0),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -433,10 +475,11 @@ class _ProductFormState extends State<ProductForm> {
                                       ),
                                     ),
                                     hintText: 'Nomor Rekening',
-                                    constraints: BoxConstraints(
-                                      maxHeight: 40,
+                                    constraints: const BoxConstraints(
+                                      // maxHeight: 40,
+                                      minHeight: 30,
                                     )),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -477,7 +520,30 @@ class _ProductFormState extends State<ProductForm> {
                             ),
                           ),
                         ),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          if (selectedPaymentMethod == null) {
+                            setState(() {
+                              paymentMethodError =
+                                  'Pilih metode pembayaran terlebih dahulu';
+                            });
+                            return;
+                          }
+                          final PaymentMethodModel paymentMethod =
+                              PaymentMethodModel(
+                            recipientName:
+                                addPaymentMethodController.recipientName.text,
+                            number: addPaymentMethodController.number.text,
+                            name: selectedPaymentMethod!,
+                            userId: FirebaseAuth.instance.currentUser!.uid,
+                          );
+
+                          await addPaymentMethodController.addPaymentMethod(
+                              paymentMethod, context);
+
+                          // Navigator.of(context).pop();
+
+                          
+                        },
                         child: const Center(
                           child: Text(
                             'Tambah',

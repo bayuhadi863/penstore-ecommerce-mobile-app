@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 
-class AppBarWishlist extends StatelessWidget {
-  const AppBarWishlist({super.key});
+class AppBarChat extends StatelessWidget {
+  const AppBarChat({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -58,7 +58,7 @@ class AppBarWishlist extends StatelessWidget {
               height: mediaQueryHeight * 0.055,
               child: Center(
                 child: Text(
-                  'Wishlist',
+                  'Chat',
                   // authUser!.uid,
                   style: TextStyle(
                     fontSize: 14,

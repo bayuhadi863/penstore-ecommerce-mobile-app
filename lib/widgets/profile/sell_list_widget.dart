@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/utils/format.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/no_product_sell.dart';
 import 'package:penstore/widgets/profile/edit_product_widget.dart';
 import 'package:skeletons/skeletons.dart';
@@ -53,7 +54,11 @@ class _SellListProfileState extends State<SellListProfile> {
                   ),
                 )
               : products.isEmpty
-                  ? const NoProductSell()
+                  ? const NoData(
+                      title: "Maaf, ",
+                      subTitle: "Belum ada produk",
+                      suggestion: "Silahkan tambahkan produk anda!",
+                    )
                   : Column(
                       children: List.generate(
                         products.length,

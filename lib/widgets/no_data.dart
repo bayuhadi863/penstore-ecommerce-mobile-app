@@ -1,7 +1,16 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class NoProductSell extends StatelessWidget {
-  const NoProductSell({super.key});
+class NoData extends StatelessWidget {
+  final String title;
+  final String subTitle;
+  final String suggestion;
+
+  const NoData({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.suggestion,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class NoProductSell extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Maaf, ",
+                    text: title,
                     style: TextStyle(
                       color: Color(0xFF424242),
                       fontSize: 16,
@@ -33,7 +42,7 @@ class NoProductSell extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: "Belum ada produk",
+                    text: subTitle,
                     style: TextStyle(
                       color: Color(0xFF6BCCC9),
                       fontSize: 16,
@@ -46,14 +55,13 @@ class NoProductSell extends StatelessWidget {
             ),
             RichText(
               text: TextSpan(
-                text: "Silahkan tambahkan produk anda",
-                style: TextStyle(
-                  color: Color(0xFF605B57),
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Poppins',
-                )
-              ),
+                  text: suggestion,
+                  style: TextStyle(
+                    color: Color(0xFF605B57),
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Poppins',
+                  )),
             ),
           ],
         ),

@@ -9,8 +9,33 @@ class BannerSlider extends StatefulWidget {
 }
 
 final List<String> imgList = [
-  'assets/images/banner1.jpg',
-  'assets/images/banner2.jpg',
+  'assets/images/banner_slider1.png',
+  'assets/images/banner_slider2.png',
+  'assets/images/banner_slider3.png',
+];
+
+final List<String> titles = [
+  'Temukan ',
+  'Nikmati ',
+  'Belanja sekarang ',
+];
+
+final List<String> subtitles = [
+  'produk',
+  'kemudahan',
+  'dan',
+];
+
+final List<String> descriptions = [
+  'terbaru dan terlengkap',
+  'berbelanja di toko online',
+  'rasakan pengalamannya',
+];
+
+final List<String> urls = [
+  'Terbaru',
+  'Kemudahan',
+  'Terbaik',
 ];
 
 class _BannerSliderState extends State<BannerSlider> {
@@ -24,13 +49,12 @@ class _BannerSliderState extends State<BannerSlider> {
       children: [
         Container(
           color: Colors.white,
-          height: mediaQueryHeight * 0.209,
+          height: mediaQueryHeight * 0.220,
           margin: const EdgeInsets.only(top: 0, bottom: 10),
           width: mediaQueryWidth,
           child: CarouselSlider(
             options: CarouselOptions(
-              autoPlay: true,
-              height: mediaQueryHeight * 0.209,
+              height: mediaQueryHeight * 0.220,
               clipBehavior: Clip.antiAlias,
               aspectRatio: 2.0,
               enlargeCenterPage: true,
@@ -41,98 +65,109 @@ class _BannerSliderState extends State<BannerSlider> {
                 });
               },
             ),
-            items: imgList
-                .map((item) => Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 307,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF91E0DD).withOpacity(0.3),
-                              blurRadius: 16,
-                              offset: const Offset(1, 1),
-                            ),
-                          ],
+            items: imgList.asMap().entries.map((entry) {
+              int index = entry.key;
+              String item = entry.value;
+              return Stack(
+                children: [
+                  Container(
+                    width: 307,
+                    height: 150,
+                    margin: const EdgeInsets.symmetric(vertical: 12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF91E0DD).withOpacity(0.5),
+                          blurRadius: 16,
+                          offset: const Offset(1, 1),
                         ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 307,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xFF605B57)
-                                      .withOpacity(0.12), // Set border color
-                                  width: 3, // Atur lebar sesuai kebutuhan
-                                ),
-                              ),
-                              child: ClipRRect(
-                                clipBehavior: Clip.hardEdge,
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image(
-                                  filterQuality: FilterQuality.high,
-                                  image: AssetImage(
-                                    item,
-                                  ),
-                                  fit: BoxFit.none,
-                                ),
-                              ),
-                            ),
-                            //overlay
-                            Center(
-                              child: Container(
-                                width: 281,
-                                height: 132,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    stops: const [0.16, 1],
-                                    colors: [
-                                      const Color(0xFF120B0B).withOpacity(0.08),
-                                      const Color(0xFF120B0B).withOpacity(0.8),
-                                    ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                            // text on bottom left
-                            const Positioned(
-                              bottom: 12,
-                              left: 12,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Kamar Tidur',
-                                    style: TextStyle(
-                                      color: Color(0xFFE5E5E5),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  //icon panah
-                                  Icon(
-                                    Icons.arrow_forward_sharp,
-                                    color: Color(0xFFE5E5E5),
-                                    size: 12,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                      ],
+                    ),
+                    child: ClipRRect(
+                      clipBehavior: Clip.hardEdge,
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image(
+                        filterQuality: FilterQuality.high,
+                        image: AssetImage(
+                          item,
                         ),
+                        fit: BoxFit.fill,
                       ),
-                    ))
-                .toList(),
+                    ),
+                  ),
+                  // Text on bottom left
+                  Positioned(
+                    bottom: 24,
+                    left: 15,
+                    child: Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: urls[index],
+                            style: const TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        // Icon panah
+                        Image.asset(
+                          'assets/icons/arrow.png',
+                          color: const Color(0xFFFFFFFF),
+                          width: 24,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 22,
+                    left: 15,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: titles[index],
+                            style: const TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: subtitles[index],
+                                style: const TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: descriptions[index],
+                            style: const TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ),
         ),
         Padding(
