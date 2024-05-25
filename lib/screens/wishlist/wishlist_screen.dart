@@ -69,7 +69,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 0.75,
+                    childAspectRatio: 0.65,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
@@ -112,14 +112,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
             borderRadius: BorderRadius.circular(12.0),
             child: InkWell(
               onLongPress: () async {
-              // pop up delete
-              showDeleteConfirmationDialog(context, wishlistItem.id, () {
-                wishlistController.deleteWishlist(wishlistItem.id);
-              });
-            },
-            onTap: () {
+                // pop up delete
+                showDeleteConfirmationDialog(context, wishlistItem.id, () {
+                  wishlistController.deleteWishlist(wishlistItem.id);
+                });
+              },
+              onTap: () {
                 Get.toNamed('/detail-wishlist',
-                  arguments: {'wishlistId': wishlistItem.id});
+                    arguments: {'wishlistId': wishlistItem.id});
               },
               child: imageUrl.isNotEmpty
                   ? Image.network(

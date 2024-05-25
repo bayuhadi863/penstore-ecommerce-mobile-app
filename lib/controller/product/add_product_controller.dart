@@ -35,7 +35,7 @@ class AddProductController extends GetxController {
       }
 
       Alerts.successSnackBar(
-          title: "Success", message: "Gambar berhasil diupload");
+          title: "Berhasil mengupload gambar", message: "Anda telah berhasil menambahkan gambar");
       print("berhasil mengupload gambar");
     } catch (e) {
       Alerts.errorSnackBar(title: 'Gagal', message: "Gagal mengupload gambar");
@@ -76,7 +76,7 @@ class AddProductController extends GetxController {
 
         // Show success snackbar
         Alerts.successSnackBar(
-            title: 'Sukses', message: "Berhasil menambahkan produk");
+            title: 'Berhasil menambah data', message: "Selamat, Anda telah Berhasil menambah data produk");
 
         // Navigator.of(context).pop();
       }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/order/get_single_order_controller.dart';
+import 'package:penstore/controller/rating/get_order_rating_controller.dart';
 import 'package:penstore/models/rating_model.dart';
 import 'package:penstore/repository/check_rated_controller.dart';
 import 'package:penstore/repository/order_repository.dart';
@@ -87,6 +88,9 @@ class AddRatingController extends GetxController {
           tag: "$orderId-${ratingData.productId}",
         );
         checkRatedController.checkRated(orderId, ratingData.productId);
+
+        GetOrderRatingController.instance.fetchRatingsByOrderId(orderId);
+        // Get.offNamed('/payment-buyer', arguments: {'orderId': orderId});
         // CheckRatedController.instance.checkRated(orderId, ratingData.productId);
       }
     } catch (e) {

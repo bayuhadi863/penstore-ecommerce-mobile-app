@@ -3,11 +3,15 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/cart/add_cart_controller.dart';
 import 'package:penstore/controller/chat/room_chat_controller.dart';
 import 'package:penstore/controller/product/product_controller.dart';
+import 'package:penstore/controller/profile/get_single_user_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
+import 'package:penstore/controller/rating/get_product_rating_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
+import 'package:penstore/utils/format.dart';
 import 'package:penstore/models/roomChat_model.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
+import 'package:intl/intl.dart';
 
 class DetailProductScreen extends StatefulWidget {
   const DetailProductScreen({super.key});
@@ -87,107 +91,158 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
-    List<Widget> generateProductContainers() {
-      return List.generate(10, (index) {
-        return Container(
-          width: mediaQueryWidth * 0.9,
-          height: 69,
-          padding: const EdgeInsets.all(10.0),
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 16,
-                color: const Color(0xFF6BCCC9).withOpacity(0.3),
-                offset: const Offset(1, 1),
-              ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 49,
-                    height: 49,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ClipRRect(
-                      clipBehavior: Clip.hardEdge,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image(
-                        filterQuality: FilterQuality.high,
-                        image: AssetImage(imgList[0]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Column(
-                    children: [
-                      Text(
-                        'Bintang Ardana',
-                        style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF424242),
-                        ),
-                      ),
-                      Text(
-                        'Barang bagus asli',
-                        style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                          color: Color(0xFF424242),
-                        ),
+    final GetProductRatingController getProductRatingController =
+        Get.put(GetProductRatingController(productId!));
+
+    Widget generateProductContainers() {
+      return Obx(() {
+        final ratings = getProductRatingController.ratings;
+
+        return ratings.isEmpty
+            ? const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text('Belum ada penilaian.',
+                    style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey,
+                    )),
+              )
+            : Column(
+                children: List.generate(ratings.length, (index) {
+                final rating = ratings[index];
+
+                final GetSingleUserController getSingleUserController = Get.put(
+                    GetSingleUserController(rating.userId),
+                    tag: rating.userId);
+
+                return Container(
+                  width: mediaQueryWidth * 0.9,
+                  // height: 69,
+                  padding: const EdgeInsets.all(12.0),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 16,
+                        color: const Color(0xFF6BCCC9).withOpacity(0.3),
+                        offset: const Offset(1, 1),
                       ),
                     ],
-                  )
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.star,
-                      color: Color(0xFFFFC701),
-                      size: 16,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Color(0xFFFFC701),
-                      size: 16,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Color(0xFFFFC701),
-                      size: 16,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Color(0xFFFFC701),
-                      size: 16,
-                    ),
-                    Icon(
-                      Icons.star_border_outlined,
-                      color: Color(0xFFFFC701),
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(500),
+                            // ),
+                            child: ClipRRect(
+                              clipBehavior: Clip.hardEdge,
+                              borderRadius: BorderRadius.circular(500),
+                              child: Image(
+                                filterQuality: FilterQuality.high,
+                                image: AssetImage(imgList[0]),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                getSingleUserController.user.value.name,
+                                style: const TextStyle(
+                                  fontFamily: 'poppins',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF424242),
+                                ),
+                              ),
+                              Text(
+                                DateFormat('dd-MM-yyyy HH:mm')
+                                    .format(rating.createdAt!),
+                                style: TextStyle(
+                                  fontFamily: 'poppins',
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                rating.score >= 1
+                                    ? Icons.star
+                                    : Icons.star_border_outlined,
+                                color: const Color(0xFFFFC701),
+                                size: 16,
+                              ),
+                              Icon(
+                                rating.score >= 2
+                                    ? Icons.star
+                                    : Icons.star_border_outlined,
+                                color: const Color(0xFFFFC701),
+                                size: 16,
+                              ),
+                              Icon(
+                                rating.score >= 3
+                                    ? Icons.star
+                                    : Icons.star_border_outlined,
+                                color: const Color(0xFFFFC701),
+                                size: 16,
+                              ),
+                              Icon(
+                                rating.score >= 4
+                                    ? Icons.star
+                                    : Icons.star_border_outlined,
+                                color: const Color(0xFFFFC701),
+                                size: 16,
+                              ),
+                              Icon(
+                                rating.score >= 5
+                                    ? Icons.star
+                                    : Icons.star_border_outlined,
+                                color: const Color(0xFFFFC701),
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            rating.description,
+                            style: const TextStyle(
+                              fontFamily: 'poppins',
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF424242),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              }));
       });
     }
 
@@ -397,7 +452,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Rp.${oneProductController.product.value.price} -',
+                                              Format.formatRupiah(
+                                                  oneProductController
+                                                      .product.value.price),
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Color(0xFF6BCCC9),
@@ -545,8 +602,24 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                     ),
                                                   ),
                                                   const SizedBox(height: 20),
-                                                  ...generateProductContainers(),
-                                                  const SizedBox(height: 100),
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20),
+                                                    child: Text(
+                                                      "Penilaian",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            Color(0xFF424242),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  generateProductContainers(),
+                                                  const SizedBox(height: 80),
                                                 ],
                                               ),
                                             ),
