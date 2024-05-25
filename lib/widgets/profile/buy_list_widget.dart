@@ -306,7 +306,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: mediaQueryWidth * 0.45,
+                                      width: mediaQueryWidth * 0.42,
                                       child: RichText(
                                         text: TextSpan(
                                           children: [
@@ -336,6 +336,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                         ),
                                       ),
                                     ),
+                                    // const SizedBox(width: 10),
                                     SizedBox(
                                       width: mediaQueryWidth * 0.38,
                                       height: 40,

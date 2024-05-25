@@ -97,4 +97,31 @@ class RatingRepository extends GetxController {
       throw e.toString();
     }
   }
+
+  // fetch ratings list by productId
+  Future<List<RatingModel>> fetchRatingsByProductId(String productId) async {
+    try {
+      final QuerySnapshot querySnapshot = await db
+          .collection('ratings')
+          .where('productId', isEqualTo: productId)
+          .get();
+
+      // check if the querySnapshot.docs is empty
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      return querySnapshot.docs
+          .map((doc) => RatingModel.fromSnapshot(doc))
+          .toList();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
