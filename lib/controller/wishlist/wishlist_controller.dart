@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/models/product_model.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/repository/wishlist_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
@@ -12,6 +13,7 @@ class WishlistController extends GetxController {
   var isLoading = false.obs;
   var wishlist = <WishlistModel>[].obs;
   var wishlistImage = <String>[].obs;
+  var products = <ProductModel>[].obs;
   final wishlistNameController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -76,6 +78,21 @@ class WishlistController extends GetxController {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> deleteWishlist(String wishlistId) async {
+    try {
+      await wishlistRepository.deleteWishlist(wishlistId);
+
+      // Show success snackbar
+      Alerts.successSnackBar(
+          title: 'Sukses', message: "Berhasil menghapus wishlist");
+    } catch (e) {
+      Alerts.errorSnackBar(
+        title: 'Gagal',
+        message: ("Gagal menghapus wishlist ${e.toString()}",),
+      );
     }
   }
 }

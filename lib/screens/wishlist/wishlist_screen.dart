@@ -5,6 +5,7 @@ import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 import 'package:penstore/widgets/add_kategori_wishlist.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 import 'package:penstore/models/wishlist_model.dart';
+import 'package:penstore/widgets/wishlist/delete_confirmation.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             children: [
               Obx(() {
                 if (wishlistController.isLoading.value) {
-                  return const Center(child: const CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (wishlistController.wishlist.isEmpty) {
                   return const Center(child: Text('No Wishlist Found'));
                 } else {
@@ -93,8 +94,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
+            onLongPress: () async {
+              // pop up delete
+              showDeleteConfirmationDialog(context, wishlistItem.id, () {
+                wishlistController.deleteWishlist(wishlistItem.id);
+              });
+            },
             onTap: () {
-              Get.toNamed('/detail-wishlist');
+              Get.toNamed('/detail-wishlist',
+                  arguments: {'wishlistId': wishlistItem.id});
             },
             child: imageUrl.isNotEmpty
                 ? Image.network(
