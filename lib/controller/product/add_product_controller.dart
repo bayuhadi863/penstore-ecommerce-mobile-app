@@ -23,13 +23,14 @@ class AddProductController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final isLoading = false.obs;
 
+  final productRepository = Get.put(ProductRepository());
+
   // upload image to get url
   Future<void> getImageUrls(List<File> selectedImages) async {
     try {
       for (final File image in selectedImages) {
         print("mengupload gambar...");
-        final productImageRepository = Get.put(ProductRepository());
-        final String imgUrl = await productImageRepository.uploadImage(image);
+        final String imgUrl = await productRepository.uploadImage(image);
         imgUrls.add(imgUrl);
       }
 
@@ -64,7 +65,6 @@ class AddProductController extends GetxController {
           Navigator.of(context).pop();
         }
 
-        final productRepository = Get.put(ProductRepository());
         await productRepository.addProduct(
             productNameController.text.trim(),
             descController.text,
@@ -78,10 +78,7 @@ class AddProductController extends GetxController {
         Alerts.successSnackBar(
             title: 'Sukses', message: "Berhasil menambahkan produk");
 
-        Navigator.of(context).pop();
-
-        // Go to main route
-        Get.offAllNamed('/');
+        // Navigator.of(context).pop();
       }
     } catch (e) {
       Navigator.of(context).pop();

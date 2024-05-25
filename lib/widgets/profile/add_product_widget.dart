@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:penstore/controller/product/add_product_controller.dart';
+import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/models/category_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 import 'package:penstore/widgets/decoration_input.dart';
@@ -153,6 +154,8 @@ class _ProductFormState extends State<ProductForm> {
   bool isLoading = false;
 
   final addProductController = Get.put(AddProductController());
+  final UserProductsController userProductsController =
+      Get.put(UserProductsController());
 
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
@@ -171,6 +174,7 @@ class _ProductFormState extends State<ProductForm> {
     final CategoryRepository categoryRepository = CategoryRepository();
     final List<CategoryModel> dataCategories =
         await categoryRepository.getCategories();
+
     setState(() {
       categories = dataCategories;
       isLoading = false;
@@ -603,6 +607,8 @@ class _ProductFormState extends State<ProductForm> {
                           await addProductController
                               .getImageUrls(selectedImages);
                           await addProductController.addProduct(context);
+
+                          userProductsController.getUserProducts();
                         },
                         child: const Center(
                           child: Text(
