@@ -1274,14 +1274,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const AddRatingDialog();
-                            });
-                        setState(() {
-                          isRating = true;
-                        });
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       return const AddRatingDialog();
+                        //     });
+                        // setState(() {
+                        //   isRating = true;
+                        // });
                       },
                       child: const Center(
                         child: Text(

@@ -1340,6 +1340,98 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                         ),
                                       ),
                                     )
+                                  ],
+                                  if (order.status == 'received') ...[
+                                    Container(
+                                      width: double.infinity,
+                                      height: 54,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF46B69)
+                                            .withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFFF46B69)
+                                                .withOpacity(0.2),
+                                            blurRadius: 16,
+                                            offset: const Offset(1, 1),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const Icon(
+                                              Icons.access_time,
+                                              color: Color(0xFFF46B69),
+                                            ),
+                                            SizedBox(
+                                                width: mediaQueryWidth * 0.04),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                RichText(
+                                                  text: const TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Pesanan telah',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF757B7B),
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: ' SELESAI',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFFF46B69),
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                RichText(
+                                                  text: const TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            'Segera cek tagihan Anda!',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF757B7B),
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
                                   ]
                                 ],
                               ),

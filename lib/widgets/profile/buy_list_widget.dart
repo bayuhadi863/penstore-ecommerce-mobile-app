@@ -348,7 +348,17 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                                 });
                                           }
                                           if (order.status == 'received') {
-                                            changeIsReceived();
+                                            Get.toNamed('/payment-buyer',
+                                                arguments: {
+                                                  'orderId': order.id!
+                                                });
+                                            return;
+                                          }
+                                          if (order.status == 'on_process') {
+                                            Get.toNamed('/payment-buyer',
+                                                arguments: {
+                                                  'orderId': order.id!
+                                                });
                                             return;
                                           }
                                           if (order.status == 'rated') {
