@@ -13,10 +13,10 @@ class ConfirmLogoutWidget extends StatelessWidget {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return AlertDialog(
-      insetPadding: EdgeInsets.all(20),
-      alignment: Alignment.topCenter,
-      titlePadding: EdgeInsets.only(top: 20, right: 20, left: 20),
-      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      insetPadding: const EdgeInsets.all(20),
+      alignment: Alignment.center,
+      titlePadding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+      contentPadding: const EdgeInsets.all(20),
       surfaceTintColor: Colors.white,
       backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -98,7 +98,7 @@ class ConfirmLogoutWidget extends StatelessWidget {
               filterQuality: FilterQuality.high,
             ),
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 text: "Apakah anda yakin ingin keluar?",
                 style: TextStyle(
                   color: Color(0xFF424242),
@@ -109,7 +109,7 @@ class ConfirmLogoutWidget extends StatelessWidget {
               ),
             ),
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 text: "Jika iya, Sampai Jumpa Lagi!",
                 style: TextStyle(
                   color: Color(0xFF605B57),
@@ -129,7 +129,7 @@ class ConfirmLogoutWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFF46B69).withOpacity(0.6),
+                          color: const Color(0xFFF46B69).withOpacity(0.3),
                           blurRadius: 16,
                           offset: const Offset(1, 1),
                         )
@@ -151,7 +151,7 @@ class ConfirmLogoutWidget extends StatelessWidget {
                     child: Center(
                       child: RichText(
                         text: const TextSpan(
-                            text: 'Gagal',
+                            text: 'Tidak',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Poppins',
@@ -163,35 +163,38 @@ class ConfirmLogoutWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                    decoration: BoxDecoration(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border:
+                        Border.all(color: const Color(0xFFF46B69), width: 1),
+                  ),
+                  width: mediaQueryWidth * 0.38,
+                  height: 54,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: const Color(0xFFF46B69), width: 1)),
-                    width: mediaQueryWidth * 0.38,
-                    height: 54,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      final logoutController = Get.put(LogoutController());
+                      logoutController.logout();
+                    },
+                    child: Center(
+                      child: RichText(
+                        text: const TextSpan(
+                          text: 'Ya',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Color(0xFFF46B69),
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        final logoutController = Get.put(LogoutController());
-                        logoutController.logout();
-                      },
-                      child: Center(
-                        child: RichText(
-                          text: const TextSpan(
-                              text: 'Ya',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                                color: const Color(0xFFF46B69),
-                                fontSize: 14,
-                              )),
-                        ),
-                      ),
-                    )),
+                    ),
+                  ),
+                ),
               ],
             ),
           ],

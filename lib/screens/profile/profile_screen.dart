@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
-import 'package:penstore/widgets/Logout_confirm.dart';
+import 'package:penstore/widgets/logout_confirm.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
