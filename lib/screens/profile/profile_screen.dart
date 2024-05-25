@@ -9,6 +9,7 @@ import 'package:penstore/widgets/Logout_confirm.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
+import 'package:penstore/widgets/profile/edit_profile.dart';
 import 'package:penstore/widgets/profile/form_tagihan.dart';
 import 'package:penstore/widgets/profile/profile_image_widget.dart';
 import 'package:penstore/widgets/profile/sale_list_widget.dart';
@@ -77,9 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Get.dialog(
-                          const FormTagihanWidget()
-                        );
+                        Get.dialog(const FormTagihanWidget());
                       },
                       style: ElevatedButton.styleFrom(
                         visualDensity: VisualDensity.comfortable,
@@ -128,7 +127,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.dialog(const EditProfile());
+                        },
                         style: ElevatedButton.styleFrom(
                           splashFactory: NoSplash.splashFactory,
                           visualDensity: VisualDensity.comfortable,
@@ -183,10 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           // setState(() {
                           //   isClickLogout = !isClickLogout;
                           // });
-                          Get.dialog(
-                            const ConfirmLogoutWidget()
-                          );
-                          
+                          Get.dialog(const ConfirmLogoutWidget());
                         },
                         style: ElevatedButton.styleFrom(
                           visualDensity: VisualDensity.comfortable,
@@ -611,8 +609,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     decoration: BoxDecoration(
                                       color: const Color(0xFFF46B69)
                                           .withOpacity(0.3),
-                                      borderRadius:
-                                          BorderRadius.circular(6),
+                                      borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: IconButton(
                                       onPressed: () {},
