@@ -23,10 +23,10 @@ List demeChatMessages = [
     isSender: false,
   ),
   ChatMessage(
-    text: "Hello, How are you?",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed nisi lacus sed viverra tellus in hac. Diam quis enim lobortis scelerisque fermentum dui. Pulvinar sapien et ligula ullamcorper. Sapien et ligula ullamcorper malesuada. Vitae congue eu consequat ac felis donec. Bibendum arcu vitae elementum curabitur vitae nunc sed. Dictumst quisque sagittis purus sit amet. Dolor magna eget est lorem ipsum dolor sit. Pulvinar sapien et ligula ullamcorper. Vel quam elementum pulvinar etiam non quam. Sed nisi lacus sed viverra tellus in hac habitasse. Felis imperdiet proin fermentum leo vel orci. Elementum pulvinar etiam non quam. Orci porta non pulvinar neque. Risus ultricies tristique nulla aliquet enim tortor. Varius quam quisque id diam. Dictum varius duis at consectetur lorem. Donec adipiscing tristique risus nec feugiat in fermentum posuere. Id porta nibh venenatis cras sed felis eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed nisi lacus sed viverra tellus in hac. Diam quis enim lobortis scelerisque fermentum dui. Pulvinar sapien et ligula ullamcorper. Sapien et ligula ullamcorper malesuada. Vitae congue eu consequat ac felis donec. Bibendum arcu vitae elementum curabitur vitae nunc sed. Dictumst quisque sagittis purus sit amet. Dolor magna eget est lorem ipsum dolor sit. Pulvinar sapien et ligula ullamcorper. Vel quam elementum pulvinar etiam non quam. Sed nisi lacus sed viverra tellus in hac habitasse. Felis imperdiet proin fermentum leo vel orci. Elementum pulvinar etiam non quam. Orci porta non pulvinar neque. Risus ultricies tristique nulla aliquet enim tortor. Varius quam quisque id diam. Dictum varius duis at consectetur lorem. Donec adipiscing tristique risus nec feugiat in fermentum posuere. Id porta nibh venenatis cras sed felis eget.",
     messageType: ChatMessageType.text,
     messageStatus: MessageStatus.viewed,
-    isSender: true,
+    isSender: true, 
   ),
   // ChatMessage(
   //   text: "",

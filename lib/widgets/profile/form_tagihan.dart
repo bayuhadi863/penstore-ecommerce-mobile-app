@@ -161,6 +161,7 @@ class _ProductFormState extends State<ProductForm> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
                 "Rp. 10.0000.000,-",
@@ -184,10 +185,12 @@ class _ProductFormState extends State<ProductForm> {
                     )),
               ),
               RichText(
+                textAlign: TextAlign.center,
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "Pembayaran digunakan sebagai biaya admin aplikasi",
+                      text:
+                          "Pembayaran digunakan sebagai biaya admin aplikasi",
                       style: TextStyle(
                         color: Color(0xFF424242),
                         fontSize: 12,
