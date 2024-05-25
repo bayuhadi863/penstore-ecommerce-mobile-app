@@ -366,9 +366,9 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                           backgroundColor: order.status ==
                                                   'on_process'
                                               ? const Color(0xFFF46B69)
-                                              : order.status == 'reveived'
+                                              : order.status == 'waiting'
                                                   ? const Color(0xFF69F477)
-                                                  : order.status == 'waiting'
+                                                  : order.status == 'received'
                                                       ? const Color(0xFFF4CD69)
                                                       : order.status == 'rated'
                                                           ? const Color(

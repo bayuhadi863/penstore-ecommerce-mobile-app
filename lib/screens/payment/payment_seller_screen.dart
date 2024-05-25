@@ -70,10 +70,23 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
     }
   }
 
+  String orderId = '';
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     final Map<String, dynamic> arguments = Get.arguments;
     final orderId = arguments['orderId'];
+
+    setState(() {
+      this.orderId = orderId;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final Map<String, dynamic> arguments = Get.arguments;
+    // final orderId = arguments['orderId'];
 
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;

@@ -6,15 +6,14 @@ import 'package:get/get.dart';
 import 'package:penstore/repository/order_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
-class ConfirmPaymentController extends GetxController {
-  static ConfirmPaymentController get instance => Get.find();
+class FinishOrderController extends GetxController {
+  static FinishOrderController get instance => Get.find();
 
   final RxBool isLoading = false.obs;
 
-  Future<void> confirmPayment(String orderId, BuildContext context) async {
+  Future<void> finishOrder(String orderId, BuildContext context) async {
     try {
       isLoading(true);
-
       showDialog(
         context: context,
         builder: (context) {
@@ -29,24 +28,23 @@ class ConfirmPaymentController extends GetxController {
       );
 
       final OrderRepository orderRepository = Get.put(OrderRepository());
-      await orderRepository.updateOrderStatus(orderId, 'on_process');
+      await orderRepository.updateOrderStatus(orderId, 'received');
 
       isLoading(false);
 
       Navigator.of(context).pop();
-      Get.back();
 
       // show success snackbar
       Alerts.successSnackBar(
-        title: 'Berhasil mengonfirmasi pembayaran!',
-        message: 'Segera kirim pesanan ke pembeli!',
+        title: 'Berhasil menyelesaikan pesanan!',
+        message: 'Beri penilaian produk pesanan Anda!',
       );
     } catch (e) {
       isLoading(false);
       Navigator.of(context).pop();
-      Get.back();
+
       Alerts.errorSnackBar(
-        title: 'Gagal mengonfirmasi pembayaran!',
+        title: 'Gagal menyelesaikan pesanan!',
         message: e.toString(),
       );
     }

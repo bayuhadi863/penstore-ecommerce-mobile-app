@@ -12,10 +12,10 @@ class AddRatingDialog extends StatelessWidget {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return AlertDialog(
-      insetPadding: EdgeInsets.all(20),
+      insetPadding: const EdgeInsets.all(20),
       alignment: Alignment.topCenter,
-      titlePadding: EdgeInsets.only(top: 20, right: 20, left: 20),
-      contentPadding: EdgeInsets.symmetric(vertical: 20),
+      titlePadding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+      contentPadding: const EdgeInsets.symmetric(vertical: 20),
       surfaceTintColor: Colors.white,
       backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -132,7 +132,7 @@ class AddRatingDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           style: TextStyle(
                             color: Color(0xFF424242),
                             fontFamily: 'Poppins',
@@ -153,7 +153,7 @@ class AddRatingDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           style: TextStyle(
                               color: Color(0xFF757B7B),
                               fontFamily: 'Poppins',
@@ -172,53 +172,51 @@ class AddRatingDialog extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Form(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      width: double.infinity,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFFFFF),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFF4CD69).withOpacity(0.3),
-                            blurRadius: 16,
-                            offset: const Offset(1, 1),
-                          ),
-                        ],
-                      ),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Deskripsikan secara singkat",
-                          hintStyle: const TextStyle(
-                            color: Color(0xFF757B7B),
-                            fontSize: 12,
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          isDense: true,
-                          constraints: BoxConstraints(
-                            minHeight: 54,
-                            maxHeight: 54,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xFFF4CD69),
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFFFF),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFF4CD69).withOpacity(0.3),
+                          blurRadius: 16,
+                          offset: const Offset(1, 1),
                         ),
-                        style: TextStyle(
-                            color: const Color(0xFF424242),
-                            fontFamily: 'poppins',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400),
-                        cursorColor: const Color(0xFFF4CD69),
+                      ],
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Deskripsikan secara singkat",
+                        hintStyle: const TextStyle(
+                          color: Color(0xFF757B7B),
+                          fontSize: 12,
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        isDense: true,
+                        constraints: const BoxConstraints(
+                          minHeight: 54,
+                          maxHeight: 54,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF4CD69),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
+                      style: const TextStyle(
+                          color: Color(0xFF424242),
+                          fontFamily: 'poppins',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400),
+                      cursorColor: const Color(0xFFF4CD69),
                     ),
                   ),
                 ],
@@ -269,7 +267,6 @@ class AddRatingDialog extends StatelessWidget {
                   ),
                 ),
               ),
-            
             ],
           ),
         ),
