@@ -4,22 +4,25 @@ class UserModel {
   final String id;
   String name;
   String email;
+  String? phone;
   DateTime? createdAt;
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
+    this.phone = '',
     this.createdAt,
   });
 
   static UserModel empty() =>
-      UserModel(id: '', name: '', email: '', createdAt: null);
+      UserModel(id: '', name: '', email: '', phone: '', createdAt: null);
 
   Map<String, dynamic> toJson(createdAt) {
     return {
       'name': name,
       'email': email,
+      'phone': phone,
       'createdAt': createdAt,
     };
   }
@@ -31,6 +34,7 @@ class UserModel {
       id: documentSnapshot.id,
       name: data['name'],
       email: data['email'],
+      phone: data['phone'],
       createdAt: data['createdAt']?.toDate(),
     );
   }

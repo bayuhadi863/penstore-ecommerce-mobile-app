@@ -171,4 +171,27 @@ class ProductRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  // update product
+  Future<void> updateProduct(ProductModel product) async {
+    try {
+      await db.collection('products').doc(product.id).update({
+        "name": product.name,
+        "desc": product.desc,
+        "stock": product.stock,
+        "price": product.price,
+        "imageUrl": product.imageUrl,
+        "categoryId": product.categoryId,
+      });
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      print(e);
+      throw 'Something went wrong. Please try again ${e.toString()}';
+    }
+  }
 }

@@ -5,157 +5,130 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
-import 'package:penstore/controller/product/add_product_controller.dart';
+import 'package:penstore/controller/product/edit_product_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/models/category_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 import 'package:penstore/widgets/decoration_input.dart';
 
-class AddProductForm extends StatefulWidget {
-  const AddProductForm({super.key});
+class EditProductForm extends StatefulWidget {
+  String productId;
+  EditProductForm({required this.productId, super.key});
 
   @override
-  State<AddProductForm> createState() => _AddProductFormState();
+  State<EditProductForm> createState() => _EditProductFormState();
 }
 
-class _AddProductFormState extends State<AddProductForm> {
+class _EditProductFormState extends State<EditProductForm> {
   @override
   Widget build(BuildContext context) {
     // final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
-    final GetUserPaymentMethodController getUserPaymentMethodController =
-        Get.put(GetUserPaymentMethodController(
-            FirebaseAuth.instance.currentUser!.uid));
-
-    return Obx(() {
-      final paymentMethods = getUserPaymentMethodController.paymentMethods;
-      return TextButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
-            paymentMethods.isEmpty
-                ? Colors.grey[400]!
-                : const Color(0xFF6BCCC9),
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 14,
-            ),
+    return IconButton(
+      icon: Image.asset(
+        'assets/icons/edit_icon.png',
+        height: 16,
+        width: 16,
+        filterQuality: FilterQuality.high,
+      ),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
           ),
         ),
-        onPressed: () {
-          if (paymentMethods.isEmpty) {
-            return;
-          }
-          showDialog(
-            context: context,
-            builder: ((context) => AlertDialog(
-                  insetPadding: const EdgeInsets.all(20),
-                  titlePadding: const EdgeInsets.all(20),
-                  contentPadding: EdgeInsets.zero,
-                  surfaceTintColor: Colors.white,
-                  backgroundColor: const Color(0xFFFFFFFF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  title: SizedBox(
-                    width: mediaQueryWidth,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Row(
-                          children: [
-                            Icon(
-                              Icons.list_alt_outlined,
-                              color: Color(0xFF91E0DD),
+        padding: MaterialStateProperty.all(
+          const EdgeInsets.all(0),
+        ),
+      ),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: ((context) => AlertDialog(
+                insetPadding: const EdgeInsets.all(20),
+                titlePadding: const EdgeInsets.all(20),
+                contentPadding: EdgeInsets.zero,
+                surfaceTintColor: Colors.white,
+                backgroundColor: const Color(0xFFFFFFFF),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                title: SizedBox(
+                  width: mediaQueryWidth,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(
+                            Icons.list_alt_outlined,
+                            color: Color(0xFF91E0DD),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Ubah produk',
+                            style: TextStyle(
+                              color: Color(0xFF424242),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Poppins',
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Tambah produk',
-                              style: TextStyle(
-                                color: Color(0xFF424242),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            height: 32,
+                            width: 32,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF91E0DD)
+                                        .withOpacity(0.3),
+                                    blurRadius: 16,
+                                    offset: const Offset(1, 1),
+                                  ),
+                                ]),
+                            child: Image.asset(
+                              'assets/icons/close_fill.png',
+                              height: 24,
+                              width: 24,
+                              color: const Color(
+                                0xFF91E0DD,
                               ),
-                            ),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              height: 32,
-                              width: 32,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0xFF91E0DD)
-                                          .withOpacity(0.3),
-                                      blurRadius: 16,
-                                      offset: const Offset(1, 1),
-                                    ),
-                                  ]),
-                              child: Image.asset(
-                                'assets/icons/close_fill.png',
-                                height: 24,
-                                width: 24,
-                                color: const Color(
-                                  0xFF91E0DD,
-                                ),
-                                filterQuality: FilterQuality.high,
-                              ),
+                              filterQuality: FilterQuality.high,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  content: const ProductForm(),
-                )),
-          );
-        },
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(
-              Icons.add,
-              color: Color(0xFFFFFFFF),
-            ),
-            Text(
-              'Tambah',
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontFamily: 'poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      );
-    });
+                ),
+                content: ProductForm(
+                  productId: widget.productId,
+                ),
+              )),
+        );
+      },
+    );
   }
 }
 
 // DIDELE KENE BEN CONTEXT STATE E FUNGSI NAK ALERT DIALOG E
 class ProductForm extends StatefulWidget {
-  const ProductForm({super.key});
+  String productId;
+  ProductForm({super.key, required this.productId});
 
   @override
   State<ProductForm> createState() => _ProductFormState();
@@ -166,7 +139,7 @@ class _ProductFormState extends State<ProductForm> {
   String? choosedCategory;
   bool isLoading = false;
 
-  final addProductController = Get.put(AddProductController());
+  final editProductController = Get.put(EditProductController());
   final UserProductsController userProductsController =
       Get.put(UserProductsController());
 
@@ -177,7 +150,7 @@ class _ProductFormState extends State<ProductForm> {
 
   // variabel list gambar
   final List<File> selectedImages = [];
-  final List<Uint8List> images = [];
+  final List<Uint8List> addedImages = [];
 
   Future<void> _getCategories() async {
     setState(() {
@@ -187,11 +160,9 @@ class _ProductFormState extends State<ProductForm> {
     final CategoryRepository categoryRepository = CategoryRepository();
     final List<CategoryModel> dataCategories =
         await categoryRepository.getCategories();
-
     setState(() {
       categories = dataCategories;
       isLoading = false;
-      print(categories);
     });
   }
 
@@ -209,11 +180,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   void initState() {
     super.initState();
-    // jika belum login
-    if (user == null) {
-      Get.offAllNamed("/login");
-    }
-    print("user sekarang : $user");
+    editProductController.getData(widget.productId);
     _getCategories();
   }
 
@@ -227,7 +194,7 @@ class _ProductFormState extends State<ProductForm> {
     setState(() {
       for (final XFile image in returnImages) {
         selectedImages.add(File(image.path));
-        images.add(File(image.path).readAsBytesSync());
+        addedImages.add(File(image.path).readAsBytesSync());
       }
       print("Tepilih gambar sebanyak ${selectedImages.length}");
     });
@@ -251,7 +218,7 @@ class _ProductFormState extends State<ProductForm> {
             width: mediaQueryWidth,
             child: SingleChildScrollView(
               child: Form(
-                key: addProductController.formKey,
+                key: editProductController.formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -259,7 +226,6 @@ class _ProductFormState extends State<ProductForm> {
                     GestureDetector(
                       onTap: () async {
                         pickImagesFromGallery();
-                        print('Pick Image');
                       },
                       child: SizedBox(
                         width: mediaQueryWidth * 0.8,
@@ -311,12 +277,13 @@ class _ProductFormState extends State<ProductForm> {
                       height: 20,
                     ),
 
-                    // list gambar dipilih
+                    // list gambar dipilih yang baru
+
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
                       children: List.generate(
-                        images.length,
+                        addedImages.length,
                         (index) => Stack(
                           children: [
                             Padding(
@@ -330,7 +297,7 @@ class _ProductFormState extends State<ProductForm> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.memory(
-                                    images[index],
+                                    addedImages[index],
                                     width: 60,
                                     height: 60,
                                     fit: BoxFit.cover,
@@ -345,7 +312,66 @@ class _ProductFormState extends State<ProductForm> {
                                 onTap: () {
                                   setState(() {
                                     selectedImages.removeAt(index);
-                                    images.removeAt(index);
+                                    addedImages.removeAt(index);
+                                  });
+                                },
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // gambar lama
+                    // list gambar dipilih yang baru
+                    Text("Gambar Produk saat ini"),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: List.generate(
+                        editProductController.previousImgUrls.length,
+                        (index) => Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey, width: 2),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    editProductController
+                                        .previousImgUrls[index],
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    editProductController.previousImgUrls
+                                        .removeAt(index);
+                                    // addedImages.removeAt(index);
                                   });
                                 },
                                 child: Container(
@@ -377,7 +403,7 @@ class _ProductFormState extends State<ProductForm> {
                     SizedBox(
                       width: mediaQueryWidth * 0.8,
                       child: TextFormField(
-                        controller: addProductController.productNameController,
+                        controller: editProductController.productNameController,
                         focusNode: _nameFocusNode,
                         keyboardType: TextInputType.name,
                         onFieldSubmitted: (_) {
@@ -452,10 +478,10 @@ class _ProductFormState extends State<ProductForm> {
                         ),
                         onChanged: (v) {
                           setState(() {
-                            addProductController.choosedCategory = v;
+                            editProductController.choosedCategory = v;
                           });
                         },
-                        value: addProductController.choosedCategory,
+                        value: editProductController.choosedCategory,
                         items: [
                           ...categories.map((category) {
                             return DropdownMenuItem<String>(
@@ -479,7 +505,7 @@ class _ProductFormState extends State<ProductForm> {
                     SizedBox(
                       width: mediaQueryWidth * 0.8,
                       child: TextFormField(
-                        controller: addProductController.priceController,
+                        controller: editProductController.priceController,
                         keyboardType: TextInputType.number,
                         focusNode: _priceFocusNode,
                         onFieldSubmitted: (_) {
@@ -517,7 +543,7 @@ class _ProductFormState extends State<ProductForm> {
                     SizedBox(
                       width: mediaQueryWidth * 0.8,
                       child: TextFormField(
-                        controller: addProductController.stockController,
+                        controller: editProductController.stockController,
                         keyboardType: TextInputType.number,
                         focusNode: _stockFocusNode,
                         onFieldSubmitted: (_) {
@@ -555,7 +581,7 @@ class _ProductFormState extends State<ProductForm> {
                     SizedBox(
                       width: mediaQueryWidth * 0.8,
                       child: TextFormField(
-                        controller: addProductController.descController,
+                        controller: editProductController.descController,
                         focusNode: _descriptionFocusNode,
                         onFieldSubmitted: (_) {
                           FocusScope.of(context)
@@ -617,15 +643,16 @@ class _ProductFormState extends State<ProductForm> {
                           ),
                         ),
                         onPressed: () async {
-                          await addProductController
+                          await editProductController
                               .getImageUrls(selectedImages);
-                          await addProductController.addProduct(context);
-
+                          await editProductController.saveProduct(
+                              widget.productId, context);
+                          // refresh products
                           userProductsController.getUserProducts();
                         },
                         child: const Center(
                           child: Text(
-                            'Tambah Produk',
+                            'Simpan Produk',
                             style: TextStyle(
                               color: Color(0xFFFFFFFF),
                               fontSize: 12,

@@ -3,15 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:penstore/repository/order_payment_repository.dart';
 import 'package:penstore/repository/order_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
-class ConfirmPaymentController extends GetxController {
-  static ConfirmPaymentController get instance => Get.find();
+class RefusePaymentController extends GetxController {
+  static RefusePaymentController get instance => Get.find();
 
   final RxBool isLoading = false.obs;
 
-  Future<void> confirmPayment(String orderId, BuildContext context) async {
+  Future<void> refusePayment(
+      String orderId, String imageUrl, BuildContext context) async {
     try {
       isLoading(true);
 
@@ -29,7 +31,12 @@ class ConfirmPaymentController extends GetxController {
       );
 
       final OrderRepository orderRepository = Get.put(OrderRepository());
-      await orderRepository.updateOrderStatus(orderId, 'on_process');
+      final OrderPaymentRepository orderPaymentRepository =
+          Get.put(OrderPaymentRepository());
+
+      await orderPaymentRepository.deleteImage(imageUrl);
+      await orderPaymentRepository.deleteOrderPaymentByOrderId(orderId);
+      await orderRepository.updateOrderStatus(orderId, 'unpaid');
 
       isLoading(false);
 
@@ -38,16 +45,16 @@ class ConfirmPaymentController extends GetxController {
 
       // show success snackbar
       Alerts.successSnackBar(
-        title: 'Berhasil mengonfirmasi pembayaran!',
-        message: 'Segera kirim pesanan ke pembeli!',
+        title: 'Berhasil menolak pembayaran!',
+        message: 'Tunggu pembeli mengirim bukti pembayaran lagi!',
       );
     } catch (e) {
       isLoading(false);
       Navigator.of(context).pop();
       Get.back();
       Alerts.errorSnackBar(
-        title: 'Gagal mengonfirmasi pembayaran!',
-        message: e.toString(),
+        title: 'Gagal menolak pembayaran!',
+        message: 'Ada masalah saat menolak pembayaran. ${e.toString()}',
       );
     }
   }

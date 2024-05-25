@@ -6,6 +6,7 @@ import 'package:penstore/widgets/add_kategori_wishlist.dart';
 import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 import 'package:penstore/models/wishlist_model.dart';
+import 'package:penstore/widgets/wishlist/delete_confirmation.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -110,8 +111,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12.0),
             child: InkWell(
-              onTap: () {
-                Get.toNamed('/detail-wishlist');
+              onLongPress: () async {
+              // pop up delete
+              showDeleteConfirmationDialog(context, wishlistItem.id, () {
+                wishlistController.deleteWishlist(wishlistItem.id);
+              });
+            },
+            onTap: () {
+                Get.toNamed('/detail-wishlist',
+                  arguments: {'wishlistId': wishlistItem.id});
               },
               child: imageUrl.isNotEmpty
                   ? Image.network(

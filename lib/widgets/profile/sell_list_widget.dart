@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/utils/format.dart';
-import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/no_product_sell.dart';
+import 'package:penstore/widgets/profile/edit_product_widget.dart';
 import 'package:skeletons/skeletons.dart';
 
 class SellListProfile extends StatefulWidget {
@@ -22,7 +21,7 @@ class _SellListProfileState extends State<SellListProfile> {
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
-    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    // final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: mediaQueryWidth,
@@ -178,46 +177,22 @@ class _SellListProfileState extends State<SellListProfile> {
                                               Row(
                                                 children: [
                                                   Container(
-                                                    width: 26,
-                                                    height: 26,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                              0xFF91E0DD)
-                                                          .withOpacity(0.3),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6),
-                                                    ),
-                                                    child: IconButton(
-                                                      onPressed: () {},
-                                                      icon: Image.asset(
-                                                        'assets/icons/edit_icon.png',
-                                                        height: 16,
-                                                        width: 16,
-                                                        filterQuality:
-                                                            FilterQuality.high,
+                                                      width: 26,
+                                                      height: 26,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                                0xFF91E0DD)
+                                                            .withOpacity(0.3),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
                                                       ),
-                                                      style: ButtonStyle(
-                                                        shape:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6),
-                                                          ),
-                                                        ),
-                                                        padding:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
+                                                      child: EditProductForm(
+                                                        productId:
+                                                            products[index].id,
+                                                      )),
                                                   const SizedBox(width: 8.0),
                                                   Container(
                                                     width: 26,

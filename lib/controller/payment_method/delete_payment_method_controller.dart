@@ -3,15 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:penstore/repository/order_repository.dart';
+import 'package:penstore/repository/payment_method_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
-class ConfirmPaymentController extends GetxController {
-  static ConfirmPaymentController get instance => Get.find();
+class DeletePaymentMethodController extends GetxController {
+  static DeletePaymentMethodController get instance => Get.find();
 
   final RxBool isLoading = false.obs;
 
-  Future<void> confirmPayment(String orderId, BuildContext context) async {
+  Future<void> deletePaymentMethod(
+      String paymentMethodId, BuildContext context) async {
     try {
       isLoading(true);
 
@@ -28,25 +29,24 @@ class ConfirmPaymentController extends GetxController {
         barrierDismissible: false,
       );
 
-      final OrderRepository orderRepository = Get.put(OrderRepository());
-      await orderRepository.updateOrderStatus(orderId, 'on_process');
+      final PaymentMethodRepository paymentMethodRepository =
+          Get.put(PaymentMethodRepository());
+      await paymentMethodRepository.deletePaymentMethod(paymentMethodId);
 
       isLoading(false);
 
       Navigator.of(context).pop();
-      Get.back();
 
       // show success snackbar
       Alerts.successSnackBar(
-        title: 'Berhasil mengonfirmasi pembayaran!',
-        message: 'Segera kirim pesanan ke pembeli!',
+        title: 'Metode pembayaran dihapus!',
+        message: 'Jangan biarkan metode pembayaran kosong.',
       );
     } catch (e) {
       isLoading(false);
       Navigator.of(context).pop();
-      Get.back();
       Alerts.errorSnackBar(
-        title: 'Gagal mengonfirmasi pembayaran!',
+        title: 'Gagal menghapus metode pembayaran!',
         message: e.toString(),
       );
     }

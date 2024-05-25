@@ -34,6 +34,7 @@ class CartModel {
         'id': user.id,
         'name': user.name,
         'email': user.email,
+        'phone': user.phone,
         'createdAt': user.createdAt,
       },
       'product': {
@@ -63,6 +64,7 @@ class CartModel {
               id: data['user']['id'],
               name: data['user']['name'],
               email: data['user']['email'],
+              phone: data['user']['phone'],
               createdAt: data['user']['createdAt']?.toDate(),
             )
           : UserModel.empty(),
