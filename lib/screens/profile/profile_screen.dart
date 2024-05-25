@@ -8,8 +8,7 @@ import 'package:penstore/controller/payment_method/get_user_payment_method_contr
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
-import 'package:penstore/widgets/Logout_confirm.dart';
-import 'package:penstore/widgets/no_product_sell.dart';
+import 'package:penstore/widgets/logout_confirm.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';

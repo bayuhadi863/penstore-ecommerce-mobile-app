@@ -27,7 +27,6 @@ class ChatBody extends StatelessWidget {
             ),
           ),)
       ],
-      
     );
   }
 }

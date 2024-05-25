@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 
-class AppBarHome extends StatelessWidget {
-  const AppBarHome({super.key});
+class AppBarWishlist extends StatelessWidget {
+  const AppBarWishlist({super.key});
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
-
-    final UserController userController = Get.put(UserController());
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -24,8 +21,9 @@ class AppBarHome extends StatelessWidget {
             Container(
               width: 48,
               height: 48,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF91E0DD),
                 borderRadius: BorderRadius.circular(50),
                 shape: BoxShape.rectangle,
                 boxShadow: [
@@ -36,7 +34,12 @@ class AppBarHome extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Center()
+              child: Image.asset(
+                'assets/images/logo_pens.png',
+                height: 27,
+                width: 32,
+                filterQuality: FilterQuality.high,
+              ),
             ),
             Container(
               decoration: const BoxDecoration(

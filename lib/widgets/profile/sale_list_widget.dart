@@ -6,6 +6,7 @@ import 'package:penstore/controller/order/get_seller_order_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:skeletons/skeletons.dart';
 
 class SaleListProfile extends StatefulWidget {
@@ -123,7 +124,11 @@ class _SaleListProfileState extends State<SaleListProfile> {
                 ),
               )
             : orders.isEmpty
-                ? const Text("Belum ada pesanan")
+                ? const NoData(
+                    title: "Maaf, ",
+                    subTitle: "Belum ada pesanan",
+                    suggestion: "Silahkan jual produk anda!",
+                  )
                 : Column(
                     children: List.generate(
                       orders.length,

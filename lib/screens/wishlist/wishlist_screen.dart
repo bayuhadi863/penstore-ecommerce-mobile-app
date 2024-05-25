@@ -3,12 +3,13 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 import 'package:penstore/widgets/add_kategori_wishlist.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/widgets/wishlist/delete_confirmation.dart';
 
 class WishlistScreen extends StatefulWidget {
-  const WishlistScreen({Key? key}) : super(key: key);
+  const WishlistScreen({super.key});
 
   @override
   State<WishlistScreen> createState() => _WishlistScreenState();
@@ -25,6 +26,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -35,7 +37,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const AppBarHome(),
+        title: const AppBarWishlist(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -48,7 +50,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 if (wishlistController.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (wishlistController.wishlist.isEmpty) {
-                  return const Center(child: Text('No Wishlist Found'));
+                  return Column(
+                    children: [
+                      const NoData(
+                        title: "Maaf, ",
+                        subTitle: "Belum ada wishlist",
+                        suggestion: "Silahkan tambahkan koleksi anda!",
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: mediaQueryWidth * 0.5,
+                        child: _buildAddNewCollection(),
+                      ),
+                    ],
+                  );
                 } else {
                   return GridView.count(
                     crossAxisCount: 2,
@@ -93,30 +108,33 @@ class _WishlistScreenState extends State<WishlistScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onLongPress: () async {
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: InkWell(
+              onLongPress: () async {
               // pop up delete
               showDeleteConfirmationDialog(context, wishlistItem.id, () {
                 wishlistController.deleteWishlist(wishlistItem.id);
               });
             },
             onTap: () {
-              Get.toNamed('/detail-wishlist',
+                Get.toNamed('/detail-wishlist',
                   arguments: {'wishlistId': wishlistItem.id});
-            },
-            child: imageUrl.isNotEmpty
-                ? Image.network(
-                    imageUrl,
-                    height: 150, // Atur tinggi gambar sesuai kebutuhan
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/images/gambar_wishlist.png',
-                    height: 150, // Atur tinggi gambar sesuai kebutuhan
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+              },
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                      imageUrl,
+                      height: 170,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/gambar_wishlist.png',
+                      height: 170, // Atur tinggi gambar sesuai kebutuhan
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
           const SizedBox(height: 5),
           Text(

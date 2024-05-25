@@ -5,6 +5,7 @@ import 'package:penstore/controller/cart/get_single_cart_controller.dart';
 import 'package:penstore/controller/order/get_user_order_controller.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:skeletons/skeletons.dart';
 
 class BuyListProfile extends StatefulWidget {
@@ -109,7 +110,11 @@ class _BuyListProfileState extends State<BuyListProfile> {
                 ),
               )
             : orders.isEmpty
-                ? const Text("Belum ada produk yang Anda beli")
+                ? const NoData(
+                      title: "Maaf, ",
+                      subTitle: "Belum ada produk yang kamu beli",
+                      suggestion: "Silahkan beli produk terlebih dahulu!",
+                    )
                 : Column(
                     children: List.generate(
                       orders.length,

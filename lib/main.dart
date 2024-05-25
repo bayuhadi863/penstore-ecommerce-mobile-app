@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:penstore/firebase_options.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/screens/auth/register_screen.dart';
@@ -16,19 +16,16 @@ import 'package:penstore/screens/product/detail_product_screen.dart';
 import 'package:penstore/screens/wishlist/wishlist_detail_screen.dart';
 import 'package:penstore/screens/wishlist/wishlist_screen.dart';
 import 'package:penstore/widgets/decoration_input.dart';
+import 'package:penstore/screens/splash_screen.dart';
+import 'package:penstore/screens/onboarding_screen.dart';
 
 Future<void> main() async {
-  // Widget initialization
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
-  // Firebase initialization
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //     .then(
-  //   (FirebaseApp value) => Get.put(AuthRepository()),
-  // );
 
   runApp(const MyApp());
 }
@@ -36,12 +33,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: '/',
+      initialRoute: '/splash',
       getPages: [
+        GetPage(name: '/splash', page: () => const SplashScreen()),
         GetPage(
             name: '/',
             page: () => FirebaseAuth.instance.currentUser != null
@@ -60,6 +57,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/wishlist', page: () => const WishlistScreen()),
         GetPage(
             name: '/detail-wishlist', page: () => const WishlistDetailScreen()),
+        GetPage(name: '/onboarding', page: () => const OnboardingScreen()),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
@@ -128,7 +126,6 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'PENSTORE',
-      // home: LoginScreen(),
     );
   }
 }
