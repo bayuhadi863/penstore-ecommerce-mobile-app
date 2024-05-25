@@ -1,12 +1,9 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/payment_method/delete_payment_method_controller.dart';
 import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
-import 'package:penstore/controller/auth/logout_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/widgets/logout_confirm.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
@@ -30,6 +27,12 @@ class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   final userController = Get.put(UserController());
   final userProductController = Get.put(UserProductsController());
+
+  final GetUserPaymentMethodController getUserPaymentMethodController = Get.put(
+      GetUserPaymentMethodController(FirebaseAuth.instance.currentUser!.uid));
+
+  final DeletePaymentMethodController deletePaymentMethodController =
+      Get.put(DeletePaymentMethodController());
   //final _formKey = GlobalKey<FormState>();
   final FocusNode _searchFocusNode = FocusNode();
   late TabController tabController;
@@ -55,13 +58,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
-
-    final GetUserPaymentMethodController getUserPaymentMethodController =
-        Get.put(GetUserPaymentMethodController(
-            FirebaseAuth.instance.currentUser!.uid));
-
-    final DeletePaymentMethodController deletePaymentMethodController =
-        Get.put(DeletePaymentMethodController());
 
     return SingleChildScrollView(
       child: Column(
@@ -709,7 +705,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceBetween,
-                                                          children: [
+                                                          children: <Widget>[
                                                             RichText(
                                                               text: TextSpan(
                                                                 text:

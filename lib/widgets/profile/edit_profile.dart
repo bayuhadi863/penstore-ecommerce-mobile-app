@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -98,6 +103,23 @@ class EditProfileForm extends StatefulWidget {
 }
 
 class _EditProfileFormState extends State<EditProfileForm> {
+  File? selectedImage;
+  Uint8List? image;
+
+  Future getImage() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnImage != null) {
+      setState(() {
+        selectedImage = File(returnImage.path);
+      });
+      image = File(returnImage.path).readAsBytesSync();
+    } else {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
@@ -105,59 +127,108 @@ class _EditProfileFormState extends State<EditProfileForm> {
       child: SingleChildScrollView(
         child: Form(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () async {},
-                child: SizedBox(
-                  width: mediaQueryWidth * 0.8,
-                  height: 127,
-                  child: DottedBorder(
-                    padding: const EdgeInsets.all(20),
-                    color: const Color(0xFF64DF70),
-                    strokeWidth: 1,
-                    borderType: BorderType.RRect,
-                    dashPattern: const [7, 7],
-                    strokeCap: StrokeCap.butt,
-                    radius: const Radius.circular(12),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Gambar Produk",
-                            style: TextStyle(
-                              color: Color(0xFF424242),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          const Text(
-                            'Seret atau pilih gambar',
-                            style: TextStyle(
-                              color: Color(0xFF757B7B),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Image.asset(
-                            'assets/icons/Plus.png',
-                            width: 24,
+              if (selectedImage != null) ...[
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: FileImage(selectedImage!),
+                      radius: mediaQueryWidth * 0.16,
+                    ),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () {
+                          // Tambahkan logika untuk menghapus gambar di sini
+                          setState(() {
+                            selectedImage = null;
+                          });
+                        },
+                        child: Container(
+                          height: 32,
+                          width: 32,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFFF46B69).withOpacity(0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(1, 1),
+                                ),
+                              ]),
+                          child: Image.asset(
+                            'assets/icons/close_fill.png',
                             height: 24,
-                            color: const Color(0xFF64DF70),
+                            width: 24,
+                            color: const Color(
+                              0xFFF46B69,
+                            ),
+                            filterQuality: FilterQuality.high,
                           ),
-                        ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ] else ...[
+                GestureDetector(
+                  onTap: () {
+                    getImage();
+                  },
+                  child: SizedBox(
+                    width: mediaQueryWidth * 0.8,
+                    height: 127,
+                    child: DottedBorder(
+                      padding: const EdgeInsets.all(20),
+                      color: const Color(0xFF64DF70),
+                      strokeWidth: 1,
+                      borderType: BorderType.RRect,
+                      dashPattern: const [7, 7],
+                      strokeCap: StrokeCap.butt,
+                      radius: const Radius.circular(12),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Gambar Profile",
+                              style: TextStyle(
+                                color: Color(0xFF424242),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            const Text(
+                              'Seret atau pilih gambar',
+                              style: TextStyle(
+                                color: Color(0xFF757B7B),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/icons/Plus.png',
+                              width: 24,
+                              height: 24,
+                              color: const Color(0xFF64DF70),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
               const SizedBox(
                 height: 20,
               ),
