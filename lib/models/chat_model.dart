@@ -53,12 +53,12 @@ class ChatModel {
     final data = snapshot.data() as Map<String, dynamic>;
     return ChatModel(
         id: snapshot.id,
-        roomId: data['roomId'],
-        message: data['message'],
-        senderId: data['senderId'],
-        senderName: data['senderName'],
-        recieverId: data['recieverId'],
-        recieverName: data['recieverName'],
+        roomId: data['roomId'] ?? "",
+        message: data['message'] ?? "",
+        senderId: data['senderId'] ?? "",
+        senderName: data['senderName'] ?? "",
+        recieverId: data['recieverId'] ?? "",
+        recieverName: data['recieverName'] ?? "",
         isSeen: data['isSeen'] ?? false,
         createdAt: data['createdAt']?.toDate());
   }

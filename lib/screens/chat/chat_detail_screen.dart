@@ -23,7 +23,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     roomId = arguments['roomChatId'];
     recieverId = arguments['recieverId'];
 
-    GetSingleUserController(recieverId!);
+    // GetSingleUserController(recieverId!);
   }
 
   @override

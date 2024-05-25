@@ -28,17 +28,27 @@ class ChatController extends GetxController {
 
   // fetch realtime chats
   void fetchChats(String roomId) {
-    db
-        .collection('chats')
-        .where('roomId', isEqualTo: roomId)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .listen((snapshot) {
-      chats.value =
-          snapshot.docs.map((doc) => ChatModel.fromSnapshot(doc)).toList();
-    }, onError: (error) {
-      // throw error;
-    });
+    try {
+      db
+          .collection('chats')
+          .where('roomId', isEqualTo: roomId)
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .listen((snapshot) async {
+        print('Fetched ${snapshot.docs.length} chats for roomId: $roomId');
+        chats.value = await snapshot.docs
+            .map((doc) => ChatModel.fromSnapshot(doc))
+            .toList();
+        print("berhasil");
+      }, onError: (error) {
+        print('Error fetching chats for roomId: $roomId');
+        print('Error details: $error');
+        throw error; // Optional: rethrow the error if you want to handle it further up the call stack
+      });
+    } catch (e) {
+      print('Exception caught in fetchChats: $e');
+      rethrow; // Optional: rethrow the error if you want to handle it further up the call stack
+    }
   }
 
   void sendMessage() {
@@ -55,7 +65,7 @@ class ChatController extends GetxController {
         'isSeen': false,
       });
       messageController.clear();
-      chat.value = ChatModel.empty();
+      // chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }
@@ -92,7 +102,7 @@ class ChatController extends GetxController {
         'createdAt': Timestamp.now(),
       });
       messageController.clear();
-      chat.value = ChatModel.empty();
+      // chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }

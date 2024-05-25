@@ -14,7 +14,7 @@ class AppBarDetailChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final ChatController chatController = Get.put(ChatController(roomId));
+    final ChatController chatController = Get.put(ChatController(roomId));
 
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
