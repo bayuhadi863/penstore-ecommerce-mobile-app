@@ -12,6 +12,7 @@ import 'package:penstore/widgets/logout_confirm.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
+import 'package:penstore/widgets/profile/edit_profile.dart';
 import 'package:penstore/widgets/profile/form_tagihan.dart';
 import 'package:penstore/widgets/profile/profile_image_widget.dart';
 import 'package:penstore/widgets/profile/sale_list_widget.dart';
@@ -139,7 +140,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.dialog(const EditProfile());
+                        },
                         style: ElevatedButton.styleFrom(
                           splashFactory: NoSplash.splashFactory,
                           visualDensity: VisualDensity.comfortable,
