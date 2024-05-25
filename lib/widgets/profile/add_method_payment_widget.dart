@@ -411,7 +411,7 @@ class _ProductFormState extends State<ProductForm> {
                                 controller:
                                     addPaymentMethodController.recipientName,
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value!.isEmpty || value.trim().isEmpty ) {
                                     return 'Nama Pemilik wajib diisi';
                                   }
                                   return null;
@@ -455,10 +455,13 @@ class _ProductFormState extends State<ProductForm> {
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Nomor Rekening wajib diisi';
+                                  } else if (double.tryParse(value) == null) {
+                                    // Cek apakah value dapat di-parse menjadi angka
+                                    return 'Nomor Rekening harus angka';
                                   }
                                   return null;
                                 },
-                                keyboardType: TextInputType.text,
+                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 0),
@@ -541,8 +544,6 @@ class _ProductFormState extends State<ProductForm> {
                               paymentMethod, context);
 
                           // Navigator.of(context).pop();
-
-                          
                         },
                         child: const Center(
                           child: Text(
