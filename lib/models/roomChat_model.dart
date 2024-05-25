@@ -4,21 +4,28 @@ class RoomChatModel {
   final String id;
   List<String> userId;
   String? lastMessage;
+  String senderName;
   bool hasUnreadMessages;
 
   RoomChatModel(
       {required this.id,
       required this.userId,
       this.lastMessage,
+      required this.senderName,
       required this.hasUnreadMessages});
 
   static RoomChatModel empty() => RoomChatModel(
-      id: '', userId: [], lastMessage: '', hasUnreadMessages: false);
+      id: '',
+      userId: [],
+      lastMessage: '',
+      hasUnreadMessages: false,
+      senderName: '');
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'userId': userId,
+      'senderName': senderName,
       'lastMessage': lastMessage,
       'hasUnreadMessages': hasUnreadMessages,
     };
@@ -32,6 +39,7 @@ class RoomChatModel {
           data['userId'] is Iterable ? List<String>.from(data['userId']) : [],
       lastMessage: data['lastMessage'] ?? '',
       hasUnreadMessages: data['hasUnreadMessages'] ?? false,
+      senderName: data['senderName'] ?? '',
     );
   }
 }

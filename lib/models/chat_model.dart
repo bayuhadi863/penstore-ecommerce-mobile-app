@@ -50,7 +50,7 @@ class ChatModel {
   }
 
   factory ChatModel.fromSnapshot(DocumentSnapshot snapshot) {
-    final data = snapshot.data as Map<String, dynamic>;
+    final data = snapshot.data() as Map<String, dynamic>;
     return ChatModel(
         id: snapshot.id,
         roomId: data['roomId'],
