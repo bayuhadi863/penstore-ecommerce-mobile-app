@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:penstore/controller/chat/chat_controller.dart';
+import 'package:intl/intl.dart';
 import 'package:penstore/models/chat_model.dart';
 
 class TextMessage extends StatelessWidget {
@@ -48,22 +47,22 @@ class TextMessage extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           // tanggal dan waktu
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "22/10/2004",
-                style: TextStyle(
+                DateFormat('dd/MM/yyyy').format(message.createdAt!),
+                style: const TextStyle(
                   color: Color(0xFF757B7B),
                   fontSize: 10,
                   fontWeight: FontWeight.normal,
                   fontFamily: 'Poppins',
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
-                "12:00 AM",
-                style: TextStyle(
+                DateFormat('hh:mm a').format(message.createdAt!),
+                style: const TextStyle(
                   color: Color(0xFF757B7B),
                   fontSize: 10,
                   fontWeight: FontWeight.normal,

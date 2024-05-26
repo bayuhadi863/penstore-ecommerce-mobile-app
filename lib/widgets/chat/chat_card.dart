@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:penstore/models/roomChat_model.dart';
 
 // import '../../../constants.dart';
@@ -10,9 +11,11 @@ class ChatCard extends StatelessWidget {
     required this.roomChat,
     required this.recieverId,
     required chat,
-  });
+    required this.isSeen,
+  }) : super(key: key);
 
   final RoomChatModel roomChat;
+  final bool isSeen;
   final String recieverId;
 
   @override
@@ -105,9 +108,10 @@ class ChatCard extends StatelessWidget {
                         ],
                       ),
                       RichText(
-                        text: const TextSpan(
-                            text: "23 April 2024, 14:00 AM",
-                            style: TextStyle(
+                        text: TextSpan(
+                            text: DateFormat('MMMM d, yyyy Hhh:mm a')
+                                .format(roomChat.updatedAt!),
+                            style: const TextStyle(
                               color: Color(0xFF6BCCC9),
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
@@ -122,11 +126,11 @@ class ChatCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Opacity(
+                  const Opacity(
                     opacity: 0.64,
                     child: Text(''),
                   ),
-                  roomChat.hasUnreadMessages
+                  isSeen
                       ? Container(
                           width: 26,
                           height: 26,

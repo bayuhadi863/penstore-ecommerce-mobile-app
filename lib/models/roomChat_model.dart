@@ -6,20 +6,23 @@ class RoomChatModel {
   String? lastMessage;
   String senderName;
   bool hasUnreadMessages;
+  DateTime? updatedAt;
 
   RoomChatModel(
       {required this.id,
       required this.userId,
       this.lastMessage,
       required this.senderName,
-      required this.hasUnreadMessages});
+      required this.hasUnreadMessages,
+      this.updatedAt});
 
   static RoomChatModel empty() => RoomChatModel(
       id: '',
       userId: [],
       lastMessage: '',
       hasUnreadMessages: false,
-      senderName: '');
+      senderName: '',
+      updatedAt: null);
 
   Map<String, dynamic> toJson() {
     return {
@@ -28,6 +31,7 @@ class RoomChatModel {
       'senderName': senderName,
       'lastMessage': lastMessage,
       'hasUnreadMessages': hasUnreadMessages,
+      'updatedAt': updatedAt,
     };
   }
 
@@ -40,6 +44,7 @@ class RoomChatModel {
       lastMessage: data['lastMessage'] ?? '',
       hasUnreadMessages: data['hasUnreadMessages'] ?? false,
       senderName: data['senderName'] ?? '',
+      updatedAt: data['updatedAt']?.toDate(),
     );
   }
 }
