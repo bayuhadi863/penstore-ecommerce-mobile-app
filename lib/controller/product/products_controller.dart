@@ -5,7 +5,7 @@ import 'package:penstore/repository/product_repository.dart';
 class ProductController extends GetxController {
   var products = <ProductModel>[].obs;
   var isLoading = false.obs;
-  var selectedCategory = ''.obs;
+  var selectedCategory = '0'.obs;
 
   final ProductRepository productRepository = ProductRepository();
 
@@ -17,7 +17,7 @@ class ProductController extends GetxController {
 
   void setSelectedCategory(String category) {
     selectedCategory.value = category;
-    if (selectedCategory.value == 'semua') {
+    if (selectedCategory.value == '0') {
       _getProducts();
     } else {
       _getProductsByCategory(category);
