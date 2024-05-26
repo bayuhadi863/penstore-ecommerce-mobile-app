@@ -7,6 +7,7 @@ import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 import 'package:penstore/models/wishlist_model.dart';
 import 'package:penstore/widgets/wishlist/delete_confirmation.dart';
+import 'package:skeletons/skeletons.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -48,7 +49,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
             children: [
               Obx(() {
                 if (wishlistController.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.72,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: List.generate(6, (index) => _buildSkeletonItem()),
+                  );
                 } else if (wishlistController.wishlist.isEmpty) {
                   return Column(
                     children: [
@@ -69,7 +78,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 0.65,
+                    childAspectRatio: 0.72,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
@@ -94,6 +103,39 @@ class _WishlistScreenState extends State<WishlistScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonItem() {
+    return SkeletonItem(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SkeletonAvatar(
+            style: SkeletonAvatarStyle(
+              width: double.infinity,
+              height: 170,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          const SizedBox(height: 5),
+          SkeletonLine(
+            style: SkeletonLineStyle(
+              height: 12,
+              width: 100,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          const SizedBox(height: 5),
+          SkeletonLine(
+            style: SkeletonLineStyle(
+              height: 10,
+              width: 80,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -130,7 +172,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     )
                   : Image.asset(
                       'assets/images/gambar_wishlist.png',
-                      height: 170, // Atur tinggi gambar sesuai kebutuhan
+                      height: 170,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),

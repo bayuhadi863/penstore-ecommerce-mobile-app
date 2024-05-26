@@ -154,8 +154,7 @@ class ProductForm extends StatefulWidget {
 }
 
 class _ProductFormState extends State<ProductForm> {
-  List<CategoryModel> categories = [];
-  String? choosedCategory;
+
   bool isLoading = false;
   String? selectedPaymentMethod;
 
@@ -180,24 +179,6 @@ class _ProductFormState extends State<ProductForm> {
   final FocusNode _stockFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
 
-  // variabel list gambar
-  final List<File> selectedImages = [];
-  final List<Uint8List> images = [];
-
-  Future<void> _getCategories() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final CategoryRepository categoryRepository = CategoryRepository();
-    final List<CategoryModel> data_categories =
-        await categoryRepository.getCategories();
-    setState(() {
-      categories = data_categories;
-      isLoading = false;
-    });
-  }
-
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -217,23 +198,6 @@ class _ProductFormState extends State<ProductForm> {
       Get.offAllNamed("/login");
     }
     print("user sekarang : $user");
-    _getCategories();
-  }
-
-  // UPLOAD GAMBAR  ==============================
-  Future<void> pickImagesFromGallery() async {
-    List<XFile>? returnImages = await ImagePicker().pickMultiImage();
-    if (returnImages == null || returnImages.isEmpty) {
-      print("gagal memilih gambar");
-      return;
-    }
-    setState(() {
-      for (final XFile image in returnImages) {
-        selectedImages.add(File(image.path));
-        images.add(File(image.path).readAsBytesSync());
-      }
-      print("Tepilih gambar sebanyak ${selectedImages.length}");
-    });
   }
 
   @override
@@ -566,5 +530,6 @@ class _ProductFormState extends State<ProductForm> {
               ),
             ),
           );
+  
   }
 }

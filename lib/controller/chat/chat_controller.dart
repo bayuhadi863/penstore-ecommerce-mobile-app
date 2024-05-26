@@ -65,6 +65,7 @@ class ChatController extends GetxController {
         'isSeen': false,
       });
       messageController.clear();
+      chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }
@@ -101,6 +102,7 @@ class ChatController extends GetxController {
         'createdAt': Timestamp.now(),
       });
       messageController.clear();
+      chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }

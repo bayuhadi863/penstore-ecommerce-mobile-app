@@ -19,41 +19,33 @@ class SplashScreen extends StatelessWidget {
     if (hasSeenOnboarding == null || !hasSeenOnboarding) {
       return const OnboardingScreen();
     } else {
-      if (FirebaseAuth.instance.currentUser != null) {
-        // Navigasi menggunakan Get.to()
-        Get.offAll(() => const MyBottomNavBar());
-        // Mengembalikan widget Container sementara karena navigasi akan dilakukan oleh GetX
-        return Container();
-      } else {
-        // Navigasi menggunakan Get.to()
-        Get.offAll(() => const LoginScreen());
-        // Mengembalikan widget Container sementara karena navigasi akan dilakukan oleh GetX
-        return Container();
-      }
+      return FirebaseAuth.instance.currentUser != null
+          ? const MyBottomNavBar()
+          : const LoginScreen();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: determineNextScreen(),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text("Error loading app"));
-        } else {
-          return AnimatedSplashScreen(
-            duration: 3000,
-            splash: const IconSplash(),
-            nextScreen: snapshot.data!,
-            splashTransition: SplashTransition.fadeTransition,
-            pageTransitionType: PageTransitionType.fade,
-            backgroundColor: const Color(0xFFFAFAFA),
-            splashIconSize: double.infinity,
-          );
-        }
-      },
+    return AnimatedSplashScreen(
+      duration: 3000,
+      splash: const IconSplash(),
+      nextScreen: FutureBuilder<Widget>(
+        future: determineNextScreen(),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text("Error loading app"));
+          } else {
+            return snapshot.data!;
+          }
+        },
+      ),
+      splashTransition: SplashTransition.fadeTransition,
+      pageTransitionType: PageTransitionType.fade,
+      backgroundColor: const Color(0xFFFAFAFA),
+      splashIconSize: double.infinity,
     );
   }
 }
@@ -75,7 +67,7 @@ class IconSplash extends StatelessWidget {
           const SizedBox(height: 20),
           GradientText(
             "Penstore",
-            colors: const [Color(0xFF424242), Color(0xFF024358)],
+            colors: [const Color(0xFF424242), const Color(0xFF024358)],
             gradientDirection: GradientDirection.ltr,
             style: const TextStyle(
               fontSize: 25,
