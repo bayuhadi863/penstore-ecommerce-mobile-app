@@ -52,6 +52,7 @@ class NoData extends StatelessWidget {
                   ),
                 ],
               ),
+              textAlign: TextAlign.center,
             ),
             RichText(
               text: TextSpan(

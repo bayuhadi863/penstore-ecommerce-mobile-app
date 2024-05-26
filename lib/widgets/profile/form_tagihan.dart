@@ -4,8 +4,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:penstore/controller/bill/get_user_bill_controller.dart';
 import 'package:penstore/models/category_model.dart';
 import 'package:penstore/repository/category_repository.dart';
+import 'package:penstore/utils/format.dart';
 
 class FormTagihanWidget extends StatefulWidget {
   const FormTagihanWidget({super.key});
@@ -154,430 +156,413 @@ class _ProductFormState extends State<ProductForm> {
     final mediaQueryHeigth = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
-    return SizedBox(
-      width: mediaQueryWidth,
-      child: SingleChildScrollView(
-        child: Form(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Rp. 10.0000.000,-",
-                style: TextStyle(
-                    color: Color(0xFF91E0DD),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins'),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              RichText(
-                text: TextSpan(
-                    text: "Bayar sesuai nominal",
-                    style: TextStyle(
-                      color: Color(0xFF605B57),
-                      fontSize: 14,
+    final GetUserBillController getUserBillController =
+        Get.put(GetUserBillController());
+
+    return Obx(() {
+      final bill = getUserBillController.bill.value;
+
+      return SizedBox(
+        width: mediaQueryWidth,
+        child: SingleChildScrollView(
+          child: Form(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  Format.formatRupiah(bill.total),
+                  style: const TextStyle(
+                      color: Color(0xFF91E0DD),
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                    )),
-              ),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text:
-                          "Pembayaran digunakan sebagai biaya admin aplikasi",
+                      fontFamily: 'Poppins'),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                RichText(
+                  text: const TextSpan(
+                      text: "Bayar sesuai nominal",
                       style: TextStyle(
-                        color: Color(0xFF424242),
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
+                        color: Color(0xFF605B57),
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ],
+                      )),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(
-                    left: 20, right: 20, bottom: 10, top: 10),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF91E0DD).withOpacity(0.3),
-                      blurRadius: 16,
-                      offset: const Offset(1, 1),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // Menetapkan alur utama Column
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/icons/money_outline.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Metode Pembayaran',
-                          style: TextStyle(
-                            color: Color(0xFF424242),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 40,
-                      margin: const EdgeInsets.only(top: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: const Color(0xFF757B7B),
-                        ),
-                      ),
-                      child: DropdownButton<String>(
-                        value: selectedPaymentMethod,
-                        hint: const Text(
-                          'Pilih Metode Pembayaran',
-                          style: TextStyle(
-                            color: Color(0xFF757B7B),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        isExpanded: true,
-                        underline: Container(),
-                        style: const TextStyle(
-                          color: Color(0xFF757B7B),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            "Pembayaran digunakan sebagai biaya admin aplikasi",
+                        style: TextStyle(
+                          color: Color(0xFF424242),
                           fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.normal,
                           fontFamily: 'Poppins',
                         ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedPaymentMethod = newValue!;
-                          });
-                        },
-                        items: paymentMethods.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    if (selectedPaymentMethod != null) ...[
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ],
+                  ),
+                ),
+
+                // const SizedBox(
+                //   height: 20,
+                // ),
+
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                //   child: SizedBox(
+                //     // width: mediaQueryWidth * 0.8,
+                //     // height: 70,
+                //     child: TextFormField(
+                //       // controller: addPaymentMethodController.number,
+                //       validator: (value) {
+                //         if (value!.isEmpty) {
+                //           return 'Nomor Rekening wajib diisi';
+                //         } else if (double.tryParse(value) == null) {
+                //           // Cek apakah value dapat di-parse menjadi angka
+                //           return 'Nomor Rekening harus angka';
+                //         }
+                //         return null;
+                //       },
+                //       keyboardType: TextInputType.number,
+                //       decoration: InputDecoration(
+                //           contentPadding: const EdgeInsets.symmetric(
+                //               horizontal: 10, vertical: 0),
+                //           border: OutlineInputBorder(
+                //             borderRadius: BorderRadius.circular(12),
+                //             borderSide: const BorderSide(
+                //               color: Color(0xFF757B7B),
+                //             ),
+                //           ),
+                //           focusedBorder: OutlineInputBorder(
+                //             borderRadius: BorderRadius.circular(12),
+                //             borderSide: const BorderSide(
+                //               color: Color(0xFF757B7B),
+                //             ),
+                //           ),
+                //           hintText: 'Nominal Pembayaran',
+                //           constraints: const BoxConstraints(
+                //             // maxHeight: 40,
+                //             minHeight: 30,
+                //           )),
+                //       style: const TextStyle(
+                //         color: Color(0xFF757B7B),
+                //         fontSize: 12,
+                //         fontWeight: FontWeight.w400,
+                //         fontFamily: 'Poppins',
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(
+                      left: 20, right: 20, bottom: 10, top: 10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF91E0DD).withOpacity(0.3),
+                        blurRadius: 16,
+                        offset: const Offset(1, 1),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize:
+                        MainAxisSize.min, // Menetapkan alur utama Column
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            'Nama Rekening',
-                            style: TextStyle(
-                              color: Color(0xFF757B7B),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Poppins',
-                            ),
+                          Image.asset(
+                            'assets/icons/money_outline.png',
+                            width: 24,
+                            height: 24,
                           ),
-                          Text(
-                            'SENJANI NATHANIA',
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Metode Pembayaran',
                             style: TextStyle(
-                              color: Color(0xFF757B7B),
+                              color: Color(0xFF424242),
                               fontSize: 12,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w600,
                               fontFamily: 'Poppins',
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'No Rek',
-                            style: TextStyle(
-                              color: Color(0xFF757B7B),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Text(
-                            '9200045678910',
-                            style: TextStyle(
-                              color: Color(0xFF757B7B),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Poppins',
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      if (isSent == false) ...[
-                        if (selectedImage != null) ...[
-                          Stack(
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                // height:, // Sesuaikan dengan tinggi gambar
-                                child: Image.memory(
-                                  image!,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedImage = null;
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    ),
-                                    style: const ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          Color(0xFF6BCCC9)),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ] else ...[
-                          SizedBox(
-                            height: 106.61,
-                            width: double.infinity,
-                            child: DottedBorder(
-                              color: const Color(0xFF6BCCC9),
-                              strokeWidth: 1,
-                              borderType: BorderType.RRect,
-                              dashPattern: const [7, 7],
-                              strokeCap: StrokeCap.butt,
-                              radius: const Radius.circular(12),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _pickImageFromGallery();
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 106.61,
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      const Column(
-                                        children: [
-                                          Text(
-                                            'Bukti Pembayaran',
-                                            style: TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                          Text(
-                                            'Seret atau pilih gambar',
-                                            style: TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Image.asset(
-                                        'assets/icons/Plus.png',
-                                        width: 24,
-                                        height: 24,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
                         ],
-                        const SizedBox(height: 20),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF6BCCC9),
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF91E0DD).withOpacity(0.3),
-                                blurRadius: 16,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                          width: double.infinity,
-                          height: 54,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                checkBukti();
-                              });
-                            },
-                            child: const Center(
-                              child: Text(
-                                'Kirim Bukti',
-                                style: TextStyle(
-                                  color: Color(0xFFFAFAFA),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 40,
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF757B7B),
                           ),
                         ),
-                      ],
-                      if (isWaiting == true) ...[
-                        // const SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          height: 54,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF6BCCC9).withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF91E0DD).withOpacity(0.6),
-                                blurRadius: 16,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
+                        child: DropdownButton<String>(
+                          value: selectedPaymentMethod,
+                          hint: const Text(
+                            'Pilih Metode Pembayaran',
+                            style: TextStyle(
+                              color: Color(0xFF757B7B),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                            ),
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Icon(
-                                Icons.access_time,
-                                color: Color(0xFF6BCCC9),
+                          borderRadius: BorderRadius.circular(12),
+                          isExpanded: true,
+                          underline: Container(),
+                          style: const TextStyle(
+                            color: Color(0xFF757B7B),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedPaymentMethod = newValue!;
+                            });
+                          },
+                          items: paymentMethods.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (selectedPaymentMethod != null) ...[
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Nama Rekening',
+                              style: TextStyle(
+                                color: Color(0xFF757B7B),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  RichText(
-                                    text: const TextSpan(
+                            ),
+                            Text(
+                              'SENJANI NATHANIA',
+                              style: TextStyle(
+                                color: Color(0xFF757B7B),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'No Rek',
+                              style: TextStyle(
+                                color: Color(0xFF757B7B),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            Text(
+                              '9200045678910',
+                              style: TextStyle(
+                                color: Color(0xFF757B7B),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        if (isSent == false) ...[
+                          if (selectedImage != null) ...[
+                            Stack(
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  // height:, // Sesuaikan dengan tinggi gambar
+                                  child: Image.memory(
+                                    image!,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          selectedImage = null;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                      ),
+                                      style: const ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                Color(0xFF6BCCC9)),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ] else ...[
+                            SizedBox(
+                              height: 106.61,
+                              width: double.infinity,
+                              child: DottedBorder(
+                                color: const Color(0xFF6BCCC9),
+                                strokeWidth: 1,
+                                borderType: BorderType.RRect,
+                                dashPattern: const [7, 7],
+                                strokeCap: StrokeCap.butt,
+                                radius: const Radius.circular(12),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _pickImageFromGallery();
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 106.61,
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        TextSpan(
-                                          text: 'Menunggu',
-                                          style: TextStyle(
-                                            color: Color(0xFF757B7B),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Poppins',
-                                          ),
+                                        const Column(
+                                          children: [
+                                            Text(
+                                              'Bukti Pembayaran',
+                                              style: TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            Text(
+                                              'Seret atau pilih gambar',
+                                              style: TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        TextSpan(
-                                          text: ' Konfirmasi Pembayaran',
-                                          style: TextStyle(
-                                            color: Color(0xFF6BCCC9),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Poppins',
-                                          ),
+                                        Image.asset(
+                                          'assets/icons/Plus.png',
+                                          width: 24,
+                                          height: 24,
                                         ),
                                       ],
                                     ),
                                   ),
-                                  RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              'dari penjual, kembali lagi nanti!',
-                                          style: TextStyle(
-                                            color: Color(0xFF757B7B),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 20),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF6BCCC9),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFF91E0DD).withOpacity(0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(1, 1),
+                                ),
+                              ],
+                            ),
+                            width: double.infinity,
+                            height: 54,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  checkBukti();
+                                });
+                              },
+                              child: const Center(
+                                child: Text(
+                                  'Kirim Bukti',
+                                  style: TextStyle(
+                                    color: Color(0xFFFAFAFA),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
-                                ],
+                                ),
                               ),
-                            ],
+                            ),
                           ),
-                        )
-                      ],
-                      if (isPaidOff == true) ...[
-                        Container(
-                          width: double.infinity,
-                          height: 54,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF69F477).withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF69F477).withOpacity(0.3),
-                                blurRadius: 16,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
+                        ],
+                        if (isWaiting == true) ...[
+                          // const SizedBox(height: 20),
+                          Container(
+                            width: double.infinity,
+                            height: 54,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF6BCCC9).withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFF91E0DD).withOpacity(0.6),
+                                  blurRadius: 16,
+                                  offset: const Offset(1, 1),
+                                ),
+                              ],
+                            ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 const Icon(
                                   Icons.access_time,
-                                  color: Color(0xFF69F477),
+                                  color: Color(0xFF6BCCC9),
                                 ),
-                                SizedBox(width: mediaQueryWidth * 0.04),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -586,7 +571,7 @@ class _ProductFormState extends State<ProductForm> {
                                       text: const TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: 'Pembayaran',
+                                            text: 'Menunggu',
                                             style: TextStyle(
                                               color: Color(0xFF757B7B),
                                               fontSize: 14,
@@ -595,9 +580,25 @@ class _ProductFormState extends State<ProductForm> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: ' LUNAS',
+                                            text: ' Konfirmasi Pembayaran',
                                             style: TextStyle(
-                                              color: Color(0xFF69F477),
+                                              color: Color(0xFF6BCCC9),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                'dari penjual, kembali lagi nanti!',
+                                            style: TextStyle(
+                                              color: Color(0xFF757B7B),
                                               fontSize: 14,
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Poppins',
@@ -610,62 +611,86 @@ class _ProductFormState extends State<ProductForm> {
                                 ),
                               ],
                             ),
-                          ),
-                        )
-                      ]
+                          )
+                        ],
+                        if (isPaidOff == true) ...[
+                          Container(
+                            width: double.infinity,
+                            height: 54,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF69F477).withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFF69F477).withOpacity(0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(1, 1),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.access_time,
+                                    color: Color(0xFF69F477),
+                                  ),
+                                  SizedBox(width: mediaQueryWidth * 0.04),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      RichText(
+                                        text: const TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: 'Pembayaran',
+                                              style: TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: ' LUNAS',
+                                              style: TextStyle(
+                                                color: Color(0xFF69F477),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ]
+                      ],
                     ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6BCCC9),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFF6BCCC9),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF6BCCC9).withOpacity(0.4),
-                      blurRadius: 16,
-                      offset: const Offset(1, 1),
-                    ),
-                  ],
-                ),
-                width: double.infinity,
-                height: 54,
-                child: TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  onPressed: () async {},
-                  child: const Center(
-                    child: Text(
-                      'Kirim Penilaian',
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
+                // const SizedBox(height: 20),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

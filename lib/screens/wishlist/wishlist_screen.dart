@@ -69,7 +69,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 0.65,
+                    childAspectRatio: 0.72,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
