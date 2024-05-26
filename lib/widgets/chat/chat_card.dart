@@ -5,12 +5,12 @@ import 'package:penstore/models/roomChat_model.dart';
 // import '../../../constants.dart';
 
 class ChatCard extends StatelessWidget {
-  ChatCard({
-    Key? key,
+  const ChatCard({
+    super.key,
     required this.roomChat,
     required this.recieverId,
     required chat,
-  }) : super(key: key);
+  });
 
   final RoomChatModel roomChat;
   final String recieverId;

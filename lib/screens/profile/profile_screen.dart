@@ -11,6 +11,7 @@ import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
+import 'package:penstore/widgets/profile/edit_method_payment.dart';
 import 'package:penstore/widgets/profile/edit_profile.dart';
 import 'package:penstore/widgets/profile/form_tagihan.dart';
 import 'package:penstore/widgets/profile/profile_image_widget.dart';
@@ -590,9 +591,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                       title:
                                                                           "Konfirmasi hapus",
                                                                       messageTitle:
-                                                                          "Apakah anda yakin ingin menghapus methode pembayaran",
+                                                                          "Apakah anda yakin ingin menghapus metode pembayaran?",
                                                                       message:
-                                                                          "Tambahkan methode pembayaran untuk menjual produk!",
+                                                                          "Jika iya, metode pembayaran akan di hapus secara permanen!",
                                                                       onPressed:
                                                                           () async {
                                                                         await deletePaymentMethodController.deletePaymentMethod(
@@ -773,7 +774,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                   child:
                                                                       IconButton(
                                                                     onPressed:
-                                                                        () {},
+                                                                        () {
+                                                                          Get.dialog(
+                                                                            const EditPaymentMethod(),
+                                                                          );
+                                                                        },
                                                                     icon: Image
                                                                         .asset(
                                                                       'assets/icons/edit_icon.png',
@@ -832,7 +837,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                           messageTitle:
                                                                               "Apakah anda yakin ingin menghapus methode pembayaran",
                                                                           message:
-                                                                              "Tambahkan methode pembayaran untuk menjual produk!",
+                                                                            "Jika iya, metode pembayaran akan di hapus secara permanen!",
                                                                           onPressed:
                                                                               () async {
                                                                             await deletePaymentMethodController.deletePaymentMethod(paymentMethod.id!,
