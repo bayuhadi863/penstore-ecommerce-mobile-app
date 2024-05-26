@@ -31,6 +31,9 @@ class LogoutController extends GetxController {
         barrierDismissible: false,
       );
 
+      // wait 5 seconds
+      // await Future.delayed(const Duration(seconds: 5));
+
       // Logout from AuthRepository
       final authRepository = Get.put(AuthRepository());
       await authRepository.signOut();

@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:penstore/repository/auth_repository.dart';
 import 'package:penstore/repository/user_repository.dart';
+import 'package:penstore/screens/bottom_navigation.dart';
 import 'package:penstore/widgets/alerts.dart';
 
 class RegisterController extends GetxController {
@@ -65,7 +66,7 @@ class RegisterController extends GetxController {
             message: "Selamat datang di PENSTORE!");
 
         // Go to main route
-        Get.offAllNamed('/');
+        Get.offAll(() => const MyBottomNavBar());
       }
     } catch (e) {
       Navigator.of(context).pop();
