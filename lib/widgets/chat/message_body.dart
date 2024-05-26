@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/chat/chat_controller.dart';
+import 'package:penstore/controller/chat/room_chat_controller.dart';
 import 'package:penstore/widgets/chat/message.dart';
 
 class MessageBody extends StatelessWidget {
@@ -10,6 +11,7 @@ class MessageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ChatRoomController chatRoomController = Get.put(ChatRoomController());
     final ChatController chatController = Get.put(ChatController(roomId));
     chatController.markMessagesAsSeen(roomId, receiverId);
     final mediaQueryHeight = MediaQuery.of(context).size.height;
@@ -114,6 +116,7 @@ class MessageBody extends StatelessWidget {
                         suffixIcon: IconButton(
                           onPressed: () {
                             chatController.sendMessage();
+                            chatRoomController.updatedAt(roomId);
                           },
                           icon: Image.asset(
                             'assets/icons/send_outline.png',
