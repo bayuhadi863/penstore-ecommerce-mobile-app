@@ -1,33 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/chat/chat_controller.dart';
 import 'package:penstore/models/chatMessages.dart';
+import 'package:penstore/models/chat_model.dart';
 import 'package:penstore/widgets/chat/text_message.dart';
 
 class Message extends StatelessWidget {
-  const Message({
+  Message({
     super.key,
-    required this.message,
+    required this.chat,
+    required this.userId,
   });
-
-  final ChatMessage message;
+  // final ChatController chatController = Get.put(ChatController());
+  final ChatModel chat;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
-    Widget messageContaint(ChatMessage message) {
-      switch (message.messageType) {
-        case ChatMessageType.text:
-          return TextMessage(message: message);
-        default:
-          return const SizedBox();
+    Widget messageContaint(ChatModel message, String userId) {
+      if (message.productId == '') {
+        return const SizedBox();
+      } else {
+        return TextMessage(message: message, userId: userId);
       }
     }
 
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 10, vertical: 5,
+        horizontal: 10,
+        vertical: 5,
       ),
       child: Row(
-        mainAxisAlignment:
-            message.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: chat.senderId == userId
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           // if (!message.isSender) ...[
           //   const CircleAvatar(
@@ -38,10 +44,10 @@ class Message extends StatelessWidget {
           // ],
           Column(
             children: [
-              messageContaint(message),
+              messageContaint(chat, userId),
             ],
           ),
-        ], 
+        ],
       ),
     );
   }
