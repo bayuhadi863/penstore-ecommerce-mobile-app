@@ -13,7 +13,7 @@ class RegisterController extends GetxController {
   final email = TextEditingController();
   // final phone = TextEditingController();
   final password = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
 
   // Loading variable
   final isLoading = false.obs;
@@ -21,7 +21,7 @@ class RegisterController extends GetxController {
   // Register function
   void register(BuildContext context) async {
     try {
-      if (formKey.currentState!.validate()) {
+      if (formKeyRegister.currentState!.validate()) {
         showDialog(
           context: context,
           builder: (context) {
@@ -50,6 +50,12 @@ class RegisterController extends GetxController {
           email.text.trim(),
           // phone.text.trim(),
         );
+
+        // clear form
+        name.clear();
+        email.clear();
+        // phone.clear();
+        password.clear();
 
         Navigator.of(context).pop();
 

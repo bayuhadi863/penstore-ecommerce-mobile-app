@@ -148,11 +148,23 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                             child: ClipRRect(
                               clipBehavior: Clip.hardEdge,
                               borderRadius: BorderRadius.circular(500),
-                              child: Image(
-                                filterQuality: FilterQuality.high,
-                                image: AssetImage(imgList[0]),
-                                fit: BoxFit.cover,
-                              ),
+                              child:
+                                  getSingleUserController.user.value.imageUrl ==
+                                              null ||
+                                          getSingleUserController
+                                                  .user.value.imageUrl ==
+                                              ''
+                                      ? Image(
+                                          filterQuality: FilterQuality.high,
+                                          image: AssetImage(imgList[0]),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          getSingleUserController
+                                              .user.value.imageUrl!,
+                                          fit: BoxFit.cover,
+                                          filterQuality: FilterQuality.high,
+                                        ),
                             ),
                           ),
                           const SizedBox(width: 10),

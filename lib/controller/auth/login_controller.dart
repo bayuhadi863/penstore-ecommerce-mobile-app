@@ -41,6 +41,10 @@ class LoginController extends GetxController {
           password.text.trim(),
         );
 
+        // clear
+        email.clear();
+        password.clear();
+
         Navigator.of(context).pop();
 
         // Show success snackbar

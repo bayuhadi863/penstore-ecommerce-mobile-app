@@ -76,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.only(
                             left: 30, top: 30, right: 30, bottom: 10),
                         child: Form(
-                          key: registerController.formKey,
+                          key: registerController.formKeyRegister,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +196,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   //   VerificationScreen(email: registerController.email.text),
                                   // );
                                 },
-
                                 child: const Text(
                                   'Daftar',
                                   style: TextStyle(
@@ -227,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.offAllNamed("/login");
+                                  Get.back();
                                 },
                                 child: const Text(
                                   'Masuk Sekarang!',

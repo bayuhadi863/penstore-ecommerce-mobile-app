@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:penstore/repository/bill_repository.dart';
 import 'package:penstore/repository/order_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
@@ -11,7 +12,8 @@ class FinishOrderController extends GetxController {
 
   final RxBool isLoading = false.obs;
 
-  Future<void> finishOrder(String orderId, BuildContext context) async {
+  Future<void> finishOrder(String orderId, BuildContext context,
+      String sellerId, int serviceFee) async {
     try {
       isLoading(true);
       showDialog(
@@ -29,6 +31,9 @@ class FinishOrderController extends GetxController {
 
       final OrderRepository orderRepository = Get.put(OrderRepository());
       await orderRepository.updateOrderStatus(orderId, 'received');
+
+      final BillRepository billRepository = Get.put(BillRepository());
+      await billRepository.increaseBill(sellerId, serviceFee);
 
       isLoading(false);
 
