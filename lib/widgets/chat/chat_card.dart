@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import 'package:penstore/models/roomChat_model.dart';
 
 // import '../../../constants.dart';
@@ -9,10 +11,9 @@ class ChatCard extends StatelessWidget {
   const ChatCard({
     super.key,
     required this.roomChat,
-    required this.recieverId,
-    required chat,
     required this.isSeen,
-  }) : super(key: key);
+    required this.recieverId, required chat,
+  });
 
   final RoomChatModel roomChat;
   final bool isSeen;
