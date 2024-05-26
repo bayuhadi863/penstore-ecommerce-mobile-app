@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/models/category_model.dart';
 import 'package:penstore/repository/category_repository.dart';
 
 class KatalogWidget extends StatefulWidget {
-  final Function onCategorySelected;
-
-  const KatalogWidget({super.key, required this.onCategorySelected});
+  const KatalogWidget({super.key});
 
   @override
   State<KatalogWidget> createState() => _KatalogWidgetState();
 }
 
 class _KatalogWidgetState extends State<KatalogWidget> {
+  final ProductController productController = Get.put(ProductController());
   List<CategoryModel> categories = [];
   bool isLoading = false;
-  int _selectedCategory = 0;
 
   Future<void> _getCategories() async {
     setState(() {
@@ -26,7 +26,7 @@ class _KatalogWidgetState extends State<KatalogWidget> {
         await categoryRepository.getCategories();
     setState(() {
       categories =
-          [CategoryModel(id: 'semua', category_name: 'Semua')] + _categories;
+          [CategoryModel(id: '0', category_name: 'Semua')] + _categories;
       isLoading = false;
     });
   }
@@ -67,16 +67,17 @@ class _KatalogWidgetState extends State<KatalogWidget> {
                         itemCount: categories.length,
                         itemBuilder: (context, index) {
                           CategoryModel category = categories[index];
-                          final bool isActive = _selectedCategory == index;
+                          final bool isActive =
+                              productController.selectedCategory.value ==
+                                  category.id;
 
                           return GestureDetector(
                             onTap: () {
-                              print("tekan category");
                               setState(() {
-                                _selectedCategory = index;
-                                widget.onCategorySelected(category.id == 'semua'
-                                    ? 'semua'
-                                    : category.id);
+                                productController.setSelectedCategory(
+                                    category.id == '0'
+                                        ? '0'
+                                        : category.id.toString());
                               });
                             },
                             child: Container(

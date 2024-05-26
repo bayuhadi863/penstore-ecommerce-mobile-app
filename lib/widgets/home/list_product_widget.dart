@@ -8,17 +8,13 @@ import 'package:penstore/widgets/no_product.dart';
 import 'package:skeletons/skeletons.dart';
 
 class ListProductWidget extends StatelessWidget {
-  final String? selectedCategory;
-
-  const ListProductWidget({super.key, required this.selectedCategory});
+  const ListProductWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final ProductController productController = Get.put(ProductController());
-
-    if (selectedCategory != null && selectedCategory!.isNotEmpty) {
-      productController.setSelectedCategory(selectedCategory!);
-    }
 
     return Obx(() {
       if (productController.isLoading.value) {

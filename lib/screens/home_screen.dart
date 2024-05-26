@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/widgets/home/appbar_home_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:penstore/widgets/home/katalog_widget.dart';
@@ -13,29 +15,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String categoryId = '';
+  final ProductController productController = Get.put(ProductController());
 
   final FocusNode _searchFocusNode = FocusNode();
-  bool isFavorite = false;
 
-  // set ubah category
-  Future<void> _setCategory(String? categoryId) async {
-    if (categoryId != null) {
-      setState(() {
-        this.categoryId = categoryId;
-      });
-      print("category ganti");
-    } else {
-      setState(() {
-        this.categoryId = '';
-      });
-    }
-  }
-
-  @override 
+  @override
   void initState() {
     super.initState();
-    _setCategory;
   }
 
   @override
@@ -64,28 +50,24 @@ class _HomeScreenState extends State<HomeScreen> {
         height: mediaQueryHeight,
         width: mediaQueryWidth,
         // color: const Color(0xFF6BCCC9),
-        child: Column(
+        child: const Column(
           children: [
             // widget search
-            const SearchWidget(),
+            SearchWidget(),
             // widget katalog
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: KatalogWidget(
-                onCategorySelected: _setCategory,
-              ),
+              padding: EdgeInsets.all(8.0),
+              child: KatalogWidget(),
             ),
             Expanded(
               child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     //widget banner slider
-                    const BannerSlider(),
+                    BannerSlider(),
                     //widget list product
-                    ListProductWidget(
-                      selectedCategory: categoryId,
-                    ),
+                    ListProductWidget(),
                   ],
                 ),
               ),
