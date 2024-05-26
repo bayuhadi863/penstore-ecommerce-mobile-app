@@ -220,4 +220,22 @@ class ProductRepository extends GetxController {
       throw 'Something went wrong. Please try again ${e.toString()}';
     }
   }
+
+  // set stock zero
+  Future<void> setStockZero(String productId) async {
+    try {
+      await db.collection('products').doc(productId).update({
+        "stock": 0,
+      });
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      print(e);
+      throw 'Something went wrong. Please try again ${e.toString()}';
+    }
+  }
 }

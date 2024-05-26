@@ -3,10 +3,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 import 'package:penstore/widgets/add_kategori_wishlist.dart';
+import 'package:penstore/widgets/confirm_action.dart';
 import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/wishlist/appbar_wishlist_widget.dart';
 import 'package:penstore/models/wishlist_model.dart';
-import 'package:penstore/widgets/wishlist/delete_confirmation.dart';
 import 'package:skeletons/skeletons.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -153,11 +153,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12.0),
             child: InkWell(
-              onLongPress: () async {
+              onLongPress: () {
                 // pop up delete
-                showDeleteConfirmationDialog(context, wishlistItem.id, () {
-                  wishlistController.deleteWishlist(wishlistItem.id);
-                });
+                Get.dialog(ConfirmAction(
+                    title: "Konfirmasi hapus",
+                    messageTitle:
+                        "Apakah anda tidak menginginkan  wishlist ini",
+                    message: "Jika iy wishlist akan dihapus",
+                    onPressed: () async {
+                      await wishlistController.deleteWishlist(wishlistItem.id);
+                      Navigator.of(context).pop();
+                      await wishlistController.getAllWishlist();
+                    }));
               },
               onTap: () {
                 Get.toNamed('/detail-wishlist',

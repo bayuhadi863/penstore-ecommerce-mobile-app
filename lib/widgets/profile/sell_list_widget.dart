@@ -214,12 +214,16 @@ class _SellListProfileState extends State<SellListProfile> {
                                                             title:
                                                                 "Konfirmasi hapus",
                                                             messageTitle:
-                                                                "Apakah anda yakin ingin menghapus produk?",
+                                                                "Anda tidak bisa menghapus produk, apakah anda yakin ingin mengkosongkan stok produk?",
                                                             message:
-                                                                "Jika iya, produk akan di hapus secara permanen!",
-                                                            onPressed:
-                                                                () async {
-                                                              // ignore: use_build_context_synchronously
+                                                                "Jika iya, stok produk akan di hapus diset ke 0!",
+                                                            onPressed: () {
+                                                              userProductsController
+                                                                  .deleteProduct(
+                                                                      products[
+                                                                              index]
+                                                                          .id);
+
                                                               Navigator.of(
                                                                       context)
                                                                   .pop();
