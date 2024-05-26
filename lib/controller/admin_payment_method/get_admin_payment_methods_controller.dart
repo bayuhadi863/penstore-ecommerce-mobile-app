@@ -1,53 +1,34 @@
 import 'package:get/get.dart';
+import 'package:penstore/models/admin_payment_method_model.dart';
+import 'package:penstore/repository/admin_payment_method_repository.dart';
 
-class GetAdminPaymentMethodsController extends GetxController{
+class GetAdminPaymentMethodsController extends GetxController {
   static GetAdminPaymentMethodsController get instance => Get.find();
 
-  final RxList<String> selectedPaymentMethod = <String>[].obs;
-  final RxBool isAllSelected = false.obs;
-  final RxInt totalPrice = 0.obs;
-  final RxString sellerId = ''.obs;
+  final RxBool isLoading = false.obs;
+  final RxList<AdminPaymentMethodModel> adminPaymentMethods =
+      <AdminPaymentMethodModel>[].obs;
 
-  void selectPaymentMethod(String paymentMethodId, int price, int quantity, String sellerId){
-    if(selectedPaymentMethod.contains(paymentMethodId)){
-      selectedPaymentMethod.remove(paymentMethodId);
-      isAllSelected.value = false;
-
-      totalPrice.value -= price * quantity;
-    } else {
-      if(selectedPaymentMethod.isEmpty){
-        this.sellerId.value = sellerId;
-        selectedPaymentMethod.add(paymentMethodId);
-      } else {
-        if(sellerId == this.sellerId.value){
-          selectedPaymentMethod.add(paymentMethodId);
-        } else {
-          return;
-        }
-      }
-
-      totalPrice.value += price * quantity;
-    }
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAdminPaymentMethods();
   }
 
-  void selectAll(List<String> paymentMethodIds, int total, String sellerId){
-    if(isAllSelected.value && sellerId == this.sellerId.value){
-      selectedPaymentMethod.clear();
-      totalPrice.value = 0;
-      isAllSelected.value = false;
-    } else {
-      if(selectedPaymentMethod.isEmpty){
-        this.sellerId.value = sellerId;
-        selectedPaymentMethod.clear();
-        totalPrice.value = total;
-        selectedPaymentMethod.addAll(paymentMethodIds);
-        isAllSelected.value = true;
-      } else {
-        if(sellerId != this.sellerId.value){
-          return;
-        }
-      }
+  void fetchAdminPaymentMethods() async {
+    try {
+      isLoading(true);
+
+      final adminPaymentMethodRepository =
+          Get.put(AdminPaymentMethodRepository());
+      final adminPaymentMethods =
+          await adminPaymentMethodRepository.fetchAdminPaymentMethods();
+      this.adminPaymentMethods.value = adminPaymentMethods;
+
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      throw e.toString();
     }
   }
-    
 }

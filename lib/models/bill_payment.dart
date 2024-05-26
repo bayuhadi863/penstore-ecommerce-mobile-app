@@ -6,6 +6,8 @@ class BillPaymentModel {
   final int total;
   final String status;
   final String billId;
+  final String imageUrl;
+  final String adminPaymentMethodId;
   final DateTime? createdAt;
 
   BillPaymentModel({
@@ -14,6 +16,8 @@ class BillPaymentModel {
     required this.total,
     required this.status,
     required this.billId,
+    required this.imageUrl,
+    required this.adminPaymentMethodId,
     this.createdAt,
   });
 
@@ -23,6 +27,8 @@ class BillPaymentModel {
         total: 0,
         status: '',
         billId: '',
+        imageUrl: '',
+        adminPaymentMethodId: '',
         createdAt: null,
       );
 
@@ -32,6 +38,8 @@ class BillPaymentModel {
       'total': total,
       'status': status,
       'billId': billId,
+      'imageUrl': imageUrl,
+      'adminPaymentMethodId': adminPaymentMethodId,
       'createdAt': createdAt,
     };
   }
@@ -44,6 +52,8 @@ class BillPaymentModel {
       total: data['total'],
       status: data['status'],
       billId: data['billId'],
+      imageUrl: data['imageUrl'],
+      adminPaymentMethodId: data['adminPaymentMethodId'],
       createdAt: data['createdAt']?.toDate(),
     );
   }
