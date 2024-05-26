@@ -132,7 +132,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final AddOrderController addOrderController = Get.put(AddOrderController());
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       // floatingActionButton: FloatingActionButton(onPressed: () {
       //   setState(() {
       //     isPaidOff = true;
@@ -1016,6 +1016,100 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
                   ),
+
+                  Container(
+                    height: 1,
+                    width: mediaQueryWidth * 0.9,
+                    color: const Color(0xFF000000),
+                  ),
+
+                  // INPUT NOTE
+                  Container(
+                    width: double.infinity,
+                    height: 138,
+                    margin: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 10, top: 10),
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF91E0DD).withOpacity(0.3),
+                            blurRadius: 16,
+                            offset: const Offset(1, 1),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                'assets/icons/note_outline.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text(
+                                'Catatabn penjual',
+                                style: TextStyle(
+                                  color: Color(0xFF424242),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: TextFormField(
+                              controller: addOrderController.note,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: 1,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 5,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFB3B3B3),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFB3B3B3),
+                                  ),
+                                ),
+                                hintText: 'Tulis Pesanmu',
+                                constraints: const BoxConstraints(
+                                  minHeight: 40,
+                                  maxHeight: 100,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                color: Color(0xFF424242),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   if (isRating) ...[
                     SizedBox(
                       height: mediaQueryHeight * 0.02,
@@ -1224,7 +1318,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 totalPrice: total,
                                 paymentMethodId: selectedPaymentMethod!,
                                 status: 'unpaid',
+                                note: addOrderController.note.text,
                               );
+
+                          
 
                               await addOrderController.createOrder(
                                   order, context);

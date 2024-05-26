@@ -172,6 +172,32 @@ class ProductRepository extends GetxController {
     }
   }
 
+  // search product by name
+  Future<List<ProductModel>> searchProducts(String query) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('products')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThanOrEqualTo: query + '\uf8ff')
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs
+            .map((doc) => ProductModel.fromSnapshot(doc))
+            .toList();
+      } else {
+        return [];
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
   // update product
   Future<void> updateProduct(ProductModel product) async {
     try {
@@ -182,6 +208,24 @@ class ProductRepository extends GetxController {
         "price": product.price,
         "imageUrl": product.imageUrl,
         "categoryId": product.categoryId,
+      });
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      print(e);
+      throw 'Something went wrong. Please try again ${e.toString()}';
+    }
+  }
+
+  // set stock zero
+  Future<void> setStockZero(String productId) async {
+    try {
+      await db.collection('products').doc(productId).update({
+        "stock": 0,
       });
     } on FirebaseException catch (e) {
       throw e.code;

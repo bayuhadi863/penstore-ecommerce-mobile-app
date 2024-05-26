@@ -30,6 +30,7 @@ class ConfirmPaymentController extends GetxController {
 
       final OrderRepository orderRepository = Get.put(OrderRepository());
       await orderRepository.updateOrderStatus(orderId, 'on_process');
+      await orderRepository.updateOrderPaymentRejected(orderId, false);
 
       isLoading(false);
 

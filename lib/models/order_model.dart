@@ -11,6 +11,7 @@ class OrderModel {
   final String paymentMethodId;
   final String status;
   final bool isPaymentRejected;
+  final String? note;
   final DateTime? createdAt;
 
   OrderModel({
@@ -24,6 +25,7 @@ class OrderModel {
     required this.paymentMethodId,
     required this.status,
     this.isPaymentRejected = false,
+    this.note = '',
     this.createdAt,
   });
 
@@ -38,6 +40,7 @@ class OrderModel {
         paymentMethodId: '',
         status: '',
         isPaymentRejected: false,
+        note: '',
         createdAt: null,
       );
 
@@ -52,6 +55,7 @@ class OrderModel {
       'paymentMethodId': paymentMethodId,
       'status': status,
       'isPaymentRejected': isPaymentRejected,
+      'note': note,
       'createdAt': createdAt,
     };
   }
@@ -70,6 +74,7 @@ class OrderModel {
       paymentMethodId: data['paymentMethodId'],
       status: data['status'],
       isPaymentRejected: data['isPaymentRejected'],
+      note: data['note'],
       createdAt: data['createdAt']?.toDate(),
     );
   }

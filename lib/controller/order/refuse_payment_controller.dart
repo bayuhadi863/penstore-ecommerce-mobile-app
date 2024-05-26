@@ -37,6 +37,7 @@ class RefusePaymentController extends GetxController {
       await orderPaymentRepository.deleteImage(imageUrl);
       await orderPaymentRepository.deleteOrderPaymentByOrderId(orderId);
       await orderRepository.updateOrderStatus(orderId, 'unpaid');
+      await orderRepository.updateOrderPaymentRejected(orderId, true);
 
       isLoading(false);
 

@@ -111,10 +111,10 @@ class _BuyListProfileState extends State<BuyListProfile> {
               )
             : orders.isEmpty
                 ? const NoData(
-                      title: "Maaf, ",
-                      subTitle: "Belum ada produk yang kamu beli",
-                      suggestion: "Silahkan beli produk terlebih dahulu!",
-                    )
+                    title: "Maaf, ",
+                    subTitle: "Belum ada produk yang kamu beli",
+                    suggestion: "Silahkan beli produk terlebih dahulu!",
+                  )
                 : Column(
                     children: List.generate(
                       orders.length,
@@ -315,6 +315,16 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       child: RichText(
                                         text: TextSpan(
                                           children: [
+                                            if (order.isPaymentRejected)
+                                              const TextSpan(
+                                                text: 'Pembayaran ditolak!',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Poppins',
+                                                ),
+                                              ),
                                             TextSpan(
                                               text: order.status == 'waiting'
                                                   ? 'Menunggu konfirmasi dari penjual'

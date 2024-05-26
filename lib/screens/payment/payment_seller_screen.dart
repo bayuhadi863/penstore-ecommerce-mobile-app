@@ -12,6 +12,9 @@ import 'package:penstore/controller/order/get_single_order_controller.dart';
 import 'package:penstore/controller/order/refuse_payment_controller.dart';
 import 'package:penstore/controller/order_payment/get_order_id_payment_controller.dart';
 import 'package:penstore/controller/payment_method/get_single_payment_method_controller.dart';
+import 'package:penstore/controller/product/get_single_product.dart';
+import 'package:penstore/controller/profile/get_single_user_controller.dart';
+import 'package:penstore/controller/rating/get_order_rating_controller.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/add_rating_dialog.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
@@ -102,6 +105,9 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
 
     final RefusePaymentController refusePaymentController =
         Get.put(RefusePaymentController());
+
+    final GetOrderRatingController getOrderRatingController =
+        Get.put(GetOrderRatingController(orderId));
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -1437,24 +1443,31 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                               ),
                             );
                           }),
-                          if (isRating) ...[
-                            SizedBox(
-                              height: mediaQueryHeight * 0.02,
-                            ),
-                            Container(
-                              height: 2,
-                              width: mediaQueryWidth * 0.9,
-                              color: const Color(0xFF757B7B),
-                            ),
-                            SizedBox(
-                              height: mediaQueryHeight * 0.02,
-                            ),
-                            Container(
+
+                          // DETAIL PEMBELI
+                          SizedBox(
+                            height: mediaQueryHeight * 0.02,
+                          ),
+                          Container(
+                            height: 2,
+                            width: mediaQueryWidth * 0.9,
+                            color: const Color(0xFF757B7B),
+                          ),
+                          SizedBox(
+                            height: mediaQueryHeight * 0.02,
+                          ),
+                          Obx(() {
+                            final GetSingleUserController
+                                getSingleUserController =
+                                Get.put(GetSingleUserController(order.userId));
+                            final user = getSingleUserController.user.value;
+                            return Container(
                               width: double.infinity,
                               height: 138,
                               margin: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 10, top: 10),
                               child: Container(
+                                height: 100,
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 20),
                                 decoration: BoxDecoration(
@@ -1472,7 +1485,6 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Row(
                                       mainAxisAlignment:
@@ -1482,11 +1494,10 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                           'assets/icons/note_outline.png',
                                           width: 24,
                                           height: 24,
-                                          color: const Color(0xFFF4CD69),
                                         ),
                                         const SizedBox(width: 10),
                                         const Text(
-                                          'Penilaian',
+                                          'Detail Pembeli',
                                           style: TextStyle(
                                             color: Color(0xFF424242),
                                             fontSize: 12,
@@ -1496,12 +1507,12 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                         ),
                                       ],
                                     ),
-                                    const Row(
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          'Nilai Produk',
+                                        const Text(
+                                          'Nama',
                                           style: TextStyle(
                                             color: Color(0xFF757B7B),
                                             fontSize: 12,
@@ -1509,45 +1520,23 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                             fontFamily: 'Poppins',
                                           ),
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xFFFFC701),
-                                              size: 24,
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xFFFFC701),
-                                              size: 24,
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xFFFFC701),
-                                              size: 24,
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xFFFFC701),
-                                              size: 24,
-                                            ),
-                                            Icon(
-                                              Icons.star_border_outlined,
-                                              color: Color(0xFFFFC701),
-                                              size: 24,
-                                            ),
-                                          ],
+                                        Text(
+                                          user.name,
+                                          style: const TextStyle(
+                                            color: Color(0xFF757B7B),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    const Row(
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          'Deskripsi',
+                                        const Text(
+                                          'Email',
                                           style: TextStyle(
                                             color: Color(0xFF757B7B),
                                             fontSize: 12,
@@ -1556,8 +1545,32 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                           ),
                                         ),
                                         Text(
-                                          'Barang bagus asli',
+                                          user.email,
+                                          style: const TextStyle(
+                                            color: Color(0xFF757B7B),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          'No. Handphone',
                                           style: TextStyle(
+                                            color: Color(0xFF757B7B),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                        Text(
+                                          user.phone ?? '-',
+                                          style: const TextStyle(
                                             color: Color(0xFF757B7B),
                                             fontSize: 12,
                                             fontWeight: FontWeight.w400,
@@ -1569,10 +1582,397 @@ class _PaymentSellerScreenState extends State<PaymentSellerScreen> {
                                   ],
                                 ),
                               ),
+                            );
+                          }),
+
+                          // ORDER NOTE
+                          SizedBox(
+                            height: mediaQueryHeight * 0.02,
+                          ),
+                          Container(
+                            height: 2,
+                            width: mediaQueryWidth * 0.9,
+                            color: const Color(0xFF757B7B),
+                          ),
+                          SizedBox(
+                            height: mediaQueryHeight * 0.02,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            // height: 138,
+                            margin: const EdgeInsets.only(
+                                left: 20, right: 20, bottom: 10, top: 10),
+                            child: Container(
+                              // height: 100,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF91E0DD)
+                                        .withOpacity(0.3),
+                                    blurRadius: 16,
+                                    offset: const Offset(1, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                // mainAxisAlignment:
+                                //     MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Image.asset(
+                                        'assets/icons/note_outline.png',
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      const Text(
+                                        'Catatan dari Pembeli',
+                                        style: TextStyle(
+                                          color: Color(0xFF424242),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'Poppins',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    order.note != '' ? order.note! : '-',
+                                    style: const TextStyle(
+                                      color: Color(0xFF757B7B),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
+                          ),
+
+                          Obx(() {
+                            final ratings = getOrderRatingController.ratings;
+
+                            return ratings.isEmpty
+                                ? Container()
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height: mediaQueryHeight * 0.02,
+                                      ),
+                                      Container(
+                                        height: 2,
+                                        width: mediaQueryWidth * 0.9,
+                                        color: const Color(0xFF757B7B),
+                                      ),
+                                      SizedBox(
+                                        height: mediaQueryHeight * 0.02,
+                                      ),
+                                      Column(
+                                        children: List.generate(ratings.length,
+                                            (index) {
+                                          final GetSingleProduct
+                                              getSingleProductController =
+                                              Get.put(
+                                            GetSingleProduct(
+                                                ratings[index].productId),
+                                            tag: ratings[index].productId,
+                                          );
+                                          return Container(
+                                            width: double.infinity,
+                                            // height: 138,
+                                            margin: const EdgeInsets.only(
+                                                left: 20,
+                                                right: 20,
+                                                bottom: 10,
+                                                top: 10),
+                                            child: Container(
+                                              // height: 100,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 20),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color:
+                                                        const Color(0xFF91E0DD)
+                                                            .withOpacity(0.3),
+                                                    blurRadius: 16,
+                                                    offset: const Offset(1, 1),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/icons/note_outline.png',
+                                                        width: 24,
+                                                        height: 24,
+                                                        color: const Color(
+                                                            0xFFF4CD69),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      const Text(
+                                                        'Penilaian',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF424242),
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Obx(() {
+                                                    final product =
+                                                        getSingleProductController
+                                                            .product.value;
+
+                                                    return Row(
+                                                      children: [
+                                                        Stack(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                Get.toNamed(
+                                                                    '/detail-product',
+                                                                    arguments: {
+                                                                      'productId':
+                                                                          product
+                                                                              .id
+                                                                    });
+                                                              },
+                                                              child: Container(
+                                                                width: 40,
+                                                                height: 40,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                ),
+                                                                child:
+                                                                    ClipRRect(
+                                                                  clipBehavior:
+                                                                      Clip.hardEdge,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              12),
+                                                                  child: (product.imageUrl !=
+                                                                              null &&
+                                                                          product
+                                                                              .imageUrl!
+                                                                              .isNotEmpty)
+                                                                      ? Image
+                                                                          .network(
+                                                                          product
+                                                                              .imageUrl![0],
+                                                                          height:
+                                                                              16,
+                                                                          width:
+                                                                              16,
+                                                                          filterQuality:
+                                                                              FilterQuality.high,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        )
+                                                                      : Image
+                                                                          .asset(
+                                                                          'assets/icons/cart_outline.png',
+                                                                          height:
+                                                                              16,
+                                                                          width:
+                                                                              16,
+                                                                          filterQuality:
+                                                                              FilterQuality.high,
+                                                                        ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 10),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                product.name,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
+                                                                      0xFF424242),
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                                softWrap: true,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 2,
+                                                              ),
+                                                              Text(
+                                                                'Harga : ${product.price}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
+                                                                      0xFF757B7B),
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                                  Container(
+                                                    height: 1,
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10),
+                                                    width: double.infinity,
+                                                    color:
+                                                        const Color(0xFF757B7B),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            ratings[index]
+                                                                        .score >=
+                                                                    1
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            ratings[index]
+                                                                        .score >=
+                                                                    2
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            ratings[index]
+                                                                        .score >=
+                                                                    3
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            ratings[index]
+                                                                        .score >=
+                                                                    4
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            ratings[index]
+                                                                        .score >=
+                                                                    5
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      // rating desc
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              ratings[index]
+                                                                  .description,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Color(
+                                                                    0xFF757B7B),
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ],
+                                  );
+                          }),
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                         ],
                       ),

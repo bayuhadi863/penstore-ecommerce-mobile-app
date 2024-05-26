@@ -6,8 +6,15 @@ import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/repository/user_repository.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 
-class AppBarHome extends StatelessWidget {
+class AppBarHome extends StatefulWidget {
   const AppBarHome({super.key});
+
+  @override
+  State<AppBarHome> createState() => _AppBarHomeState();
+}
+
+class _AppBarHomeState extends State<AppBarHome> {
+  final UserController userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {

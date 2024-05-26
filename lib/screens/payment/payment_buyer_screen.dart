@@ -1057,6 +1057,99 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                           ),
                                         ),
                                       ],
+                                      if (order.isPaymentRejected)
+                                        Container(
+                                          width: double.infinity,
+                                          height: 54,
+                                          margin:
+                                              const EdgeInsets.only(top: 20),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFF46B69)
+                                                .withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: const Color(0xFFF46B69)
+                                                    .withOpacity(0.2),
+                                                blurRadius: 16,
+                                                offset: const Offset(1, 1),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            // crossAxisAlignment:
+                                            //     CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              const Icon(
+                                                Icons.error_outline_rounded,
+                                                color: Color(0xFFF46B69),
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  RichText(
+                                                    text: const TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Pembayaran',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: ' DITOLAK!',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFFF46B69),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: const TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              'Kirim bukti pembayaran lagi!',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       order.status == 'waiting'
                                           ?
                                           // const SizedBox(height: 20),
@@ -1554,6 +1647,81 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                 ),
                               );
                             }),
+
+                            // ORDER NOTE
+                            SizedBox(
+                              height: mediaQueryHeight * 0.02,
+                            ),
+                            Container(
+                              height: 2,
+                              width: mediaQueryWidth * 0.9,
+                              color: const Color(0xFF757B7B),
+                            ),
+                            SizedBox(
+                              height: mediaQueryHeight * 0.02,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              // height: 138,
+                              margin: const EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 10, top: 10),
+                              child: Container(
+                                // height: 100,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFF91E0DD)
+                                          .withOpacity(0.3),
+                                      blurRadius: 16,
+                                      offset: const Offset(1, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  // mainAxisAlignment:
+                                  //     MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                          'assets/icons/note_outline.png',
+                                          width: 24,
+                                          height: 24,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text(
+                                          'Catatan Untuk Penjual',
+                                          style: TextStyle(
+                                            color: Color(0xFF424242),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      order.note != '' ? order.note! : '-',
+                                      style: const TextStyle(
+                                        color: Color(0xFF757B7B),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
                             Obx(() {
                               final ratings = getOrderRatingController.ratings;
 
