@@ -585,7 +585,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                             6),
                                                               ),
                                                               child: IconButton(
-                                                                onPressed: () async {
+                                                                onPressed:
+                                                                    () async {
                                                                   Get.dialog(
                                                                     ConfirmAction(
                                                                       title:
@@ -775,10 +776,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                       IconButton(
                                                                     onPressed:
                                                                         () {
-                                                                          Get.dialog(
-                                                                            const EditPaymentMethod(),
-                                                                          );
-                                                                        },
+                                                                      Get.dialog(
+                                                                        EditPaymentMethod(
+                                                                            paymentMethodId:
+                                                                                paymentMethod.id!),
+                                                                      );
+                                                                    },
                                                                     icon: Image
                                                                         .asset(
                                                                       'assets/icons/edit_icon.png',
@@ -837,7 +840,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                           messageTitle:
                                                                               "Apakah anda yakin ingin menghapus methode pembayaran",
                                                                           message:
-                                                                            "Jika iya, metode pembayaran akan di hapus secara permanen!",
+                                                                              "Jika iya, metode pembayaran akan di hapus secara permanen!",
                                                                           onPressed:
                                                                               () async {
                                                                             await deletePaymentMethodController.deletePaymentMethod(paymentMethod.id!,

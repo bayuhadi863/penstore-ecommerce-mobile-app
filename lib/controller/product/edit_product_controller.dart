@@ -94,8 +94,8 @@ class EditProductController extends GetxController {
         newImgUrls.add(imgUrl);
       }
 
-      Alerts.successSnackBar(
-          title: "Success", message: "Gambar berhasil diupload");
+      // Alerts.successSnackBar(
+      //     title: "Success", message: "Gambar berhasil diupload");
       print("berhasil mengupload gambar");
     } catch (e) {
       Alerts.errorSnackBar(title: 'Gagal', message: "Gagal mengupload gambar");
