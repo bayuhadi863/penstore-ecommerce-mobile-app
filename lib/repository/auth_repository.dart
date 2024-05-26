@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
+import 'package:penstore/repository/user_repository.dart';
 
 class AuthRepository extends GetxController {
   static AuthRepository get instance => Get.find();
 
+  
+  
   // @override
   // void onReady() {
   //   // super.onReady();
@@ -12,11 +16,13 @@ class AuthRepository extends GetxController {
 
   // Function to show relevant screen
   // screenRedirect() async {
-  //   if (FirebaseAuth.instance.currentUser != null) {
-  //     print(FirebaseAuth.instance.currentUser);
-  //     Get.offAllNamed('/');
+  //   final UserController userController = Get.put(UserController());
+
+  //   if (userController.user.value.) {
+  //     Get.offAllNamed('/home');
   //   } else {
   //     Get.offAllNamed('/login');
+
   //   }
   // }
 

@@ -126,6 +126,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final GetSelectedCartsController getSelectedCartsController =
         Get.put(GetSelectedCartsController(widget.cartIds!));
 
+    // final GetUserPaymentMethodController getUserPaymentMethodController =
+    //     Get.put(GetUserPaymentMethodController(widget.sellerId!));
+
     final GetUserPaymentMethodController getUserPaymentMethodController =
         Get.put(GetUserPaymentMethodController(widget.sellerId!));
 
@@ -191,6 +194,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           TextSpan(
                             text: 'Pesanan',
+                            
                             style: TextStyle(
                               color: Color(0xFF424242),
                               fontSize: 18,
@@ -528,10 +532,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               return paymentMethod.name;
                             }
 
-                            return DropdownButton<String>(
+                            final paymentMethodLoading = getUserPaymentMethodController.isLoading.value;
+
+                            //BUTUH LOADING SKELETON
+                            return paymentMethodLoading ? CircularProgressIndicator() : DropdownButton<String>(
                               value: selectedPaymentMethod,
                               hint: const Text(
                                 'Pilih metode pembayaran',
+                                
                                 style: TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
@@ -1057,7 +1065,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                               const SizedBox(width: 10),
                               const Text(
-                                'Catatabn penjual',
+                                'Catatan penjual',
                                 style: TextStyle(
                                   color: Color(0xFF424242),
                                   fontSize: 12,
