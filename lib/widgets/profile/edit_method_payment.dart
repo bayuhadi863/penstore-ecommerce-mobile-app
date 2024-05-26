@@ -119,20 +119,22 @@ class _EditPaymentMethodForm extends State<EditPaymentMethodForm> {
             children: <Widget>[
               RichText(
                 text: const TextSpan(
-                    text: "Tambah Metode",
-                    style: TextStyle(
-                      color: Color(0xFF605B57),
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                    )),
+                  text: "Ubah Metode Pembayaran",
+                  style: TextStyle(
+                    color: Color(0xFF605B57),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                textAlign: TextAlign.center,
               ),
               RichText(
                 maxLines: 2,
                 text: const TextSpan(
                   children: [
                     TextSpan(
-                      text: "Tambahkan metode pembayaran yang bisa",
+                      text: "Ubah  metode pembayaran yang bisa",
                       style: TextStyle(
                         color: Color(0xFF424242),
                         fontSize: 12,
@@ -142,6 +144,7 @@ class _EditPaymentMethodForm extends State<EditPaymentMethodForm> {
                     ),
                   ],
                 ),
+                textAlign: TextAlign.center,
               ),
               RichText(
                 maxLines: 2,
@@ -249,91 +252,88 @@ class _EditPaymentMethodForm extends State<EditPaymentMethodForm> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    if (selectedPaymentMethod != 'COD (Bayar di tempat)' &&
-                        selectedPaymentMethod != null) ...[
-                      SizedBox(
-                        width: mediaQueryWidth * 0.8,
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty || value.trim().isEmpty) {
-                              return 'Nama Pemilik wajib diisi';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 0),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF757B7B),
-                                ),
+                    SizedBox(
+                      width: mediaQueryWidth * 0.8,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty || value.trim().isEmpty) {
+                            return 'Nama Pemilik wajib diisi';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF757B7B),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF757B7B),
-                                ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF757B7B),
                               ),
-                              hintText: 'Nama Pemilik Rekening',
-                              constraints: const BoxConstraints(
-                                minHeight: 40,
-                              )),
-                          style: const TextStyle(
-                            color: Color(0xFF757B7B),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Poppins',
-                          ),
+                            ),
+                            hintText: 'Nama Pemilik Rekening',
+                            constraints: const BoxConstraints(
+                              minHeight: 40,
+                            )),
+                        style: const TextStyle(
+                          color: Color(0xFF757B7B),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: mediaQueryWidth * 0.8,
-                        // height: 70,
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Nomor Rekening wajib diisi';
-                            } else if (double.tryParse(value) == null) {
-                              // Cek apakah value dapat di-parse menjadi angka
-                              return 'Nomor Rekening harus angka';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 0),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF757B7B),
-                                ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: mediaQueryWidth * 0.8,
+                      // height: 70,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Nomor Rekening wajib diisi';
+                          } else if (double.tryParse(value) == null) {
+                            // Cek apakah value dapat di-parse menjadi angka
+                            return 'Nomor Rekening harus angka';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF757B7B),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF757B7B),
-                                ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF757B7B),
                               ),
-                              hintText: 'Nomor Rekening',
-                              constraints: const BoxConstraints(
-                                // maxHeight: 40,
-                                minHeight: 30,
-                              )),
-                          style: const TextStyle(
-                            color: Color(0xFF757B7B),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Poppins',
-                          ),
+                            ),
+                            hintText: 'Nomor Rekening',
+                            constraints: const BoxConstraints(
+                              // maxHeight: 40,
+                              minHeight: 30,
+                            )),
+                        style: const TextStyle(
+                          color: Color(0xFF757B7B),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
                         ),
                       ),
-                    ],
+                    ),
                   ],
                 ),
               ),
@@ -368,7 +368,7 @@ class _EditPaymentMethodForm extends State<EditPaymentMethodForm> {
                   onPressed: () async {},
                   child: const Center(
                     child: Text(
-                      'Tambah',
+                      'Simpan',
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 12,
