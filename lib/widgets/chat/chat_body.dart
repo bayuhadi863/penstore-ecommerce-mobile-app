@@ -4,6 +4,7 @@ import 'package:penstore/controller/chat/room_chat_controller.dart';
 import 'package:penstore/models/chat.dart';
 import 'package:penstore/widgets/chat/chat_card.dart';
 import 'package:penstore/widgets/no_data.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ChatBody extends StatefulWidget {
   const ChatBody({super.key});
@@ -15,12 +16,16 @@ class ChatBody extends StatefulWidget {
 class _ChatBodyState extends State<ChatBody> {
   final ChatRoomController chatRoomController = Get.put(ChatRoomController());
 
-  // final FocusNode _searchFocusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (chatRoomController.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
+        return ListView.builder(
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return _buildSkeletonChatCard();
+          },
+        );
       } else if (chatRoomController.chatRooms.isEmpty) {
         return const Column(
           children: [
@@ -29,31 +34,16 @@ class _ChatBodyState extends State<ChatBody> {
               subTitle: "Anda belum punya riwayat chat",
               suggestion: "Silahkan tambahkan buau obrolan!",
             ),
-            SizedBox(height: 20),
           ],
         );
       } else {
         return Column(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 10.0, left: 20, right: 20),
-            //   child: CustomTextField(
-            //     focusNode: _searchFocusNode,
-            //     hintText: "Cari chat",
-            //     prefixIcon: 'search',
-            //     keyboardType: TextInputType.text,
-            //     controller: TextEditingController(),
-            //   ),
-            // ),
             Expanded(
               child: ListView.builder(
                 itemCount: chatRoomController.chatRooms.length,
                 itemBuilder: (context, index) {
                   final chatRoom = chatRoomController.chatRooms[index];
-
-                  // get user data
-
-                  print('room ${chatRoom.hasUnreadMessages}');
                   return ChatCard(
                     chat: chatsData[index],
                     roomChat: chatRoom,
@@ -68,5 +58,33 @@ class _ChatBodyState extends State<ChatBody> {
         );
       }
     });
+  }
+
+  Widget _buildSkeletonChatCard() {
+    return SkeletonItem(
+      child: ListTile(
+        leading: SkeletonAvatar(
+          style: SkeletonAvatarStyle(
+            width: 50,
+            height: 50,
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        title: SkeletonLine(
+          style: SkeletonLineStyle(
+            height: 16,
+            width: 120,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        subtitle: SkeletonLine(
+          style: SkeletonLineStyle(
+            height: 14,
+            width: 200,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+    );
   }
 }

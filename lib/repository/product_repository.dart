@@ -172,6 +172,32 @@ class ProductRepository extends GetxController {
     }
   }
 
+  // search product by name
+  Future<List<ProductModel>> searchProducts(String query) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('products')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThanOrEqualTo: query + '\uf8ff')
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs
+            .map((doc) => ProductModel.fromSnapshot(doc))
+            .toList();
+      } else {
+        return [];
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
   // update product
   Future<void> updateProduct(ProductModel product) async {
     try {

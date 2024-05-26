@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
 import 'package:penstore/utils/format.dart';
+import 'package:penstore/widgets/confirm_action.dart';
 import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/no_product_sell.dart';
 import 'package:penstore/widgets/profile/edit_product_widget.dart';
@@ -207,7 +208,25 @@ class _SellListProfileState extends State<SellListProfile> {
                                                               6),
                                                     ),
                                                     child: IconButton(
-                                                      onPressed: () {},
+                                                      onPressed: () async {
+                                                        Get.dialog(
+                                                          ConfirmAction(
+                                                            title:
+                                                                "Konfirmasi hapus",
+                                                            messageTitle:
+                                                                "Apakah anda yakin ingin menghapus produk?",
+                                                            message:
+                                                                "Jika iya, produk akan di hapus secara permanen!",
+                                                            onPressed:
+                                                                () async {
+                                                              // ignore: use_build_context_synchronously
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        );
+                                                      },
                                                       icon: Image.asset(
                                                         'assets/icons/delete_icon.png',
                                                         height: 16,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/widgets/home/appbar_home_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:penstore/widgets/home/katalog_widget.dart';
@@ -13,29 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String categoryId = '';
-
+  final ProductController productController = Get.put(ProductController());
   final FocusNode _searchFocusNode = FocusNode();
-  bool isFavorite = false;
 
-  // set ubah category
-  Future<void> _setCategory(String? categoryId) async {
-    if (categoryId != null) {
-      setState(() {
-        this.categoryId = categoryId;
-      });
-      print("category ganti");
-    } else {
-      setState(() {
-        this.categoryId = '';
-      });
-    }
-  }
-
-  @override 
+  @override
   void initState() {
     super.initState();
-    _setCategory;
   }
 
   @override
@@ -63,33 +48,42 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SizedBox(
         height: mediaQueryHeight,
         width: mediaQueryWidth,
-        // color: const Color(0xFF6BCCC9),
         child: Column(
           children: [
             // widget search
             const SearchWidget(),
-            // widget katalog
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: KatalogWidget(
-                onCategorySelected: _setCategory,
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    //widget banner slider
-                    const BannerSlider(),
-                    //widget list product
-                    ListProductWidget(
-                      selectedCategory: categoryId,
+            Obx(() {
+              if (productController.isSearching.value) {
+                return const Expanded(
+                  child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          ListProductWidget(),
+                        ],
+                      )),
+                );
+              } else {
+                return const Expanded(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        // widget katalog
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: KatalogWidget(),
+                        ),
+                        // widget banner slider
+                        BannerSlider(),
+                        // widget list product
+                        ListProductWidget(),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            )
+                  ),
+                );
+              }
+            }),
           ],
         ),
       ),
