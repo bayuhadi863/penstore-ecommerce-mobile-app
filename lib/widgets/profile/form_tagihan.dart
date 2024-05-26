@@ -229,57 +229,6 @@ class _ProductFormState extends State<ProductForm> {
                   ),
                 ),
 
-                // const SizedBox(
-                //   height: 20,
-                // ),
-
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                //   child: SizedBox(
-                //     // width: mediaQueryWidth * 0.8,
-                //     // height: 70,
-                //     child: TextFormField(
-                //       // controller: addPaymentMethodController.number,
-                //       validator: (value) {
-                //         if (value!.isEmpty) {
-                //           return 'Nomor Rekening wajib diisi';
-                //         } else if (double.tryParse(value) == null) {
-                //           // Cek apakah value dapat di-parse menjadi angka
-                //           return 'Nomor Rekening harus angka';
-                //         }
-                //         return null;
-                //       },
-                //       keyboardType: TextInputType.number,
-                //       decoration: InputDecoration(
-                //           contentPadding: const EdgeInsets.symmetric(
-                //               horizontal: 10, vertical: 0),
-                //           border: OutlineInputBorder(
-                //             borderRadius: BorderRadius.circular(12),
-                //             borderSide: const BorderSide(
-                //               color: Color(0xFF757B7B),
-                //             ),
-                //           ),
-                //           focusedBorder: OutlineInputBorder(
-                //             borderRadius: BorderRadius.circular(12),
-                //             borderSide: const BorderSide(
-                //               color: Color(0xFF757B7B),
-                //             ),
-                //           ),
-                //           hintText: 'Nominal Pembayaran',
-                //           constraints: const BoxConstraints(
-                //             // maxHeight: 40,
-                //             minHeight: 30,
-                //           )),
-                //       style: const TextStyle(
-                //         color: Color(0xFF757B7B),
-                //         fontSize: 12,
-                //         fontWeight: FontWeight.w400,
-                //         fontFamily: 'Poppins',
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
                 const SizedBox(
                   height: 20,
                 ),
@@ -362,9 +311,10 @@ class _ProductFormState extends State<ProductForm> {
                   )
                 ],
 
-                if (billPayments.isEmpty ||
-                    billPayments[billPayments.length - 1].status ==
-                        'rejected') ...[
+                if (bill.id != '' &&
+                    (billPayments.isEmpty ||
+                        billPayments[billPayments.length - 1].status ==
+                            'rejected')) ...[
                   Obx(() {
                     final paymentMethods =
                         getAdminPaymentMethodsController.adminPaymentMethods;

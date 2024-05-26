@@ -1057,7 +1057,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                               const SizedBox(width: 10),
                               const Text(
-                                'Catatabn penjual',
+                                'Catatan penjual',
                                 style: TextStyle(
                                   color: Color(0xFF424242),
                                   fontSize: 12,
@@ -1320,8 +1320,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 status: 'unpaid',
                                 note: addOrderController.note.text,
                               );
-
-                          
 
                               await addOrderController.createOrder(
                                   order, context);

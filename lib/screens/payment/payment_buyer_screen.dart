@@ -841,57 +841,60 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Nama Rekening',
-                                            style: TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
+                                      if (paymentMethodData.value.name !=
+                                          'COD (Bayar di tempat)') ...[
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Nama Rekening',
+                                              style: TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            paymentMethodData
-                                                .value.recipientName
-                                                .toUpperCase(),
-                                            style: const TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
+                                            Text(
+                                              paymentMethodData
+                                                  .value.recipientName
+                                                  .toUpperCase(),
+                                              style: const TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'No Rek',
+                                              style: TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                              ),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'No Rek',
-                                            style: TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          ),
-                                          Text(
-                                            paymentMethodData.value.number,
-                                            style: const TextStyle(
-                                              color: Color(0xFF757B7B),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                            Text(
+                                              paymentMethodData.value.number,
+                                              style: const TextStyle(
+                                                color: Color(0xFF757B7B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
                                       const SizedBox(height: 15),
                                       if (order.status == 'unpaid') ...[
                                         if (selectedImage != null) ...[
@@ -1150,7 +1153,8 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                             ],
                                           ),
                                         ),
-                                      order.status == 'waiting'
+                                      order.status == 'waiting' ||
+                                              order.status == 'waiting_cod'
                                           ?
                                           // const SizedBox(height: 20),
                                           Container(
@@ -1195,9 +1199,9 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                             .center,
                                                     children: [
                                                       RichText(
-                                                        text: const TextSpan(
+                                                        text: TextSpan(
                                                           children: [
-                                                            TextSpan(
+                                                            const TextSpan(
                                                               text: 'Menunggu',
                                                               style: TextStyle(
                                                                 color: Color(
@@ -1211,9 +1215,12 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                               ),
                                                             ),
                                                             TextSpan(
-                                                              text:
-                                                                  ' Konfirmasi Pembayaran',
-                                                              style: TextStyle(
+                                                              text: order.status ==
+                                                                      'waiting_cod'
+                                                                  ? 'Konfirmasi Pemesanan'
+                                                                  : ' Konfirmasi Pembayaran',
+                                                              style:
+                                                                  const TextStyle(
                                                                 color: Color(
                                                                     0xFF69A9F4),
                                                                 fontSize: 12,

@@ -379,7 +379,9 @@ class _SaleListProfileState extends State<SaleListProfile> {
                                                           ? const Color(
                                                               0xFFF4CD69)
                                                           : order.status ==
-                                                                  'waiting'
+                                                                      'waiting' ||
+                                                                  order.status ==
+                                                                      'waiting_cod'
                                                               ? const Color(
                                                                   0xFF6BCCC9)
                                                               : const Color(
@@ -393,7 +395,10 @@ class _SaleListProfileState extends State<SaleListProfile> {
                                               TextSpan(
                                                 text: order.status == 'unpaid'
                                                     ? 'Menunggu Pembayaran'
-                                                    : order.status == 'waiting'
+                                                    : order.status ==
+                                                                'waiting' ||
+                                                            order.status ==
+                                                                'waiting_cod'
                                                         ? 'Konfirmasi Pembayaran'
                                                         : order.status ==
                                                                 'on_process'

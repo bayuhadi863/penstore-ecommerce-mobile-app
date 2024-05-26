@@ -326,7 +326,9 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                                 ),
                                               ),
                                             TextSpan(
-                                              text: order.status == 'waiting'
+                                              text: order.status == 'waiting' ||
+                                                      order.status ==
+                                                          'waiting_cod'
                                                   ? 'Menunggu konfirmasi dari penjual'
                                                   : order.status == 'on_process'
                                                       ? 'Pesanan Anda sedang diproses'
@@ -357,7 +359,8 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                       height: 40,
                                       child: TextButton(
                                         onPressed: () {
-                                          if (order.status == 'waiting') {
+                                          if (order.status == 'waiting' ||
+                                              order.status == 'waiting_cod') {
                                             Get.toNamed('/payment-buyer',
                                                 arguments: {
                                                   'orderId': order.id!
@@ -392,7 +395,9 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                           backgroundColor: order.status ==
                                                   'on_process'
                                               ? const Color(0xFFF46B69)
-                                              : order.status == 'waiting'
+                                              : order.status == 'waiting' ||
+                                                      order.status ==
+                                                          'waiting_cod'
                                                   ? const Color(0xFF69F477)
                                                   : order.status == 'received'
                                                       ? const Color(0xFFF4CD69)
@@ -410,7 +415,10 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                           text: TextSpan(
                                             children: [
                                               TextSpan(
-                                                text: order.status == 'waiting'
+                                                text: order.status ==
+                                                            'waiting' ||
+                                                        order.status ==
+                                                            'waiting_cod'
                                                     ? 'Lihat Detail'
                                                     : order.status ==
                                                             'on_process'
