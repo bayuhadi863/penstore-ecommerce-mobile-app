@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
             page: () => FirebaseAuth.instance.currentUser != null
                 ? const MyBottomNavBar()
                 : const LoginScreen()),
+        GetPage(name: '/onboarding', page: () => OnboardingScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/register', page: () => const RegisterScreen()),
         GetPage(

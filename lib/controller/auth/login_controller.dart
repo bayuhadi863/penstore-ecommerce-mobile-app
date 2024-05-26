@@ -50,6 +50,8 @@ class LoginController extends GetxController {
 
         // Go to main route
         Get.offAll(() => const MyBottomNavBar());
+        // Get.offAllNamed("/");
+
 
         // clear
         email.clear();

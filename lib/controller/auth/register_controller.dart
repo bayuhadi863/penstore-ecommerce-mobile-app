@@ -67,6 +67,7 @@ class RegisterController extends GetxController {
 
         // Go to main route
         Get.offAll(() => const MyBottomNavBar());
+        // Get.offAllNamed("/");
       }
     } catch (e) {
       Navigator.of(context).pop();

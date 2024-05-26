@@ -13,9 +13,8 @@ class AppBarHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
-
     final UserController userController = Get.put(UserController());
-
+    
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(
