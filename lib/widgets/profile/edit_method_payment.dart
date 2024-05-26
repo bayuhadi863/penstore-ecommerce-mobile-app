@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class EditPaymentMethod extends StatefulWidget {
-  const EditPaymentMethod({super.key});
+  final String paymentMethodId;
+
+  const EditPaymentMethod({super.key, required this.paymentMethodId});
 
   @override
   State<EditPaymentMethod> createState() => _EditPaymentMethodState();

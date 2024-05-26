@@ -79,4 +79,23 @@ class PaymentMethodRepository extends GetxController {
       throw e.toString();
     }
   }
+
+  // update payment method by paymentMethodId
+  Future<void> updatePaymentMethod(
+      String paymentMethodId, PaymentMethodModel paymentMethod) async {
+    try {
+      await db
+          .collection('paymentMethods')
+          .doc(paymentMethodId)
+          .update(paymentMethod.toJson());
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
