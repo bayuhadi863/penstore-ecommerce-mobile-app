@@ -144,6 +144,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                               height: 13,
                               width: 13,
                               filterQuality: FilterQuality.high,
+                              color: const Color(0xFF6BCCC9),
                             ),
                           ),
                         ),
