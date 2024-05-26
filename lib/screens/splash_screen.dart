@@ -66,10 +66,7 @@ class IconSplash extends StatelessWidget {
           const SizedBox(height: 20),
           GradientText(
             "Penstore",
-            colors: const [
-              Color(0xFF424242),
-              Color(0xFF024358)
-            ],
+            colors: const [Color(0xFF424242), Color(0xFF024358)],
             gradientDirection: GradientDirection.ltr,
             style: const TextStyle(
               fontSize: 25,

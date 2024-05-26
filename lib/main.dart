@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: '/splash',
+      initialRoute: '/',
       getPages: [
         GetPage(name: '/splash', page: () => const SplashScreen()),
         GetPage(

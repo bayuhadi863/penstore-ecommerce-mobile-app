@@ -126,4 +126,22 @@ class OrderRepository extends GetxController {
       throw e.toString();
     }
   }
+
+  // update order isPaymentRejected by orderId
+  Future<void> updateOrderPaymentRejected(
+      String orderId, bool isPaymentRejected) async {
+    try {
+      await db.collection('orders').doc(orderId).update(
+        {'isPaymentRejected': isPaymentRejected},
+      );
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

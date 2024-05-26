@@ -13,6 +13,8 @@ class AddOrderController extends GetxController {
   final isLoading = false.obs;
   final Rx<OrderModel> orderData = OrderModel.empty().obs;
 
+  final note = TextEditingController();
+
   // create order from OrderRepository
   Future<void> createOrder(OrderModel order, BuildContext context) async {
     try {
