@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:penstore/repository/auth_repository.dart';
 import 'package:penstore/repository/user_repository.dart';
+import 'package:penstore/screens/bottom_navigation.dart';
 import 'package:penstore/widgets/alerts.dart';
 
 class RegisterController extends GetxController {
@@ -13,7 +14,7 @@ class RegisterController extends GetxController {
   final email = TextEditingController();
   // final phone = TextEditingController();
   final password = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
 
   // Loading variable
   final isLoading = false.obs;
@@ -21,7 +22,7 @@ class RegisterController extends GetxController {
   // Register function
   void register(BuildContext context) async {
     try {
-      if (formKey.currentState!.validate()) {
+      if (formKeyRegister.currentState!.validate()) {
         showDialog(
           context: context,
           builder: (context) {
@@ -51,6 +52,12 @@ class RegisterController extends GetxController {
           // phone.text.trim(),
         );
 
+        // clear form
+        name.clear();
+        email.clear();
+        // phone.clear();
+        password.clear();
+
         Navigator.of(context).pop();
 
         // Show success snackbar
@@ -59,7 +66,7 @@ class RegisterController extends GetxController {
             message: "Selamat datang di PENSTORE!");
 
         // Go to main route
-        Get.offAllNamed('/');
+        Get.offAll(() => const MyBottomNavBar());
       }
     } catch (e) {
       Navigator.of(context).pop();

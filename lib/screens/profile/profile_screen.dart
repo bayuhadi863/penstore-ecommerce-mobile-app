@@ -64,7 +64,9 @@ class _ProfileScreenState extends State<ProfileScreen>
     return SingleChildScrollView(
       child: Column(
         children: [
-          const ProfileImage(),
+          ProfileImage(
+            imageUrl: userController.user.value.imageUrl,
+          ),
           SizedBox(
             height: mediaQueryHeigth * 0.08,
           ),
@@ -93,22 +95,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                       },
                       style: ElevatedButton.styleFrom(
                         visualDensity: VisualDensity.comfortable,
-                        maximumSize: Size(110, 40),
+                        maximumSize: const Size(110, 40),
                         side: isClick
                             ? BorderSide.none
-                            : BorderSide(
+                            : const BorderSide(
                                 color: Color(0xFF6BCCC9),
                                 width: 1,
                               ),
-                        backgroundColor:
-                            isClick ? Color(0xFF6BCCC9) : Colors.transparent,
+                        backgroundColor: isClick
+                            ? const Color(0xFF6BCCC9)
+                            : Colors.transparent,
                         foregroundColor: Colors.transparent,
                         surfaceTintColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,8 +120,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                             text: TextSpan(
                               text: "Tagihan Anda",
                               style: TextStyle(
-                                color:
-                                    isClick ? Colors.white : Color(0xFF6BCCC9),
+                                color: isClick
+                                    ? Colors.white
+                                    : const Color(0xFF6BCCC9),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Poppins',
@@ -128,7 +132,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                           Icon(
                             Icons.arrow_forward_ios,
                             size: 12,
-                            color: isClick ? Colors.white : Color(0xFF6BCCC9),
+                            color: isClick
+                                ? Colors.white
+                                : const Color(0xFF6BCCC9),
                           ),
                         ],
                       ),
@@ -144,22 +150,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                         style: ElevatedButton.styleFrom(
                           splashFactory: NoSplash.splashFactory,
                           visualDensity: VisualDensity.comfortable,
-                          maximumSize: Size(110, 40),
+                          maximumSize: const Size(110, 40),
                           side: isClick
                               ? BorderSide.none
-                              : BorderSide(
+                              : const BorderSide(
                                   color: Color(0xFF64DF70),
                                   width: 1,
                                 ),
-                          backgroundColor:
-                              isClick ? Color(0xFF64DF70) : Colors.transparent,
+                          backgroundColor: isClick
+                              ? const Color(0xFF64DF70)
+                              : Colors.transparent,
                           foregroundColor: Colors.transparent,
                           surfaceTintColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 style: TextStyle(
                                   color: isClick
                                       ? Colors.white
-                                      : Color(0xFF64DF70),
+                                      : const Color(0xFF64DF70),
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins',
@@ -180,7 +187,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Icon(
                               Icons.arrow_forward_ios,
                               size: 12,
-                              color: isClick ? Colors.white : Color(0xFF64DF70),
+                              color: isClick
+                                  ? Colors.white
+                                  : const Color(0xFF64DF70),
                             ),
                           ],
                         ),
@@ -199,15 +208,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                         },
                         style: ElevatedButton.styleFrom(
                           visualDensity: VisualDensity.comfortable,
-                          maximumSize: Size(110, 40),
+                          maximumSize: const Size(110, 40),
                           side: isClickLogout
                               ? BorderSide.none
-                              : BorderSide(
+                              : const BorderSide(
                                   color: Color(0xFFF46B69),
                                   width: 1,
                                 ),
                           backgroundColor: isClickLogout
-                              ? Color(0xFFF46B69)
+                              ? const Color(0xFFF46B69)
                               : Colors.transparent,
                           foregroundColor: Colors.transparent,
                           surfaceTintColor: Colors.transparent,
@@ -215,7 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -226,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 style: TextStyle(
                                   color: isClickLogout
                                       ? Colors.white
-                                      : Color(0xFFF46B69),
+                                      : const Color(0xFFF46B69),
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins',
@@ -238,7 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               size: 12,
                               color: isClickLogout
                                   ? Colors.white
-                                  : Color(0xFFF46B69),
+                                  : const Color(0xFFF46B69),
                             ),
                           ],
                         ),
@@ -247,14 +256,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "No Telepon",
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color(0xFF757B7B),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -262,7 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ),
                     ),
                     Text(
-                      "no telepon",
+                      userController.user.value.phone ?? "Belum diatur",
                       style: const TextStyle(
                         color: Color(0xFF757B7B),
                         fontSize: 12,
@@ -384,7 +394,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ],
                         ),
                       ),
-                      BuyListProfile(),
+                      const BuyListProfile(),
                       const SizedBox(
                         height: 165,
                       ),
@@ -539,7 +549,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                   .spaceBetween,
                                                           children: [
                                                             RichText(
-                                                              text: TextSpan(
+                                                              text:
+                                                                  const TextSpan(
                                                                 text:
                                                                     "COD (Bayar di tempat)",
                                                                 style:
@@ -971,7 +982,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ],
                         ),
                       ),
-                      SellListProfile(),
+                      const SellListProfile(),
                       SizedBox(
                         height: mediaQueryHeigth * 0.21,
                       ),
@@ -1017,7 +1028,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ],
                         ),
                       ),
-                      SaleListProfile(),
+                      const SaleListProfile(),
                       const SizedBox(
                         height: 165,
                       ),

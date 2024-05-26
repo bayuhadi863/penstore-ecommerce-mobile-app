@@ -1909,8 +1909,8 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                             ),
                             child: TextButton(
                               onPressed: () async {
-                                await finishOrderController.finishOrder(
-                                    orderId, context);
+                                await finishOrderController.finishOrder(orderId,
+                                    context, order.sellerId, order.serviceFee);
 
                                 getSingleOrderController.getOrderById(orderId);
                               },
@@ -1982,7 +1982,6 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                           ),
                         ),
                       )
-                    
                     ]
                   ],
                 );

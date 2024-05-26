@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/chat/chat_controller.dart';
+import 'package:penstore/controller/profile/user_controller.dart';
 
 class AppBarDetailChat extends StatelessWidget {
-  const AppBarDetailChat({super.key});
+  AppBarDetailChat({
+    required this.roomId,
+    required this.recieverName,
+    super.key,
+  });
+  final String roomId;
+  final String recieverName;
 
   @override
   Widget build(BuildContext context) {
+    final ChatController chatController = Get.put(ChatController(roomId));
+
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Padding(
@@ -54,8 +64,8 @@ class AppBarDetailChat extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     RichText(
-                      text: const TextSpan(
-                        text: 'Kristin Watson',
+                      text: TextSpan(
+                        text: recieverName,
                         style: TextStyle(
                           color: Color(0xFF424242),
                           fontSize: 12,
@@ -66,7 +76,7 @@ class AppBarDetailChat extends StatelessWidget {
                     ),
                     RichText(
                       text: const TextSpan(
-                        text: 'Active 3m ago',
+                        text: 'Active lately',
                         style: TextStyle(
                           color: Color(0xFF757B7B),
                           fontSize: 12,

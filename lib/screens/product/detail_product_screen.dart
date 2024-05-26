@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/cart/add_cart_controller.dart';
+import 'package:penstore/controller/chat/room_chat_controller.dart';
 import 'package:penstore/controller/product/product_controller.dart';
 import 'package:penstore/controller/profile/get_single_user_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/rating/get_product_rating_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/utils/format.dart';
+import 'package:penstore/models/roomChat_model.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
 import 'package:penstore/widgets/home/banner_slider_widget.dart';
 import 'package:intl/intl.dart';
@@ -150,11 +152,23 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                             child: ClipRRect(
                               clipBehavior: Clip.hardEdge,
                               borderRadius: BorderRadius.circular(500),
-                              child: Image(
-                                filterQuality: FilterQuality.high,
-                                image: AssetImage(imgList[0]),
-                                fit: BoxFit.cover,
-                              ),
+                              child:
+                                  getSingleUserController.user.value.imageUrl ==
+                                              null ||
+                                          getSingleUserController
+                                                  .user.value.imageUrl ==
+                                              ''
+                                      ? Image(
+                                          filterQuality: FilterQuality.high,
+                                          image: AssetImage(imgList[0]),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          getSingleUserController
+                                              .user.value.imageUrl!,
+                                          fit: BoxFit.cover,
+                                          filterQuality: FilterQuality.high,
+                                        ),
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -734,8 +748,31 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                               ),
                                             ),
                                             InkWell(
-                                              onTap: () {
-                                                Get.toNamed('/detail-chat');
+                                              onTap: () async {
+                                                ChatRoomController
+                                                    chatRoomController =
+                                                    Get.put(
+                                                        ChatRoomController());
+                                                await chatRoomController
+                                                    .createChatRoom(
+                                                        oneProductController
+                                                            .seller.value.id);
+
+                                                RoomChatModel roomChat =
+                                                    await chatRoomController
+                                                        .findChatRoom(
+                                                            oneProductController
+                                                                .seller
+                                                                .value
+                                                                .id);
+
+                                                Get.toNamed('/detail-chat',
+                                                    arguments: {
+                                                      'roomChatId': roomChat.id,
+                                                      'recieverId':
+                                                          oneProductController
+                                                              .seller.value.id,
+                                                    });
                                               },
                                               child: Container(
                                                 width: mediaQueryWidth * 0.164,

@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:penstore/models/chat.dart';
+import 'package:get/get.dart';
+import 'package:penstore/models/roomChat_model.dart';
 
 // import '../../../constants.dart';
 
 class ChatCard extends StatelessWidget {
-  const ChatCard({
+  ChatCard({
     Key? key,
-    required this.chat,
-    required this.press,
+    required this.roomChat,
+    required this.recieverId,
+    required chat,
   }) : super(key: key);
 
-  final Chat chat;
-  final VoidCallback press;
+  final RoomChatModel roomChat;
+  final String recieverId;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: press,
+      onTap: () {
+        Get.toNamed('/detail-chat', arguments: {
+          'roomChatId': roomChat.id,
+          'recieverId': recieverId,
+        });
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -51,9 +58,9 @@ class ChatCard extends StatelessWidget {
                         offset: const Offset(1, 1),
                       ),
                     ]),
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       radius: 30,
-                      backgroundImage: AssetImage(chat.image),
+                      backgroundImage: AssetImage('assets/images/profile.jpeg'),
                     ),
                   ),
                 ],
@@ -71,7 +78,7 @@ class ChatCard extends StatelessWidget {
                         children: [
                           RichText(
                             text: TextSpan(
-                              text: chat.name,
+                              text: roomChat.senderName,
                               style: const TextStyle(
                                 color: Color(0xFF424242),
                                 fontSize: 12,
@@ -84,7 +91,7 @@ class ChatCard extends StatelessWidget {
                           ),
                           RichText(
                             text: TextSpan(
-                              text: chat.lastMessage,
+                              text: roomChat.lastMessage,
                               style: const TextStyle(
                                 color: Color(0xFF757B7B),
                                 fontSize: 12,
@@ -117,36 +124,39 @@ class ChatCard extends StatelessWidget {
                 children: [
                   Opacity(
                     opacity: 0.64,
-                    child: Text(chat.time),
+                    child: Text(''),
                   ),
-                  Container(
-                    width: 26,
-                    height: 26,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF46B69).withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Image.asset(
-                        'assets/icons/delete_icon.png',
-                        height: 16,
-                        width: 16,
-                        filterQuality: FilterQuality.high,
-                      ),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
+                  roomChat.hasUnreadMessages
+                      ? Container(
+                          width: 26,
+                          height: 26,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF46B69).withOpacity(0.3),
                             borderRadius: BorderRadius.circular(6),
                           ),
-                        ),
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.all(0),
-                        ),
-                      ),
-                    ),
-                  ),
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Image.asset(
+                              'assets/icons/info_outline.png',
+                              height: 16,
+                              width: 16,
+                              filterQuality: FilterQuality.high,
+                              color: const Color(0xFFF46B69).withOpacity(1),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all(
+                                const EdgeInsets.all(0),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ],

@@ -5,6 +5,7 @@ class UserModel {
   String name;
   String email;
   String? phone;
+  String? imageUrl;
   DateTime? createdAt;
 
   UserModel({
@@ -12,6 +13,7 @@ class UserModel {
     required this.name,
     required this.email,
     this.phone = '',
+    this.imageUrl = '',
     this.createdAt,
   });
 
@@ -23,6 +25,7 @@ class UserModel {
       'name': name,
       'email': email,
       'phone': phone,
+      'imageUrl': imageUrl,
       'createdAt': createdAt,
     };
   }
@@ -34,7 +37,8 @@ class UserModel {
       id: documentSnapshot.id,
       name: data['name'],
       email: data['email'],
-      phone: data['phone'],
+      phone: data['phone'] ?? '',
+      imageUrl: data['imageUrl'],
       createdAt: data['createdAt']?.toDate(),
     );
   }

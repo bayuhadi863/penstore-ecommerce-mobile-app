@@ -176,9 +176,9 @@ class ConfirmLogoutWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       final logoutController = Get.put(LogoutController());
-                      logoutController.logout();
+                      await logoutController.logout(context);
                     },
                     child: Center(
                       child: RichText(

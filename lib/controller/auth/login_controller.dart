@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:penstore/repository/auth_repository.dart';
+import 'package:penstore/screens/bottom_navigation.dart';
 import 'package:penstore/widgets/alerts.dart';
 
 class LoginController extends GetxController {
@@ -48,7 +49,11 @@ class LoginController extends GetxController {
             title: 'Selamat, anda berhasil login', message: "Selamat menikmati fitur-fitur yang kami sediakan di ", messageOptional: "PENSTORE");
 
         // Go to main route
-        Get.offAllNamed('/');
+        Get.offAll(() => const MyBottomNavBar());
+
+        // clear
+        email.clear();
+        password.clear();
       }
     } catch (e) {
       Navigator.of(context).pop();

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:penstore/models/chatMessages.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/chat/chat_controller.dart';
+import 'package:penstore/models/chat_model.dart';
 
 class TextMessage extends StatelessWidget {
-  const TextMessage({
+  TextMessage({
     super.key,
     required this.message,
+    required this.userId,
   });
-
-  final ChatMessage message;
+  final ChatModel message;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class TextMessage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       margin: const EdgeInsets.only(top: 5),
       decoration: BoxDecoration(
-        color: message.isSender
+        color: message.senderId == userId
             ? const Color(0xFF91E0DD).withOpacity(0.5)
             : const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(12),
@@ -35,7 +38,7 @@ class TextMessage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            message.text,
+            message.message!,
             style: const TextStyle(
               color: Color(0xFF424242),
               fontSize: 12,

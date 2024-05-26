@@ -10,6 +10,7 @@ class OrderModel {
   final int totalPrice;
   final String paymentMethodId;
   final String status;
+  final bool isPaymentRejected;
   final DateTime? createdAt;
 
   OrderModel({
@@ -22,6 +23,7 @@ class OrderModel {
     required this.totalPrice,
     required this.paymentMethodId,
     required this.status,
+    this.isPaymentRejected = false,
     this.createdAt,
   });
 
@@ -35,6 +37,7 @@ class OrderModel {
         totalPrice: 0,
         paymentMethodId: '',
         status: '',
+        isPaymentRejected: false,
         createdAt: null,
       );
 
@@ -48,6 +51,7 @@ class OrderModel {
       'totalPrice': totalPrice,
       'paymentMethodId': paymentMethodId,
       'status': status,
+      'isPaymentRejected': isPaymentRejected,
       'createdAt': createdAt,
     };
   }
@@ -65,6 +69,7 @@ class OrderModel {
       totalPrice: data['totalPrice'],
       paymentMethodId: data['paymentMethodId'],
       status: data['status'],
+      isPaymentRejected: data['isPaymentRejected'],
       createdAt: data['createdAt']?.toDate(),
     );
   }

@@ -78,7 +78,7 @@ class AuthRepository extends GetxController {
   Future<void> signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Get.offAllNamed('/login');
+      Get.offAllNamed('/');
     } on FirebaseAuthException catch (e) {
       throw e.code;
     } on FirebaseException catch (e) {

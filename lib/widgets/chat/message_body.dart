@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:penstore/models/chatMessages.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/chat/chat_controller.dart';
 import 'package:penstore/widgets/chat/message.dart';
 
 class MessageBody extends StatelessWidget {
-  const MessageBody({super.key});
+  MessageBody({super.key, required this.roomId, required this.receiverId});
+  final String roomId;
+  final String receiverId;
 
   @override
   Widget build(BuildContext context) {
+    final ChatController chatController = Get.put(ChatController(roomId));
+    chatController.markMessagesAsSeen(roomId, receiverId);
     final mediaQueryHeight = MediaQuery.of(context).size.height;
 
     return Stack(
@@ -31,24 +36,32 @@ class MessageBody extends StatelessWidget {
           ),
           width: double.infinity,
           height: mediaQueryHeight * 0.9,
-          margin: const EdgeInsets.only( right: 20, left: 20, bottom: 20),
+          margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
           padding: EdgeInsets.only(bottom: mediaQueryHeight * 0.07),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListView.builder(
-                  itemCount: demeChatMessages.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => Message(
-                    message: demeChatMessages[index],
-                  ),
+          child: Obx(() {
+            if (chatController.chats.isEmpty) {
+              return const Center(child: Text('No chat available.'));
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListView.builder(
+                      reverse: true,
+                      itemCount: chatController.chats.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Message(
+                        chat: chatController.chats[index],
+                        userId: chatController.user!.uid,
+                      ),
+                    ),
+                    SizedBox(height: mediaQueryHeight * 0.06),
+                  ],
                 ),
-                SizedBox(height: mediaQueryHeight * 0.06),
-              ],
-            ),
-          ),
+              );
+            }
+          }),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -75,6 +88,7 @@ class MessageBody extends StatelessWidget {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       minLines: 1,
+                      controller: chatController.messageController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -98,7 +112,9 @@ class MessageBody extends StatelessWidget {
                           maxHeight: 100,
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            chatController.sendMessage();
+                          },
                           icon: Image.asset(
                             'assets/icons/send_outline.png',
                             width: 16,

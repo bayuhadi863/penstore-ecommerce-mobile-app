@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/profile/get_single_user_controller.dart';
 import 'package:penstore/widgets/chat/appBar_detail_chat.dart';
 import 'package:penstore/widgets/chat/message_body.dart';
 
@@ -10,6 +12,20 @@ class ChatDetailScreen extends StatefulWidget {
 }
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
+  String? roomId;
+  String? recieverId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final Map<String, dynamic> arguments = Get.arguments;
+    roomId = arguments['roomChatId'];
+    recieverId = arguments['recieverId'];
+
+    // GetSingleUserController(recieverId!);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +36,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const AppBarDetailChat(),
+        title: AppBarDetailChat(
+          roomId: roomId!,
+          recieverName: "Seller",
+        ),
       ),
-      body: MessageBody(),
+      body: MessageBody(
+        roomId: roomId!,
+        receiverId: recieverId!,
+      ),
     );
   }
 }
