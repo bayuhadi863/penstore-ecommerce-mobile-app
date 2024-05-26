@@ -5,7 +5,9 @@ import 'package:penstore/controller/payment_method/delete_payment_method_control
 import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
 import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/profile/user_products_controller.dart';
+import 'package:penstore/widgets/confirm_action.dart';
 import 'package:penstore/widgets/logout_confirm.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/profile/add_method_payment_widget.dart';
 import 'package:penstore/widgets/profile/add_product_widget.dart';
 import 'package:penstore/widgets/profile/buy_list_widget.dart';
@@ -469,9 +471,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                               )
                             : paymentMethods.isEmpty
-                                ? const Center(
-                                    child: Text(
-                                        "Belum ada metode pembayaran. Tambahkan metode pembayaran untuk menjual produk"),
+                                ? const NoData(
+                                    title: "Maaf, ",
+                                    subTitle: "Belum ada metode pembayaran",
+                                    suggestion:
+                                        "Silahkan Tambahkan metode pembayaran untuk menjual produk!",
                                   )
                                 : Column(
                                     children: [
@@ -569,18 +573,31 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                             6),
                                                               ),
                                                               child: IconButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  await deletePaymentMethodController.deletePaymentMethod(
-                                                                      paymentMethod
-                                                                          .id!,
-                                                                      context);
+                                                                onPressed: () async {
+                                                                  Get.dialog(
+                                                                    ConfirmAction(
+                                                                      title:
+                                                                          "Konfirmasi hapus",
+                                                                      messageTitle:
+                                                                          "Apakah anda yakin ingin menghapus methode pembayaran",
+                                                                      message:
+                                                                          "Tambahkan methode pembayaran untuk menjual produk!",
+                                                                      onPressed:
+                                                                          () async {
+                                                                        await deletePaymentMethodController.deletePaymentMethod(
+                                                                            paymentMethod.id!,
+                                                                            context);
 
-                                                                  getUserPaymentMethodController.getPaymentMethodByUserId(
-                                                                      FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser!
-                                                                          .uid);
+                                                                        getUserPaymentMethodController.getPaymentMethodByUserId(FirebaseAuth
+                                                                            .instance
+                                                                            .currentUser!
+                                                                            .uid);
+                                                                        // ignore: use_build_context_synchronously
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                  );
                                                                 },
                                                                 icon:
                                                                     Image.asset(
@@ -797,15 +814,25 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                       IconButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      await deletePaymentMethodController.deletePaymentMethod(
-                                                                          paymentMethod
-                                                                              .id!,
-                                                                          context);
+                                                                      Get.dialog(
+                                                                        ConfirmAction(
+                                                                          title:
+                                                                              "Konfirmasi hapus",
+                                                                          messageTitle:
+                                                                              "Apakah anda yakin ingin menghapus methode pembayaran",
+                                                                          message:
+                                                                              "Tambahkan methode pembayaran untuk menjual produk!",
+                                                                          onPressed:
+                                                                              () async {
+                                                                            await deletePaymentMethodController.deletePaymentMethod(paymentMethod.id!,
+                                                                                context);
 
-                                                                      getUserPaymentMethodController.getPaymentMethodByUserId(FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser!
-                                                                          .uid);
+                                                                            getUserPaymentMethodController.getPaymentMethodByUserId(FirebaseAuth.instance.currentUser!.uid);
+                                                                            // ignore: use_build_context_synchronously
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      );
                                                                     },
                                                                     icon: Image
                                                                         .asset(

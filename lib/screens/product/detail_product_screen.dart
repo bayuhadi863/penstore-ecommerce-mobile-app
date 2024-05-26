@@ -97,18 +97,20 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
         final ratings = getProductRatingController.ratings;
 
         return ratings.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.symmetric(
+            ? Padding(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 10,
                 ),
-                child: Text('Belum ada penilaian.',
-                    style: TextStyle(
-                      fontFamily: 'poppins',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    )),
+                child: Text(
+                  'Belum ada penilaian.',
+                  style: TextStyle(
+                    fontFamily: 'poppins',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey[500],
+                  ),
+                ),
               )
             : Column(
                 children: List.generate(ratings.length, (index) {
@@ -299,7 +301,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                 Icons.arrow_back_ios_new,
                                 size: 20,
                                 color: Color(0xFF6BCCC9),
-                              ),
+                              ), 
                             ),
                           ),
                           SizedBox(
@@ -401,8 +403,8 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(32),
-                              topRight: Radius.circular(32),
+                              topLeft: Radius.circular(24),
+                              topRight: Radius.circular(24),
                             ),
                           ),
                           child: Stack(
