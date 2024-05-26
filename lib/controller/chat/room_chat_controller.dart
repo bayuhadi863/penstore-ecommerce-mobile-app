@@ -6,7 +6,7 @@ import 'package:penstore/models/roomChat_model.dart';
 class ChatRoomController extends GetxController {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   var chatRooms = <RoomChatModel>[].obs;
-
+  var isLoading = false.obs;
   var choosedRoomId = ''.obs;
   var recieverId = ''.obs;
 
@@ -20,10 +20,12 @@ class ChatRoomController extends GetxController {
 
   // fetch chat rooms realtime
   void fetchChatRooms() {
+    isLoading.value = true;
     if (user != null) {
       db
           .collection('chatRooms')
           .where('userId', arrayContains: user!.uid)
+          .orderBy('updatedAt', descending: true)
           .snapshots()
           .listen((snapshot) async {
         var rooms = snapshot.docs
@@ -41,6 +43,7 @@ class ChatRoomController extends GetxController {
 
         chatRooms.value = rooms;
       });
+      isLoading.value = false;
     }
   }
 
@@ -94,11 +97,16 @@ class ChatRoomController extends GetxController {
     var unreadMessagesSnapshot = await db
         .collection('chats')
         .where('roomId', isEqualTo: roomId)
-        .where('receiver', isEqualTo: user!.uid)
         .where('isSeen', isEqualTo: false)
         .get();
 
-    return unreadMessagesSnapshot.docs.isNotEmpty;
+    // Langkah 2: Filter dokumen yang tidak memiliki senderId sama dengan user.uid
+    var unreadMessages = unreadMessagesSnapshot.docs.where((doc) {
+      var data = doc.data();
+      return data['senderId'] != user!.uid;
+    }).toList();
+
+    return unreadMessages.isNotEmpty;
   }
 
   // buat jika belum ada chat room
@@ -123,7 +131,7 @@ class ChatRoomController extends GetxController {
           'userId': users,
           'lastMessage': '',
           'hasUnreadMessages': false,
-          'createdAt': Timestamp.now(),
+          'updateddAt': Timestamp.now(),
         });
         print('Chat room created successfully');
       } else {
@@ -152,5 +160,15 @@ class ChatRoomController extends GetxController {
       print('Error finding chat room: $e');
     }
     return RoomChatModel.empty();
+  }
+
+  Future<void> updatedAt(String roomId) async {
+    try {
+      await db.collection('chatRooms').doc(roomId).update({
+        'updatedAt': Timestamp.now(),
+      });
+    } catch (e) {
+      print('Error updating chat room: $e');
+    }
   }
 }

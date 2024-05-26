@@ -65,7 +65,7 @@ class ChatController extends GetxController {
         'isSeen': false,
       });
       messageController.clear();
-      // chat.value = ChatModel.empty();
+      chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }
@@ -77,7 +77,7 @@ class ChatController extends GetxController {
       var unreadMessagesSnapshot = await db
           .collection('chats')
           .where('roomId', isEqualTo: roomId)
-          .where('receiverId', isEqualTo: receiverId)
+          .where('senderId', isNotEqualTo: user!.uid)
           .where('isSeen', isEqualTo: false)
           .get();
 
@@ -102,7 +102,7 @@ class ChatController extends GetxController {
         'createdAt': Timestamp.now(),
       });
       messageController.clear();
-      // chat.value = ChatModel.empty();
+      chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }

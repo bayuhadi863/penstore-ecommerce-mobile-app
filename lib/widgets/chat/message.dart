@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:penstore/controller/chat/chat_controller.dart';
-import 'package:penstore/models/chatMessages.dart';
 import 'package:penstore/models/chat_model.dart';
 import 'package:penstore/widgets/chat/text_message.dart';
 
@@ -18,7 +15,7 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget messageContaint(ChatModel message, String userId) {
-      if (message.productId == '') {
+      if (message.productId != null) {
         return const SizedBox();
       } else {
         return TextMessage(message: message, userId: userId);
