@@ -15,7 +15,7 @@ class NoData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -55,13 +55,15 @@ class NoData extends StatelessWidget {
             ),
             RichText(
               text: TextSpan(
-                  text: suggestion,
-                  style: TextStyle(
-                    color: Color(0xFF605B57),
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Poppins',
-                  )),
+                text: suggestion,
+                style: TextStyle(
+                  color: Color(0xFF605B57),
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

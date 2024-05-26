@@ -46,7 +46,7 @@ class LoginController extends GetxController {
 
         // Show success snackbar
         Alerts.successSnackBar(
-            title: 'Login berhasil!', message: "Selamat datang kembali!");
+            title: 'Selamat, anda berhasil login', message: "Selamat menikmati fitur-fitur yang kami sediakan di ", messageOptional: "PENSTORE");
 
         // Go to main route
         Get.offAll(() => const MyBottomNavBar());
@@ -59,7 +59,7 @@ class LoginController extends GetxController {
       Navigator.of(context).pop();
       // Show error snackbar
       Alerts.errorSnackBar(
-        title: 'Login gagal!',
+        title: 'Maaf, anda gagal login',
         message: getErrorMessage(
           e.toString(),
         ),

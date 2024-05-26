@@ -234,6 +234,7 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
                             SizedBox(
                               width: double.infinity,
                               child: TextFormField(
+                                cursorColor: const Color(0xFF6BCCC9),
                                 controller: addProductWishlistController
                                     .wishlistNameController,
                                 focusNode: _nameFocusNode,
