@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/widgets/text_form_field.dart';
 
-class SearchWidget extends StatefulWidget {
+class SearchWidget extends StatelessWidget {
   const SearchWidget({super.key});
 
   @override
-  State<SearchWidget> createState() => _SearchWidgetState();
-}
-
-class _SearchWidgetState extends State<SearchWidget> {
-  final FocusNode _searchFocusNode = FocusNode();
-  @override
   Widget build(BuildContext context) {
+    final ProductController productController = Get.find<ProductController>();
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Row(
@@ -21,11 +19,11 @@ class _SearchWidgetState extends State<SearchWidget> {
           SizedBox(
             width: mediaQueryWidth * 0.730,
             child: CustomTextField(
-              focusNode: _searchFocusNode,
+              focusNode: productController.searchFocusNode,
               hintText: "Cari barang apa?",
               prefixIcon: 'search',
               keyboardType: TextInputType.text,
-              controller: TextEditingController(),
+              controller: productController.searchTextController,
             ),
           ),
           Container(
