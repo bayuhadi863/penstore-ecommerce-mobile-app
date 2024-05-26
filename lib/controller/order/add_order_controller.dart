@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:penstore/models/order_model.dart';
+import 'package:penstore/repository/cart_repository.dart';
 import 'package:penstore/repository/order_repository.dart';
+import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
 class AddOrderController extends GetxController {
@@ -32,6 +34,25 @@ class AddOrderController extends GetxController {
         },
         barrierDismissible: false,
       );
+
+      final CartRepository cartRepository = Get.put(CartRepository());
+      final carts = await cartRepository.fetchCartsByIds(order.cartIds);
+
+      // for each carts check is cart.quantity > cart.product.stock
+      for (var cart in carts) {
+        final productRepository =
+            Get.put(ProductRepository(), tag: cart.product.id);
+        final product = await productRepository.getProductById(cart.product.id);
+        if (cart.quantity > product.stock) {
+          isLoading(false);
+          Navigator.of(context).pop();
+          Alerts.errorSnackBar(
+            title: 'Gagal menambahkan pesanan!',
+            message: 'Stok produk ${cart.product.name} tidak mencukupi!',
+          );
+          return;
+        }
+      }
 
       // create order from OrderRepository
       final OrderRepository orderRepository = Get.put(OrderRepository());

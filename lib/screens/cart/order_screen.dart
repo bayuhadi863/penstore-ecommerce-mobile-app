@@ -1321,6 +1321,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 note: addOrderController.note.text,
                               );
 
+                          
+
                               await addOrderController.createOrder(
                                   order, context);
                             },
