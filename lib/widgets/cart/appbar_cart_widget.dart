@@ -60,15 +60,6 @@ class AppBarCartWidget extends StatelessWidget {
                           fontFamily: 'Poppins',
                         ),
                       ),
-                      TextSpan(
-                        text: ' (2)',
-                        style: TextStyle(
-                          color: Color(0xFF6BCCC9),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
                     ],
                   ),
                 ),

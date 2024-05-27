@@ -14,6 +14,8 @@ import 'package:penstore/repository/cart_repository.dart';
 import 'package:penstore/screens/cart/order_screen.dart';
 import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/cart/appBar_cart_widget.dart';
+import 'package:penstore/widgets/confirm_action.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:skeletons/skeletons.dart';
 
 class CartScreen extends StatefulWidget {
@@ -148,8 +150,16 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       )
                     : getCartsController.cartSellerIds.isEmpty
-                        ? const Center(
-                            child: Text("Keranjang Anda masih kosong"),
+                        ? Column(
+                            children: [
+                              SizedBox(height: mediaQueryHeight * 0.2),
+                              const NoData(
+                                title: "Maaf, ",
+                                subTitle: "keranjang anda masih kosong",
+                                suggestion:
+                                    "Silahkan tambahkan produk ke keranjang!",
+                              ),
+                            ],
                           )
                         : Column(
                             mainAxisSize: MainAxisSize.min,
@@ -691,22 +701,33 @@ class _CartScreenState extends State<CartScreen> {
                           decoration: BoxDecoration(
                             color: selectCartController.selectedCart.isEmpty
                                 ? Colors.grey[400]
-                                : Colors.red,
+                                : const Color(0xFFF46B69),
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: TextButton(
                             onPressed: () async {
-                              if (selectCartController.selectedCart.isEmpty) {
-                                return;
-                              }
+                              Get.dialog(ConfirmAction(
+                                  title: "Konfirmasi hapus",
+                                  messageTitle:
+                                      "Apakah anda yakin ingin menghapus produk?",
+                                  message:
+                                      "Jika iya, maka produk akan dihapus dari keranjang",
+                                  onPressed: () async {
+                                    if (selectCartController
+                                        .selectedCart.isEmpty) {
+                                      return;
+                                    }
 
-                              deleteCartController.deleteCart(
-                                  selectCartController.selectedCart.toList(),
-                                  context);
+                                    deleteCartController.deleteCart(
+                                        selectCartController.selectedCart
+                                            .toList(),
+                                        context);
 
-                              selectCartController.clearAll();
+                                    selectCartController.clearAll();
 
-                              getCartsController.fetchCartSellerId();
+                                    getCartsController.fetchCartSellerId();
+                                    Navigator.of(context).pop();
+                                  }));
                             },
                             child: const Text(
                               'Hapus',
