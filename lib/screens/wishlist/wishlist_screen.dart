@@ -167,8 +167,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     }));
               },
               onTap: () {
-                Get.toNamed('/detail-wishlist',
-                    arguments: {'wishlistId': wishlistItem.id});
+                Get.toNamed('/detail-wishlist', arguments: {
+                  'wishlistId': wishlistItem.id,
+                  'wishlistName': wishlistItem.name
+                });
               },
               child: imageUrl.isNotEmpty
                   ? Image.network(

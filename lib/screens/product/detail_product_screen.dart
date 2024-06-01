@@ -36,6 +36,16 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   bool isAddButtonPressed = false;
   bool isRemoveButtonPressed = false;
 
+  // PAGINATION PAGE VIEW
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   //add quantity
   void addQuantity() {
     if (quantity >= oneProductController.product.value.stock) {
@@ -315,7 +325,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                 Icons.arrow_back_ios_new,
                                 size: 20,
                                 color: Color(0xFF6BCCC9),
-                              ), 
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -391,6 +401,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                   oneProductController
                                       .product.value.imageUrl!.isNotEmpty)
                               ? PageView.builder(
+                                  controller: _pageController,
+                                  onPageChanged: (int page) {
+                                    setState(() {
+                                      _currentPage = page;
+                                    });
+                                  },
                                   itemCount: oneProductController
                                       .product.value.imageUrl!.length,
                                   itemBuilder: (context, index) {
@@ -407,6 +423,22 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                   fit: BoxFit.cover,
                                   filterQuality: FilterQuality.high,
                                 ),
+                        ),
+                      ),
+                      Positioned(
+                        top: mediaQueryHeight * 0.780 / 2 - 20,
+                        left: mediaQueryWidth * 0.8,
+                        right: 0,
+                        child: Center(
+                          child: Text(
+                            "${_currentPage + 1}/${oneProductController.product.value.imageUrl!.length}",
+                            style: TextStyle(
+                              color: Color(0xFF6BCCC9),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                         ),
                       ),
                       Align(
