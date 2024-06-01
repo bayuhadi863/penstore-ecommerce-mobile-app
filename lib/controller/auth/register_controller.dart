@@ -67,7 +67,7 @@ class RegisterController extends GetxController {
             message: "Selamat datang di PENSTORE!");
 
         // Go to main route
-        MiddlewareController().screenRedirect();
+        Get.offAllNamed('/');
       }
     } catch (e) {
       Navigator.of(context).pop();

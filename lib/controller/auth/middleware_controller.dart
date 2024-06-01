@@ -12,8 +12,8 @@ class MiddlewareController extends GetxController {
   final authUser = FirebaseAuth.instance.currentUser;
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
     screenRedirect();
   }
 

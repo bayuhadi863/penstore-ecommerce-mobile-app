@@ -52,7 +52,7 @@ class LoginController extends GetxController {
             messageOptional: "PENSTORE");
 
         // Go to main route
-        MiddlewareController().screenRedirect();
+        Get.offAllNamed('/');
 
         // clear
         email.clear();

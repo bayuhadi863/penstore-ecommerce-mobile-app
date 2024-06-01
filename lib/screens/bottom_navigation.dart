@@ -20,7 +20,7 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
   @override
   void initState() {
     super.initState();
-    // Get.put(MiddlewareController());
+    // MiddlewareController().screenRedirect();
     pages = const [
       HomeScreen(),
       WishlistScreen(),
@@ -31,6 +31,9 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    // final MiddlewareController middlewareController =
+    //     Get.put(MiddlewareController());
+
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: Container(

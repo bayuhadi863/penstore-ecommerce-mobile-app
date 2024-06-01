@@ -12,6 +12,7 @@ import 'package:penstore/screens/bottom_navigation.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 import 'package:penstore/screens/cart/order_screen.dart';
 import 'package:penstore/screens/chat/chat_detail_screen.dart';
+import 'package:penstore/screens/middleware.dart';
 import 'package:penstore/screens/payment/payment_buyer_screen.dart';
 import 'package:penstore/screens/payment/payment_seller_screen.dart';
 import 'package:penstore/screens/product/detail_product_screen.dart';
@@ -28,10 +29,10 @@ Future<void> main() async {
   ]);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
-      .then(
-    (FirebaseApp value) => Get.put(MiddlewareController()),
-  )
-  ;
+      //     .then(
+      //   (FirebaseApp value) => Get.put(MiddlewareController()),
+      // )
+      ;
 
   runApp(const MyApp());
 }
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: '/',
+      initialRoute: '/splash',
       getPages: [
         GetPage(name: '/splash', page: () => const SplashScreen()),
         // GetPage(
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
         //     page: () => FirebaseAuth.instance.currentUser != null
         //         ? const MyBottomNavBar()
         //         : const LoginScreen()),
-        GetPage(name: '/', page: () => const MyBottomNavBar()),
+        GetPage(name: '/', page: () => const Middleware()),
+        // GetPage(name: '/user', page: () => const MyBottomNavBar()),
         GetPage(name: '/admin', page: () => const AdminHomeScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/register', page: () => const RegisterScreen()),
