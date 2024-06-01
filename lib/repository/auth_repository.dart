@@ -6,8 +6,6 @@ import 'package:penstore/repository/user_repository.dart';
 class AuthRepository extends GetxController {
   static AuthRepository get instance => Get.find();
 
-  
-  
   // @override
   // void onReady() {
   //   // super.onReady();
@@ -84,7 +82,7 @@ class AuthRepository extends GetxController {
   Future<void> signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Get.offAllNamed('/');
+      Get.offAllNamed('/login');
     } on FirebaseAuthException catch (e) {
       throw e.code;
     } on FirebaseException catch (e) {

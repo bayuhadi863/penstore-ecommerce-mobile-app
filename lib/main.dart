@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:penstore/controller/auth/middleware_controller.dart';
 import 'package:penstore/firebase_options.dart';
+import 'package:penstore/screens/admin/admin_home_screen.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/screens/auth/register_screen.dart';
 import 'package:penstore/screens/bottom_navigation.dart';
@@ -25,7 +27,11 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then(
+    (FirebaseApp value) => Get.put(MiddlewareController()),
+  )
+  ;
 
   runApp(const MyApp());
 }
@@ -39,11 +45,13 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       getPages: [
         GetPage(name: '/splash', page: () => const SplashScreen()),
-        GetPage(
-            name: '/',
-            page: () => FirebaseAuth.instance.currentUser != null
-                ? const MyBottomNavBar()
-                : const LoginScreen()),
+        // GetPage(
+        //     name: '/',
+        //     page: () => FirebaseAuth.instance.currentUser != null
+        //         ? const MyBottomNavBar()
+        //         : const LoginScreen()),
+        GetPage(name: '/', page: () => const MyBottomNavBar()),
+        GetPage(name: '/admin', page: () => const AdminHomeScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/register', page: () => const RegisterScreen()),
         GetPage(

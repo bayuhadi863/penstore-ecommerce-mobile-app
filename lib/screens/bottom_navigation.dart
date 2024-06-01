@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/auth/middleware_controller.dart';
 import 'package:penstore/screens/chat/chat_screen.dart';
 import 'package:penstore/screens/home_screen.dart';
 import 'package:penstore/screens/profile/profile_screen.dart';
@@ -18,6 +20,7 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
   @override
   void initState() {
     super.initState();
+    // Get.put(MiddlewareController());
     pages = const [
       HomeScreen(),
       WishlistScreen(),
@@ -31,7 +34,7 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: Container(
-           height: 80,
+          height: 80,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
