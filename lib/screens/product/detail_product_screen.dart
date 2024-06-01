@@ -512,165 +512,200 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                         ),
                                       ),
                                       SizedBox(height: mediaQueryHeight * 0.02),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                // rate
-                                                const Row(
+                                      SizedBox(
+                                        height: mediaQueryHeight * 0.46,
+                                        child: SingleChildScrollView(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Color(0xFFFFC701),
-                                                      size: 20,
+                                                    // rate
+                                                    const Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.star,
+                                                          color:
+                                                              Color(0xFFFFC701),
+                                                          size: 20,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color:
+                                                              Color(0xFFFFC701),
+                                                          size: 20,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color:
+                                                              Color(0xFFFFC701),
+                                                          size: 20,
+                                                        ),
+                                                        Icon(
+                                                          Icons.star,
+                                                          color:
+                                                              Color(0xFFFFC701),
+                                                          size: 20,
+                                                        ),
+                                                        Icon(
+                                                          Icons
+                                                              .star_border_outlined,
+                                                          color:
+                                                              Color(0xFFFFC701),
+                                                          size: 20,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Color(0xFFFFC701),
-                                                      size: 20,
-                                                    ),
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Color(0xFFFFC701),
-                                                      size: 20,
-                                                    ),
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Color(0xFFFFC701),
-                                                      size: 20,
-                                                    ),
-                                                    Icon(
-                                                      Icons
-                                                          .star_border_outlined,
-                                                      color: Color(0xFFFFC701),
-                                                      size: 20,
+                                                    // stock
+                                                    Container(
+                                                      width: mediaQueryWidth *
+                                                          0.30,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      height: mediaQueryHeight *
+                                                          0.030,
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xFF6BCCC9),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                      child: Text(
+                                                        'Stok: ${oneProductController.product.value.stock}',
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Color(0xFFFFFFFF),
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
-                                                // stock
-                                                Container(
-                                                  width: mediaQueryWidth * 0.30,
-                                                  alignment: Alignment.center,
-                                                  height:
-                                                      mediaQueryHeight * 0.030,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFF6BCCC9),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ),
-                                                  child: Text(
-                                                    'Stock: ${oneProductController.product.value.stock}',
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color(0xFFFFFFFF),
-                                                      fontFamily: 'Poppins',
-                                                    ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Container(
+                                                width: mediaQueryWidth,
+                                                height: mediaQueryHeight * 0.46,
+                                                child: SingleChildScrollView(
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    20.0),
+                                                        child: Text(
+                                                          oneProductController
+                                                              .productCategory
+                                                              .value
+                                                              .category_name,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    20.0),
+                                                        child: Text(
+                                                          "Penjual: ${oneProductController.seller.value.name}",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    20.0),
+                                                        child: Text(
+                                                          oneProductController
+                                                              .product
+                                                              .value
+                                                              .desc,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 20),
+                                                      const Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 20),
+                                                        child: Text(
+                                                          "Penilaian",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            color: Color(
+                                                                0xFF424242),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      generateProductContainers(),
+                                                      const SizedBox(
+                                                          height: 80),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Container(
-                                            width: mediaQueryWidth,
-                                            height: mediaQueryHeight * 0.46,
-                                            child: SingleChildScrollView(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 20.0),
-                                                    child: Text(
-                                                      oneProductController
-                                                          .productCategory
-                                                          .value
-                                                          .category_name,
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF757B7B),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 20.0),
-                                                    child: Text(
-                                                      "Penjual: ${oneProductController.seller.value.name}",
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF757B7B),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 20.0),
-                                                    child: Text(
-                                                      oneProductController
-                                                          .product.value.desc,
-                                                      style: const TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF757B7B),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 20),
-                                                  const Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 20),
-                                                    child: Text(
-                                                      "Penilaian",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF424242),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  generateProductContainers(),
-                                                  const SizedBox(height: 80),
-                                                ],
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),

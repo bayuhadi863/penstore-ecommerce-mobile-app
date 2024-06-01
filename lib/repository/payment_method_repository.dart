@@ -82,12 +82,12 @@ class PaymentMethodRepository extends GetxController {
 
   // update payment method by paymentMethodId
   Future<void> updatePaymentMethod(
-      String paymentMethodId, PaymentMethodModel paymentMethod) async {
+      String paymentMethodId, String recipientName, String number) async {
     try {
-      await db
-          .collection('paymentMethods')
-          .doc(paymentMethodId)
-          .update(paymentMethod.toJson());
+      await db.collection('paymentMethods').doc(paymentMethodId).update({
+        'recipientName': recipientName,
+        'number': number,
+      });
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {

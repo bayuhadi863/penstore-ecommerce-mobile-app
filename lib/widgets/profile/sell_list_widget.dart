@@ -73,11 +73,11 @@ class _SellListProfileState extends State<SellListProfile> {
                             },
                             child: Container(
                               width: double.infinity,
-                              height: 100,
+                              // height: 100,
                               margin: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 10, top: 10),
                               child: Container(
-                                height: 100,
+                                // height: 100,
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
                                 decoration: BoxDecoration(
@@ -159,6 +159,7 @@ class _SellListProfileState extends State<SellListProfile> {
                                               ),
                                             ],
                                           ),
+                                          const SizedBox(height: 10),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,

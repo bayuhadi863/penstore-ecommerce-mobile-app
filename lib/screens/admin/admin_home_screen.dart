@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
+import 'package:penstore/controller/category/delete_category_controller.dart';
+import 'package:penstore/controller/category/get_categories_controller.dart';
 import 'package:penstore/screens/admin/add_kategori.dart';
 import 'package:penstore/screens/admin/edit_kategori.dart';
 import 'package:penstore/widgets/confirm_action.dart';
@@ -33,6 +35,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
     final mediaQueryHeigth = MediaQuery.of(context).size.height;
 
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
+    final GetCategoriesController getCategoriesController =
+        Get.put(GetCategoriesController());
+
+    final DeleteCategoryController deleteCategoryController =
+        Get.put(DeleteCategoryController());
 
     return Scaffold(
       // body: Center(
@@ -261,131 +269,167 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                 ],
                               ),
                             ),
-                            ListView.builder(
-                              itemCount: 5,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 20),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF91E0DD)
-                                            .withOpacity(0.3),
-                                        blurRadius: 16,
-                                        offset: const Offset(1, 1),
-                                      ),
-                                    ],
-                                  ),
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    title: RichText(
-                                      text: const TextSpan(
-                                          text: 'Kategori Produk',
-                                          style: TextStyle(
-                                            color: Color(0xFF424242),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                          )),
-                                    ),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          width: 26,
-                                          height: 26,
-                                          alignment: Alignment.center,
+                            Obx(() {
+                              final categories =
+                                  getCategoriesController.categories;
+                              final loading =
+                                  getCategoriesController.isLoading.value;
+
+                              return loading
+                                  ? CircularProgressIndicator()
+                                  : ListView.builder(
+                                      itemCount: categories.length,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 20, right: 20, bottom: 20),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 10),
                                           decoration: BoxDecoration(
-                                            color: const Color(0xFF91E0DD)
-                                                .withOpacity(0.3),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(6),
+                                                BorderRadius.circular(12),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: const Color(0xFF91E0DD)
+                                                    .withOpacity(0.3),
+                                                blurRadius: 16,
+                                                offset: const Offset(1, 1),
+                                              ),
+                                            ],
                                           ),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              Get.dialog(
-                                                const EditKategoriProduct(),
-                                              );
-                                            },
-                                            icon: Image.asset(
-                                              'assets/icons/edit_icon.png',
-                                              height: 16,
-                                              width: 16,
-                                              filterQuality: FilterQuality.high,
+                                          child: ListTile(
+                                            contentPadding: EdgeInsets.zero,
+                                            title: RichText(
+                                              text: TextSpan(
+                                                  text: categories[index]
+                                                      .category_name,
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF424242),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Poppins',
+                                                  )),
                                             ),
-                                            style: ButtonStyle(
-                                              shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
+                                            trailing: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: 26,
+                                                  height: 26,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF91E0DD)
+                                                            .withOpacity(0.3),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                  ),
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      Get.dialog(
+                                                        EditKategoriProduct(
+                                                          categoryId:
+                                                              categories[index]
+                                                                  .id!,
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: Image.asset(
+                                                      'assets/icons/edit_icon.png',
+                                                      height: 16,
+                                                      width: 16,
+                                                      filterQuality:
+                                                          FilterQuality.high,
+                                                    ),
+                                                    style: ButtonStyle(
+                                                      shape:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(6),
+                                                        ),
+                                                      ),
+                                                      padding:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        const EdgeInsets.all(0),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                const EdgeInsets.all(0),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8.0),
-                                        Container(
-                                          width: 26,
-                                          height: 26,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFF46B69)
-                                                .withOpacity(0.3),
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          child: IconButton(
-                                            onPressed: () async {
-                                              Get.dialog(
-                                                ConfirmAction(
-                                                  title: "Konfirmasi hapus",
-                                                  messageTitle:
-                                                      "Apakah anda yakin ingin menghapus methode pembayaran",
-                                                  message:
-                                                      "Jika iya, metode pembayaran akan di hapus secara permanen!",
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
-                                                  },
+                                                const SizedBox(width: 8.0),
+                                                Container(
+                                                  width: 26,
+                                                  height: 26,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFFF46B69)
+                                                            .withOpacity(0.3),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                  ),
+                                                  child: IconButton(
+                                                    onPressed: () async {
+                                                      Get.dialog(
+                                                        ConfirmAction(
+                                                          title:
+                                                              "Konfirmasi hapus",
+                                                          messageTitle:
+                                                              "Apakah anda yakin ingin menghapus methode pembayaran",
+                                                          message:
+                                                              "Jika iya, metode pembayaran akan di hapus secara permanen!",
+                                                          onPressed: () async {
+                                                            await deleteCategoryController
+                                                                .deleteCategory(
+                                                                    categories[
+                                                                            index]
+                                                                        .id!,
+                                                                    context);
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: Image.asset(
+                                                      'assets/icons/delete_icon.png',
+                                                      height: 16,
+                                                      width: 16,
+                                                      filterQuality:
+                                                          FilterQuality.high,
+                                                    ),
+                                                    style: ButtonStyle(
+                                                      shape:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(6),
+                                                        ),
+                                                      ),
+                                                      padding:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        const EdgeInsets.all(0),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              );
-                                            },
-                                            icon: Image.asset(
-                                              'assets/icons/delete_icon.png',
-                                              height: 16,
-                                              width: 16,
-                                              filterQuality: FilterQuality.high,
-                                            ),
-                                            style: ButtonStyle(
-                                              shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                              ),
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                const EdgeInsets.all(0),
-                                              ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                                        );
+                                      },
+                                    );
+                            }),
                             const SizedBox(
                               height: 100,
                             ),
@@ -460,7 +504,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -566,7 +611,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   side: BorderSide(
-                                                    color: const Color(0xFFF46B69),
+                                                    color:
+                                                        const Color(0xFFF46B69),
                                                     // color: order.status ==
                                                     //         'received'
                                                     //     ? const Color(0xFFF46B69)
@@ -591,7 +637,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                                 text: TextSpan(
                                                   children: [
                                                     TextSpan(
-                                                      text: "Menunggu Pembayaran",
+                                                      text:
+                                                          "Menunggu Pembayaran",
                                                       // text: order.status ==
                                                       //         'unpaid'
                                                       //     ? 'Menunggu Pembayaran'
@@ -609,7 +656,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                                       //                     ? 'Sudah Dinilai'
                                                       //                     : '',
                                                       style: TextStyle(
-                                                        color: const Color(0xFFF46B69),
+                                                        color: const Color(
+                                                            0xFFF46B69),
                                                         // color: order.status ==
                                                         //         'received'
                                                         //     ? const Color(

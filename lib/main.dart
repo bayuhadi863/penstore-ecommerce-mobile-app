@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         //         ? const MyBottomNavBar()
         //         : const LoginScreen()),
         GetPage(name: '/', page: () => const Middleware()),
-        // GetPage(name: '/user', page: () => const MyBottomNavBar()),
+        GetPage(name: '/user', page: () => const MyBottomNavBar()),
         GetPage(name: '/admin', page: () => const AdminHomeScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/register', page: () => const RegisterScreen()),
