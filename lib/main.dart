@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:penstore/controller/auth/middleware_controller.dart';
 import 'package:penstore/firebase_options.dart';
 import 'package:penstore/screens/admin/admin_home_screen.dart';
+import 'package:penstore/screens/admin/payment_admin.dart';
 import 'package:penstore/screens/auth/login_screen.dart';
 import 'package:penstore/screens/auth/register_screen.dart';
 import 'package:penstore/screens/bottom_navigation.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/detail-wishlist', page: () => const WishlistDetailScreen()),
         GetPage(name: '/onboarding', page: () => const OnboardingScreen()),
+         GetPage(name: '/payment-admin', page: () => const PaymentAdmin()),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
