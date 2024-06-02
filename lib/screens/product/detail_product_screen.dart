@@ -839,6 +839,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                       'recieverId':
                                                           oneProductController
                                                               .seller.value.id,
+                                                      'productId': productId!,
                                                     });
                                               },
                                               child: Container(

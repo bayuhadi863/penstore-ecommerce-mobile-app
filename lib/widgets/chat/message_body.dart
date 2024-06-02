@@ -5,9 +5,14 @@ import 'package:penstore/controller/chat/room_chat_controller.dart';
 import 'package:penstore/widgets/chat/message.dart';
 
 class MessageBody extends StatelessWidget {
-  MessageBody({super.key, required this.roomId, required this.receiverId});
+  MessageBody(
+      {super.key,
+      required this.roomId,
+      required this.receiverId,
+      required this.productId});
   final String roomId;
   final String receiverId;
+  String productId;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +20,13 @@ class MessageBody extends StatelessWidget {
     final ChatController chatController = Get.put(ChatController(roomId));
     chatController.markMessagesAsSeen(roomId, receiverId);
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+
+    // jika membawa produk
+    if (productId.isNotEmpty) {
+      chatController.writeProductMessage(
+        productId,
+      );
+    }
 
     return Stack(
       children: [
@@ -65,6 +77,12 @@ class MessageBody extends StatelessWidget {
             }
           }),
         ),
+        if (productId.isNotEmpty) ...[
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Text("Link Produk Tersematkan"),
+          )
+        ],
         Align(
           alignment: Alignment.bottomCenter,
           child: SafeArea(
@@ -115,8 +133,18 @@ class MessageBody extends StatelessWidget {
                         ),
                         suffixIcon: IconButton(
                           onPressed: () {
-                            chatController.sendMessage();
-                            chatRoomController.updatedAt(roomId);
+                            if (chatController.chat.value.productId != '') {
+                              // langsung kirim Link product saat kirim pesan
+                              chatController.chat.value.productId = productId;
+                              chatController.sendProductMessage();
+                              chatController.sendMessage();
+                              productId = '';
+                              chatRoomController.updatedAt(roomId);
+                            } else {
+                              // tanpa link product
+                              chatController.sendMessage();
+                              chatRoomController.updatedAt(roomId);
+                            }
                           },
                           icon: Image.asset(
                             'assets/icons/send_outline.png',

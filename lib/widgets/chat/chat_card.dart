@@ -12,7 +12,8 @@ class ChatCard extends StatelessWidget {
     super.key,
     required this.roomChat,
     required this.isSeen,
-    required this.recieverId, required chat,
+    required this.recieverId,
+    required chat,
   });
 
   final RoomChatModel roomChat;
@@ -26,6 +27,7 @@ class ChatCard extends StatelessWidget {
         Get.toNamed('/detail-chat', arguments: {
           'roomChatId': roomChat.id,
           'recieverId': recieverId,
+          'productId': '',
         });
       },
       child: Padding(
@@ -110,7 +112,7 @@ class ChatCard extends StatelessWidget {
                       ),
                       RichText(
                         text: TextSpan(
-                            text: DateFormat('MMMM d, yyyy Hhh:mm a')
+                            text: DateFormat('MMMM d, yyyy hh:mm a')
                                 .format(roomChat.updatedAt!),
                             style: const TextStyle(
                               color: Color(0xFF6BCCC9),
