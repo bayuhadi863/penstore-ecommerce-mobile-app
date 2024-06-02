@@ -71,6 +71,16 @@ class CategoryRepository extends GetxController {
   // delete category
   Future<void> deleteCategory(String id) async {
     try {
+      // get products by categoryId
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('products')
+          .where('categoryId', isEqualTo: id)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        throw 'Kategori ini masih digunakan dalam produk.';
+      }
+
       await db.collection('categories').doc(id).delete();
     } on FirebaseException catch (e) {
       throw e.code;

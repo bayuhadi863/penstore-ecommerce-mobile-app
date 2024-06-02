@@ -25,7 +25,7 @@ class UserController extends GetxController {
       final UserRepository userRepository = Get.put(UserRepository());
       final UserModel userModel = await userRepository.fetchUser(uid);
       user.value = userModel;
-      
+
       isLoading(false);
     } catch (e) {
       isLoading(false);

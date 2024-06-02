@@ -257,33 +257,36 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "No Telepon",
-                      style: TextStyle(
-                        color: Color(0xFF757B7B),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins',
+              Obx(() {
+                final user = userController.user.value;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "No Telepon",
+                        style: TextStyle(
+                          color: Color(0xFF757B7B),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                        ),
                       ),
-                    ),
-                    Text(
-                      userController.user.value.phone ?? "Belum diatur",
-                      style: const TextStyle(
-                        color: Color(0xFF757B7B),
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'Poppins',
+                      Text(
+                        user.phone ?? "Belum diatur",
+                        style: const TextStyle(
+                          color: Color(0xFF757B7B),
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Poppins',
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                    ],
+                  ),
+                );
+              }),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),

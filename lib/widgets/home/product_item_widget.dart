@@ -6,6 +6,7 @@ import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
+import 'package:penstore/utils/format.dart';
 
 class ProductItemWidget extends StatefulWidget {
   final ProductModel product;
@@ -191,7 +192,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Rp ${widget.product.price} -',
+                              Format.formatRupiah(widget.product.price),
                               style: const TextStyle(
                                 color: Color(0xFF91E0DD),
                                 fontSize: 12,

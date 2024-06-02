@@ -352,7 +352,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                           },
                           child: const Center(
                             child: Text(
-                              'Tambah Produk',
+                              'Edit Profile',
                               style: TextStyle(
                                 color: Color(0xFFFFFFFF),
                                 fontSize: 12,
