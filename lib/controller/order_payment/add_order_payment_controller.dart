@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:penstore/models/order_payment_model.dart';
 import 'package:penstore/repository/order_payment_repository.dart';
+import 'package:penstore/repository/order_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
 class AddOrderPaymentController extends GetxController {
@@ -49,6 +50,10 @@ class AddOrderPaymentController extends GetxController {
       final OrderPaymentRepository orderPaymentRepository =
           Get.put(OrderPaymentRepository());
       await orderPaymentRepository.addOrderPayment(orderPayment);
+
+      final OrderRepository orderRepository = Get.put(OrderRepository());
+      await orderRepository.updateOrderPaymentRejected(orderId, false);
+
       isLoading(false);
       Alerts.successSnackBar(
           title: "Success", message: "Berhasil mengirim bukti pembayaran");
