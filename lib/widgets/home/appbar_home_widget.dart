@@ -6,16 +6,22 @@ import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/repository/user_repository.dart';
 import 'package:penstore/screens/cart/cart_screen.dart';
 
-class AppBarHome extends StatelessWidget {
+class AppBarHome extends StatefulWidget {
   const AppBarHome({super.key});
+
+  @override
+  State<AppBarHome> createState() => _AppBarHomeState();
+}
+
+class _AppBarHomeState extends State<AppBarHome> {
+  final UserController userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     final mediaQueryHeight = MediaQuery.of(context).size.height;
-
     final UserController userController = Get.put(UserController());
-
+    
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(

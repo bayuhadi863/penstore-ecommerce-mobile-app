@@ -14,6 +14,7 @@ class ChatDetailScreen extends StatefulWidget {
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   String? roomId;
   String? recieverId;
+  String? productId;
 
   @override
   void initState() {
@@ -22,6 +23,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     final Map<String, dynamic> arguments = Get.arguments;
     roomId = arguments['roomChatId'];
     recieverId = arguments['recieverId'];
+    productId = arguments['productId'];
 
     // GetSingleUserController(recieverId!);
   }
@@ -44,6 +46,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       body: MessageBody(
         roomId: roomId!,
         receiverId: recieverId!,
+        productId: productId!,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:penstore/models/chat_model.dart';
+import 'package:penstore/widgets/chat/product_message.dart';
 import 'package:penstore/widgets/chat/text_message.dart';
 
 class Message extends StatelessWidget {
@@ -8,17 +9,18 @@ class Message extends StatelessWidget {
     required this.chat,
     required this.userId,
   });
-  // final ChatController chatController = Get.put(ChatController());
   final ChatModel chat;
   final String userId;
 
   @override
   Widget build(BuildContext context) {
     Widget messageContaint(ChatModel message, String userId) {
-      if (message.productId != null) {
-        return const SizedBox();
-      } else {
+      if (message.productId != "" && message.productId != null) {
+        return ProductMessage(message: message, userId: userId);
+      } else if (message.productId != null && message.productId == '') {
         return TextMessage(message: message, userId: userId);
+      } else {
+        return Text('pesan tidak dapat dmuat ${message.productId}');
       }
     }
 

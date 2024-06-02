@@ -5,6 +5,7 @@ import 'package:penstore/models/roomChat_model.dart';
 
 class ChatRoomController extends GetxController {
   final FirebaseFirestore db = FirebaseFirestore.instance;
+
   var chatRooms = <RoomChatModel>[].obs;
   var isLoading = false.obs;
   var choosedRoomId = ''.obs;

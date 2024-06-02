@@ -1153,7 +1153,8 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                             ],
                                           ),
                                         ),
-                                      order.status == 'waiting'
+                                      order.status == 'waiting' ||
+                                              order.status == 'waiting_cod'
                                           ?
                                           // const SizedBox(height: 20),
                                           Container(
@@ -1198,9 +1199,9 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                             .center,
                                                     children: [
                                                       RichText(
-                                                        text: const TextSpan(
+                                                        text: TextSpan(
                                                           children: [
-                                                            TextSpan(
+                                                            const TextSpan(
                                                               text: 'Menunggu',
                                                               style: TextStyle(
                                                                 color: Color(
@@ -1214,9 +1215,12 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                                                               ),
                                                             ),
                                                             TextSpan(
-                                                              text:
-                                                                  ' Konfirmasi Pembayaran',
-                                                              style: TextStyle(
+                                                              text: order.status ==
+                                                                      'waiting_cod'
+                                                                  ? 'Konfirmasi Pemesanan'
+                                                                  : ' Konfirmasi Pembayaran',
+                                                              style:
+                                                                  const TextStyle(
                                                                 color: Color(
                                                                     0xFF69A9F4),
                                                                 fontSize: 12,

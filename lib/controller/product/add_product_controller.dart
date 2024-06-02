@@ -77,12 +77,19 @@ class AddProductController extends GetxController {
             choosedCategory!,
             user!.uid);
 
+        productNameController.clear();
+        priceController.clear();
+        stockController.clear();
+        descController.clear();
+        choosedCategory = null;
+        imgUrls.clear();
+
         // Show success snackbar
         Alerts.successSnackBar(
             title: 'Berhasil menambah data',
             message: "Selamat, Anda telah Berhasil menambah data produk");
 
-        // Navigator.of(context).pop();
+        Navigator.of(context).pop();
       }
     } catch (e) {
       Navigator.of(context).pop();

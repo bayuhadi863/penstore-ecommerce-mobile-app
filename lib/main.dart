@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/detail-wishlist', page: () => const WishlistDetailScreen()),
         GetPage(name: '/onboarding', page: () => const OnboardingScreen()),
-         GetPage(name: '/payment-admin', page: () => const PaymentAdmin()),
+        GetPage(name: '/payment-admin', page: () => const PaymentAdmin()),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

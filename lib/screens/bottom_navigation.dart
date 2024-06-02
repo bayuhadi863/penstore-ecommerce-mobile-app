@@ -31,9 +31,6 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    // final MiddlewareController middlewareController =
-    //     Get.put(MiddlewareController());
-
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: Container(

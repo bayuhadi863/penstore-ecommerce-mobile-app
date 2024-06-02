@@ -177,8 +177,8 @@ class _ProductFormState extends State<ProductForm> {
   final FocusNode _descriptionFocusNode = FocusNode();
 
   // variabel list gambar
-  final List<File> selectedImages = [];
-  final List<Uint8List> images = [];
+  List<File> selectedImages = [];
+  List<Uint8List> images = [];
 
   Future<void> _getCategories() async {
     setState(() {
@@ -618,8 +618,6 @@ class _ProductFormState extends State<ProductForm> {
                           ),
                         ),
                         onPressed: () async {
-                          
-
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -635,6 +633,12 @@ class _ProductFormState extends State<ProductForm> {
                           await addProductController
                               .getImageUrls(selectedImages);
                           await addProductController.addProduct(context);
+
+                          // set ke 0
+                          setState(() {
+                            selectedImages = [];
+                            images = [];
+                          });
 
                           userProductsController.getUserProducts();
 
