@@ -35,7 +35,7 @@ class _ChatBodyState extends State<ChatBody> {
             const NoData(
               title: "Maaf, ",
               subTitle: "Anda belum punya riwayat chat",
-              suggestion: "Silahkan tambahkan buau obrolan!",
+              suggestion: "Silahkan tambahkan obrolan baru!",
             ),
           ],
         );

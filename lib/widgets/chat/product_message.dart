@@ -40,41 +40,46 @@ class ProductMessage extends StatelessWidget {
           // Gambar produk
           Row(
             children: [
-              Image.network(
-                message.productImg!,
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  message.productImg!,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                ),
               ),
               const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      message.productName!.length > 14
-                          ? '${message.productName!.substring(0, 14)}...'
-                          : message.productName!,
+              Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    child: Text(
+                      message.productName!,
                       style: const TextStyle(
                         color: Color(0xFF424242),
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 5),
-                    // Harga produk
-                    Text(
-                      'Rp ${message.productPrice!} -',
-                      style: const TextStyle(
-                        color: Color(0xFF424242),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                      ),
+                  ),
+                  const SizedBox(height: 5),
+                  // Harga produk
+                  Text(
+                    'Rp${message.productPrice!}',
+                    style: const TextStyle(
+                      color: Color(0xFF424242),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
