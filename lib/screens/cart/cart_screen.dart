@@ -359,7 +359,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     left: 20,
                                                     right: 20,
                                                     bottom: 10),
-                                                height: 100,
+                                                // height: 100,
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 10,
@@ -429,7 +429,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           },
                                                           child: Container(
                                                             width: 80,
-                                                            height: 90,
+                                                            height: 80,
                                                             decoration:
                                                                 BoxDecoration(
                                                               borderRadius:
@@ -492,18 +492,31 @@ class _CartScreenState extends State<CartScreen> {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        Text(
-                                                          cart.product.name,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Color(
-                                                                0xFF424242),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontFamily:
-                                                                'Poppins',
+                                                        SizedBox(
+                                                          width:
+                                                              mediaQueryWidth *
+                                                                  0.42,
+                                                          child: Text(
+                                                            cart.product.name,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Color(
+                                                                  0xFF424242),
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                            ),
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                           ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
                                                         ),
                                                         Text(
                                                           Format.formatRupiah(
@@ -519,6 +532,9 @@ class _CartScreenState extends State<CartScreen> {
                                                             fontFamily:
                                                                 'Poppins',
                                                           ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
                                                         ),
                                                         Container(
                                                           width:

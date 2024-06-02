@@ -26,11 +26,14 @@ class _KatalogWidgetState extends State<KatalogWidget> {
     final CategoryRepository categoryRepository = CategoryRepository();
     final List<CategoryModel> _categories =
         await categoryRepository.getCategories();
-    setState(() {
-      categories =
-          [CategoryModel(id: '0', category_name: 'Semua')] + _categories;
-      isLoading = false;
-    });
+
+    if (mounted) {
+      setState(() {
+        categories =
+            [CategoryModel(id: '0', category_name: 'Semua')] + _categories;
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -54,7 +57,7 @@ class _KatalogWidgetState extends State<KatalogWidget> {
                     child: SkeletonLine(
                       style: SkeletonLineStyle(
                         height: 32,
-                        width: 100,
+                        width: 90,
                         borderRadius: BorderRadius.circular(50),
                       ),
                     ),

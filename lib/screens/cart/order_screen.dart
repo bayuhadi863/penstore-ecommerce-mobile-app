@@ -131,7 +131,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     //     Get.put(GetUserPaymentMethodController(widget.sellerId!));
 
     final GetUserPaymentMethodController getUserPaymentMethodController =
-        Get.put(GetUserPaymentMethodController(widget.sellerId!));
+        Get.put(GetUserPaymentMethodController(widget.sellerId!),
+            tag: widget.sellerId);
 
     final AddOrderController addOrderController = Get.put(AddOrderController());
 
@@ -541,7 +542,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 baseColor: Colors.grey[300]!,
                                 highlightColor: Colors.grey[100]!,
                                 child: Container(
-                                  height: 40.0, 
+                                  height: 40.0,
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(12),

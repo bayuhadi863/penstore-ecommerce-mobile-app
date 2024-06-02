@@ -157,7 +157,7 @@ class _BuyListProfileState extends State<BuyListProfile> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
-                                  height: mediaQueryHeight * 0.1,
+                                  // height: mediaQueryHeight * 0.1,
                                   child: Obx(() {
                                     final cart = getSingleCartController.cart;
                                     return Row(
@@ -215,13 +215,18 @@ class _BuyListProfileState extends State<BuyListProfile> {
                                               MainAxisAlignment.start,
                                           children: [
                                             const SizedBox(height: 5),
-                                            Text(
-                                              cart.value.product.name,
-                                              style: const TextStyle(
-                                                color: Color(0xFF424242),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Poppins',
+                                            SizedBox(
+                                              width: mediaQueryWidth * 0.55,
+                                              child: Text(
+                                                cart.value.product.name,
+                                                style: const TextStyle(
+                                                  color: Color(0xFF424242),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: 'Poppins',
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
                                             const SizedBox(height: 5),

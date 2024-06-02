@@ -24,6 +24,8 @@ class GetUserPaymentMethodController extends GetxController {
       final paymentMethodRepository = Get.put(PaymentMethodRepository());
       final paymentMethods =
           await paymentMethodRepository.fetchPaymentMethodsByUserId(userId);
+
+      print(paymentMethods.length);
       this.paymentMethods.value = paymentMethods;
 
       isLoading(false);

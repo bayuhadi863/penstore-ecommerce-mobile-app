@@ -124,4 +124,66 @@ class BillPaymentRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  // fetch all bill payments
+  Future<List<BillPaymentModel>> fetchAllBillPayments() async {
+    try {
+      QuerySnapshot querySnapshot = await db.collection('bill_payments').get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      return querySnapshot.docs
+          .map((e) => BillPaymentModel.fromSnapshot(e))
+          .toList();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // fetch bill payment by id
+  Future<BillPaymentModel> fetchBillPaymentById(String id) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await db.collection('bill_payments').doc(id).get();
+
+      if (!documentSnapshot.exists) {
+        return BillPaymentModel.empty();
+      }
+
+      return BillPaymentModel.fromSnapshot(documentSnapshot);
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // update bill payment status by id
+  Future<void> updateBillPaymentStatus(String id, String status) async {
+    try {
+      await db.collection('bill_payments').doc(id).update({'status': status});
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  
 }

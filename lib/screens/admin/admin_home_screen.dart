@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/auth/logout_controller.dart';
+import 'package:penstore/controller/bill_payment/get_bill_payments_controller.dart';
 import 'package:penstore/controller/category/delete_category_controller.dart';
 import 'package:penstore/controller/category/get_categories_controller.dart';
+import 'package:penstore/controller/profile/get_single_user_controller.dart';
 import 'package:penstore/screens/admin/add_kategori.dart';
 import 'package:penstore/screens/admin/edit_kategori.dart';
+import 'package:penstore/utils/format.dart';
 import 'package:penstore/widgets/confirm_action.dart';
 import 'package:penstore/widgets/logout_confirm.dart';
 
@@ -41,6 +44,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
 
     final DeleteCategoryController deleteCategoryController =
         Get.put(DeleteCategoryController());
+
+    final GetBillPaymentsController getBillPaymentsController =
+        Get.put(GetBillPaymentsController());
 
     return Scaffold(
       // body: Center(
@@ -479,221 +485,291 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                 ],
                               ),
                             ),
-                            Column(
-                                children: List.generate(4, (index) {
-                              return InkWell(
-                                onTap: () {
-                                  Get.toNamed('/payment-admin');
-                                },
-                                child: Container(
-                                  width: mediaQueryWidth * 0.9,
-                                  margin: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 10, top: 10),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF91E0DD)
-                                            .withOpacity(0.3),
-                                        blurRadius: 16,
-                                        offset: const Offset(1, 1),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'Senjani Thania',
-                                          style: const TextStyle(
-                                            color: Color(0xFF424242),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              text: 'Jumlah transaksi: 10',
-                                              style: const TextStyle(
-                                                color: Color(0xFF757B7B),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Poppins',
+                            Obx(() {
+                              final billPayments =
+                                  getBillPaymentsController.billPayments;
+
+                              // sort by status
+                              billPayments
+                                  .sort((a, b) => a.status.compareTo(b.status));
+
+                              final billLoading =
+                                  getBillPaymentsController.isLoading.value;
+
+                              return billLoading
+                                  ? const CircularProgressIndicator()
+                                  : Column(
+                                      children: List.generate(
+                                        billPayments.length,
+                                        (index) {
+                                          final billPayment =
+                                              billPayments[index];
+
+                                          final GetSingleUserController
+                                              getSingleUserController = Get.put(
+                                                  GetSingleUserController(
+                                                      billPayment.userId),
+                                                  tag: billPayment.userId
+                                                      .toString());
+
+                                          return InkWell(
+                                            onTap: () {
+                                              Get.toNamed('/payment-admin',
+                                                  arguments: {
+                                                    'billPaymentId':
+                                                        billPayment.id,
+                                                  });
+                                            },
+                                            child: Container(
+                                              width: mediaQueryWidth * 0.9,
+                                              margin: const EdgeInsets.only(
+                                                  left: 20,
+                                                  right: 20,
+                                                  bottom: 10,
+                                                  top: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color:
+                                                        const Color(0xFF91E0DD)
+                                                            .withOpacity(0.3),
+                                                    blurRadius: 16,
+                                                    offset: const Offset(1, 1),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Total Tagihan: ',
-                                                  style: const TextStyle(
-                                                    color: Color(0xFF757B7B),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'Poppins',
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: 'Rp. 30.000',
-                                                  style: const TextStyle(
-                                                    color: Color(0xFF6BCCC9),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'Poppins',
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Container(
-                                        height: 1,
-                                        width: mediaQueryWidth * 0.9,
-                                        color: const Color(0xFF757B7B),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: mediaQueryWidth * 0.3,
-                                            child: RichText(
-                                              text: const TextSpan(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  TextSpan(
-                                                    text: 'Status tagihan',
-                                                    style: TextStyle(
-                                                      color: Color(0xFF757B7B),
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontFamily: 'Poppins',
-                                                    ),
+                                                  Obx(() {
+                                                    final user =
+                                                        getSingleUserController
+                                                            .user.value;
+
+                                                    return RichText(
+                                                      text: TextSpan(
+                                                        text: user.name,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF424242),
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          text:
+                                                              'Jumlah transaksi: ${billPayment.total ~/ 1000}',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Color(
+                                                                0xFF757B7B),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: [
+                                                            const TextSpan(
+                                                              text:
+                                                                  'Total Tagihan: ',
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF757B7B),
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                              ),
+                                                            ),
+                                                            TextSpan(
+                                                              text: Format
+                                                                  .formatRupiah(
+                                                                      billPayment
+                                                                          .total),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Color(
+                                                                    0xFF6BCCC9),
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 5),
+                                                  Container(
+                                                    height: 1,
+                                                    width:
+                                                        mediaQueryWidth * 0.9,
+                                                    color:
+                                                        const Color(0xFF757B7B),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQueryWidth *
+                                                            0.3,
+                                                        child: RichText(
+                                                          text: const TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    'Status tagihan',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
+                                                                      0xFF757B7B),
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        // width: mediaQueryWidth * 0.5,
+                                                        // height: 40,
+                                                        child: TextButton(
+                                                          onPressed: () {
+                                                            Get.toNamed(
+                                                                    '/payment-admin',
+                                                                    arguments: {
+                                                                  'billPaymentId':
+                                                                      billPayment
+                                                                          .id,
+                                                                })!
+                                                                .then((value) =>
+                                                                    GetBillPaymentsController
+                                                                        .instance
+                                                                        .getAllBillPayments());
+                                                          },
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              side: BorderSide(
+                                                                color: billPayment
+                                                                            .status ==
+                                                                        'waiting'
+                                                                    ? const Color(
+                                                                        0xFF69A9F4)
+                                                                    : billPayment.status ==
+                                                                            'rejected'
+                                                                        ? const Color(
+                                                                            0xFFF46B69)
+                                                                        : const Color(
+                                                                            0xFF6BCCC9),
+                                                                // color: order.status ==
+                                                                //         'received'
+                                                                //     ? const Color(0xFFF46B69)
+                                                                //     : order.status ==
+                                                                //             'on_process'
+                                                                //         ? const Color(
+                                                                //             0xFF69F477)
+                                                                //         : order.status ==
+                                                                //                 'rated'
+                                                                //             ? const Color(
+                                                                //                 0xFFF4CD69)
+                                                                //             : order.status ==
+                                                                //                     'waiting'
+                                                                //                 ? const Color(
+                                                                //                     0xFF6BCCC9)
+                                                                //                 : const Color(
+                                                                //                     0xFF69A9F4),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                  text: billPayment
+                                                                              .status ==
+                                                                          'waiting'
+                                                                      ? "Konfirmasi Pembayaran"
+                                                                      : billPayment.status ==
+                                                                              'rejected'
+                                                                          ? 'Ditolak'
+                                                                          : 'Lunas',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: billPayment.status ==
+                                                                            'waiting'
+                                                                        ? const Color(
+                                                                            0xFF69A9F4)
+                                                                        : billPayment.status ==
+                                                                                'rejected'
+                                                                            ? const Color(0xFFF46B69)
+                                                                            : const Color(0xFF6BCCC9),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        'Poppins',
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            // width: mediaQueryWidth * 0.5,
-                                            // height: 40,
-                                            child: TextButton(
-                                              onPressed: () {
-                                                // Get.toNamed('/payment-seller',
-                                                //         arguments: {
-                                                //       'orderId': order.id!
-                                                //     })!
-                                                //     .then((value) =>
-                                                //         getSellerOrderController
-                                                //             .getOrdersBySellerId(
-                                                //                 FirebaseAuth
-                                                //                     .instance
-                                                //                     .currentUser!
-                                                //                     .uid));
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  side: BorderSide(
-                                                    color:
-                                                        const Color(0xFFF46B69),
-                                                    // color: order.status ==
-                                                    //         'received'
-                                                    //     ? const Color(0xFFF46B69)
-                                                    //     : order.status ==
-                                                    //             'on_process'
-                                                    //         ? const Color(
-                                                    //             0xFF69F477)
-                                                    //         : order.status ==
-                                                    //                 'rated'
-                                                    //             ? const Color(
-                                                    //                 0xFFF4CD69)
-                                                    //             : order.status ==
-                                                    //                     'waiting'
-                                                    //                 ? const Color(
-                                                    //                     0xFF6BCCC9)
-                                                    //                 : const Color(
-                                                    //                     0xFF69A9F4),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text:
-                                                          "Menunggu Pembayaran",
-                                                      // text: order.status ==
-                                                      //         'unpaid'
-                                                      //     ? 'Menunggu Pembayaran'
-                                                      //     : order.status ==
-                                                      //             'waiting'
-                                                      //         ? 'Konfirmasi Pembayaran'
-                                                      //         : order.status ==
-                                                      //                 'on_process'
-                                                      //             ? 'Lunas'
-                                                      //             : order.status ==
-                                                      //                     'received'
-                                                      //                 ? 'Diterima'
-                                                      //                 : order.status ==
-                                                      //                         'rated'
-                                                      //                     ? 'Sudah Dinilai'
-                                                      //                     : '',
-                                                      style: TextStyle(
-                                                        color: const Color(
-                                                            0xFFF46B69),
-                                                        // color: order.status ==
-                                                        //         'received'
-                                                        //     ? const Color(
-                                                        //         0xFFF46B69)
-                                                        //     : order.status ==
-                                                        //             'on_process'
-                                                        //         ? const Color(
-                                                        //             0xFF69F477)
-                                                        //         : order.status ==
-                                                        //                 'rated'
-                                                        //             ? const Color(
-                                                        //                 0xFFF4CD69)
-                                                        //             : order.status ==
-                                                        //                     'waiting'
-                                                        //                 ? const Color(
-                                                        //                     0xFF6BCCC9)
-                                                        //                 : const Color(
-                                                        //                     0xFF69A9F4),
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontFamily: 'Poppins',
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
+                                          );
+                                        },
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            })),
+                                    );
+                            }),
                             const SizedBox(
                               height: 100,
                             ),
