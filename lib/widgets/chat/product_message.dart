@@ -47,29 +47,34 @@ class ProductMessage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               const SizedBox(width: 10),
-              Column(
-                children: [
-                  Text(
-                    message.productName!,
-                    style: const TextStyle(
-                      color: Color(0xFF424242),
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      message.productName!.length > 14
+                          ? '${message.productName!.substring(0, 14)}...'
+                          : message.productName!,
+                      style: const TextStyle(
+                        color: Color(0xFF424242),
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  // Harga produk
-                  Text(
-                    message.productPrice!,
-                    style: const TextStyle(
-                      color: Color(0xFF424242),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Poppins',
+                    const SizedBox(height: 5),
+                    // Harga produk
+                    Text(
+                      'Rp ${message.productPrice!} -',
+                      style: const TextStyle(
+                        color: Color(0xFF424242),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
