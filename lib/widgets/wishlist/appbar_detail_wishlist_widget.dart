@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 
 class AppBarDetailWishlist extends StatelessWidget {
-  const AppBarDetailWishlist({super.key});
+  const AppBarDetailWishlist({super.key, required this.title});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +55,8 @@ class AppBarDetailWishlist extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: RichText(
-                  text: const TextSpan(
-                    text: 'Alat Tulis',
+                  text: TextSpan(
+                    text: title,
                     style: TextStyle(
                       color: Color(0xFF424242),
                       fontSize: 18,

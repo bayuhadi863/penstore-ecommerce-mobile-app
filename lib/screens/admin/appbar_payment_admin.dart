@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/wishlist/wishlist_controller.dart';
 
-class AppBarCartWidget extends StatelessWidget {
-  const AppBarCartWidget({super.key});
+class AppBarAdminPayment extends StatelessWidget {
+  const AppBarAdminPayment({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final WishlistController wishlistController = Get.put(WishlistController());
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Padding(
@@ -33,7 +36,8 @@ class AppBarCartWidget extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  wishlistController.getAllWishlist();
+                  Get.back();
                 },
                 icon: const Icon(
                   Icons.arrow_back_ios_new,
@@ -50,17 +54,13 @@ class AppBarCartWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20.0),
                 child: RichText(
                   text: const TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Keranjang Saya',
-                        style: TextStyle(
-                          color: Color(0xFF424242),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                    ],
+                    text: 'Tagihan',
+                    style: TextStyle(
+                      color: Color(0xFF424242),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                    ),
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/models/category_model.dart';
 import 'package:penstore/repository/category_repository.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:skeletons/skeletons.dart';
 
 class KatalogWidget extends StatefulWidget {
@@ -44,19 +45,14 @@ class _KatalogWidgetState extends State<KatalogWidget> {
       width: double.infinity,
       height: 32,
       child: isLoading
-          ? SkeletonListView(
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 30),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  width: 100,
-                );
-              }
-          )
+          ? const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: CircularProgressIndicator(
+                  color: Colors.grey,
+                ),
+              ),
+            )
           : categories.isEmpty
               ? const Text("data tidak ada")
               : SingleChildScrollView(

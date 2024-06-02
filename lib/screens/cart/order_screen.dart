@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:shimmer/shimmer.dart' as shimmer;
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -125,6 +126,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final total = widget.totalPrice! + serviceFee;
     final GetSelectedCartsController getSelectedCartsController =
         Get.put(GetSelectedCartsController(widget.cartIds!));
+
+    // final GetUserPaymentMethodController getUserPaymentMethodController =
+    //     Get.put(GetUserPaymentMethodController(widget.sellerId!));
 
     final GetUserPaymentMethodController getUserPaymentMethodController =
         Get.put(GetUserPaymentMethodController(widget.sellerId!));
@@ -528,39 +532,57 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               return paymentMethod.name;
                             }
 
-                            return DropdownButton<String>(
-                              value: selectedPaymentMethod,
-                              hint: const Text(
-                                'Pilih metode pembayaran',
-                                style: TextStyle(
+                            final paymentMethodLoading =
+                                getUserPaymentMethodController.isLoading.value;
+
+                            //BUTUH LOADING SKELETON
+                            if (paymentMethodLoading) {
+                              return shimmer.Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  height: 40.0, 
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return DropdownButton<String>(
+                                value: selectedPaymentMethod,
+                                hint: const Text(
+                                  'Pilih metode pembayaran',
+                                  style: TextStyle(
+                                    color: Color(0xFF757B7B),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                isExpanded: true,
+                                underline: Container(),
+                                style: const TextStyle(
                                   color: Color(0xFF757B7B),
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins',
                                 ),
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                              isExpanded: true,
-                              underline: Container(),
-                              style: const TextStyle(
-                                color: Color(0xFF757B7B),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedPaymentMethod = newValue!;
-                                });
-                              },
-                              items: paymentMethodsId.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  enabled: value != 'Pilih Metode Pembayaran',
-                                  child: Text(getPaymentMethodName(value)),
-                                );
-                              }).toList(),
-                            );
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedPaymentMethod = newValue!;
+                                  });
+                                },
+                                items: paymentMethodsId.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    enabled: value != 'Pilih Metode Pembayaran',
+                                    child: Text(getPaymentMethodName(value)),
+                                  );
+                                }).toList(),
+                              );
+                            }
                           }),
                         ),
                         if (isOrdered == true) ...[

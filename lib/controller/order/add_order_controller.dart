@@ -66,8 +66,9 @@ class AddOrderController extends GetxController {
       final paymentMethod = await paymentMethodRepository
           .fetchPaymentMethodById(orderData.paymentMethodId);
 
+      // check if payment method is COD
       if (paymentMethod.name == 'COD (Bayar di tempat)') {
-        orderRepository.updateOrderStatus(orderData.id!, 'on_process');
+        await orderRepository.updateOrderStatus(orderData.id!, 'on_process');
       }
 
       isLoading(false);

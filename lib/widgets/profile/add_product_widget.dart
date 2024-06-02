@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:penstore/controller/payment_method/get_user_payment_method_controller.dart';
@@ -617,11 +618,27 @@ class _ProductFormState extends State<ProductForm> {
                           ),
                         ),
                         onPressed: () async {
+                          
+
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const Center(
+                                child: SpinKitFadingCircle(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                              );
+                            },
+                            barrierDismissible: false,
+                          );
                           await addProductController
                               .getImageUrls(selectedImages);
                           await addProductController.addProduct(context);
 
                           userProductsController.getUserProducts();
+
+                          Navigator.pop(context);
                         },
                         child: const Center(
                           child: Text(

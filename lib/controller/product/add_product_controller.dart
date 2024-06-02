@@ -34,9 +34,9 @@ class AddProductController extends GetxController {
         imgUrls.add(imgUrl);
       }
 
-      Alerts.successSnackBar(
-          title: "Berhasil mengupload gambar", message: "Anda telah berhasil menambahkan gambar");
-      print("berhasil mengupload gambar");
+      // Alerts.successSnackBar(
+      //     title: "Berhasil mengupload gambar", message: "Anda telah berhasil menambahkan gambar");
+      // print("berhasil mengupload gambar");
     } catch (e) {
       Alerts.errorSnackBar(title: 'Gagal', message: "Gagal mengupload gambar");
       print("error : $e");
@@ -62,7 +62,10 @@ class AddProductController extends GetxController {
         if (imgUrls.isEmpty) {
           Alerts.errorSnackBar(
               title: 'Gagal', message: "Produk harus memiliki gambar");
+
           Navigator.of(context).pop();
+
+          return;
         }
 
         await productRepository.addProduct(
@@ -76,7 +79,8 @@ class AddProductController extends GetxController {
 
         // Show success snackbar
         Alerts.successSnackBar(
-            title: 'Berhasil menambah data', message: "Selamat, Anda telah Berhasil menambah data produk");
+            title: 'Berhasil menambah data',
+            message: "Selamat, Anda telah Berhasil menambah data produk");
 
         // Navigator.of(context).pop();
       }

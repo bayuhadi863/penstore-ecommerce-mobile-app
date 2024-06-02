@@ -73,11 +73,11 @@ class _SellListProfileState extends State<SellListProfile> {
                             },
                             child: Container(
                               width: double.infinity,
-                              height: 100,
+                              // height: 100,
                               margin: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 10, top: 10),
                               child: Container(
-                                height: 100,
+                                // height: 100,
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
                                 decoration: BoxDecoration(
@@ -159,6 +159,7 @@ class _SellListProfileState extends State<SellListProfile> {
                                               ),
                                             ],
                                           ),
+                                          const SizedBox(height: 10),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -195,69 +196,69 @@ class _SellListProfileState extends State<SellListProfile> {
                                                             products[index].id,
                                                       )),
                                                   const SizedBox(width: 8.0),
-                                                  Container(
-                                                    width: 26,
-                                                    height: 26,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                              0xFFF46B69)
-                                                          .withOpacity(0.3),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6),
-                                                    ),
-                                                    child: IconButton(
-                                                      onPressed: () async {
-                                                        Get.dialog(
-                                                          ConfirmAction(
-                                                            title:
-                                                                "Konfirmasi hapus",
-                                                            messageTitle:
-                                                                "Anda tidak bisa menghapus produk, apakah anda yakin ingin mengkosongkan stok produk?",
-                                                            message:
-                                                                "Jika iya, stok produk akan di hapus diset ke 0!",
-                                                            onPressed: () {
-                                                              userProductsController
-                                                                  .deleteProduct(
-                                                                      products[
-                                                                              index]
-                                                                          .id);
+                                                  // Container(
+                                                  //   width: 26,
+                                                  //   height: 26,
+                                                  //   alignment: Alignment.center,
+                                                  //   decoration: BoxDecoration(
+                                                  //     color: const Color(
+                                                  //             0xFFF46B69)
+                                                  //         .withOpacity(0.3),
+                                                  //     borderRadius:
+                                                  //         BorderRadius.circular(
+                                                  //             6),
+                                                  //   ),
+                                                  //   child: IconButton(
+                                                  //     onPressed: () async {
+                                                  //       Get.dialog(
+                                                  //         ConfirmAction(
+                                                  //           title:
+                                                  //               "Konfirmasi hapus",
+                                                  //           messageTitle:
+                                                  //               "Anda tidak bisa menghapus produk, apakah anda yakin ingin mengkosongkan stok produk?",
+                                                  //           message:
+                                                  //               "Jika iya, stok produk akan di hapus diset ke 0!",
+                                                  //           onPressed: () {
+                                                  //             userProductsController
+                                                  //                 .deleteProduct(
+                                                  //                     products[
+                                                  //                             index]
+                                                  //                         .id);
 
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        );
-                                                      },
-                                                      icon: Image.asset(
-                                                        'assets/icons/delete_icon.png',
-                                                        height: 16,
-                                                        width: 16,
-                                                        filterQuality:
-                                                            FilterQuality.high,
-                                                      ),
-                                                      style: ButtonStyle(
-                                                        shape:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6),
-                                                          ),
-                                                        ),
-                                                        padding:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  //             Navigator.of(
+                                                  //                     context)
+                                                  //                 .pop();
+                                                  //           },
+                                                  //         ),
+                                                  //       );
+                                                  //     },
+                                                  //     icon: Image.asset(
+                                                  //       'assets/icons/delete_icon.png',
+                                                  //       height: 16,
+                                                  //       width: 16,
+                                                  //       filterQuality:
+                                                  //           FilterQuality.high,
+                                                  //     ),
+                                                  //     style: ButtonStyle(
+                                                  //       shape:
+                                                  //           MaterialStateProperty
+                                                  //               .all(
+                                                  //         RoundedRectangleBorder(
+                                                  //           borderRadius:
+                                                  //               BorderRadius
+                                                  //                   .circular(
+                                                  //                       6),
+                                                  //         ),
+                                                  //       ),
+                                                  //       padding:
+                                                  //           MaterialStateProperty
+                                                  //               .all(
+                                                  //         const EdgeInsets.all(
+                                                  //             0),
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
                                                 ],
                                               ),
                                             ],
