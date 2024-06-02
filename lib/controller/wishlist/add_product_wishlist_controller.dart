@@ -19,16 +19,11 @@ class AddProductWishlistController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final isLoading = false.obs;
 
-  Future<void> reloadVariable() async {
-    isAddNewWishlist = false;
-    choosedWishlist = null;
-    wishlistNameController.text = "";
-    formKey.currentState!.reset();
-  }
-
   // buat wishlist
   Future<String> createWishlist() async {
+    print(wishlistNameController);
     try {
+      print("membuat wishlist");
       String wishlistId = await wishlistRepository.createWishlist(
         wishlistNameController.text,
         user!.uid,
@@ -38,13 +33,15 @@ class AddProductWishlistController extends GetxController {
       Alerts.successSnackBar(
           title: 'Sukses', message: "Berhasil membuat wishlist");
 
-      await reloadVariable();
+      print("new wishlist $wishlistId");
+      print('ini tipe ${wishlistId.runtimeType}');
 
+      wishlistNameController.text = "";
       return wishlistId;
     } catch (e) {
       Alerts.errorSnackBar(
         title: 'Gagal',
-        message: "Gagal menambah produk ${e.toString()}",
+        message: "Gagal membuat wishlist produk ${e.toString()}",
       );
       return "";
     }

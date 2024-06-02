@@ -355,11 +355,17 @@ class _AddCollectionDialogState extends State<AddCollectionDialog> {
                         onTap: () async {
                           if (addProductWishlistController.isAddNewWishlist) {
                             // jika menambahkan wishlist baru
+                            print(addProductWishlistController
+                                .wishlistNameController.text);
                             String newWishlistId =
                                 await addProductWishlistController
                                     .createWishlist();
+
                             await addProductWishlistController.addToWishlist(
                                 widget.productId, newWishlistId, context);
+
+                            addProductWishlistController.isAddNewWishlist =
+                                false;
                           } else {
                             // jika memilih wishlist
                             await addProductWishlistController.addToWishlist(

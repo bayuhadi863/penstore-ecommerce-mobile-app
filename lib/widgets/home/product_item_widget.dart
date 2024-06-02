@@ -125,6 +125,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                 },
                               );
                               setState(() {
+                                productController.reloadGetData();
                                 checkWishlist();
                               });
                             }
