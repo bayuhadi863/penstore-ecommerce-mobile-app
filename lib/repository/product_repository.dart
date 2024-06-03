@@ -79,8 +79,10 @@ class ProductRepository extends GetxController {
 // get all data product
   Future<List<ProductModel>> getAllProducts() async {
     try {
-      final QuerySnapshot<Map<dynamic, dynamic>> querySnapshot =
-          await db.collection('products').get();
+      final QuerySnapshot<Map<dynamic, dynamic>> querySnapshot = await db
+          .collection('products')
+          // .where('stock', isGreaterThan: 0)
+          .get();
       if (querySnapshot.docs.isNotEmpty) {
         print("dataku ${querySnapshot.docs}");
         return querySnapshot.docs
@@ -105,6 +107,7 @@ class ProductRepository extends GetxController {
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
           .collection('products')
+          // .where('stock', isGreaterThan: 1)
           .where('categoryId', isEqualTo: categoryId)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
@@ -179,6 +182,7 @@ class ProductRepository extends GetxController {
           .collection('products')
           .where('name', isGreaterThanOrEqualTo: query)
           .where('name', isLessThanOrEqualTo: query + '\uf8ff')
+          // .where('stock', isGreaterThan: 0)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         return querySnapshot.docs

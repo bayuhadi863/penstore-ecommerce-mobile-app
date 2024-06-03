@@ -51,6 +51,15 @@ class EditProductController extends GetxController {
         formKey.currentState!.save();
         isLoading.value = true;
 
+        if (newImgUrls.isEmpty && previousImgUrls.isEmpty) {
+          Alerts.errorSnackBar(
+            title: 'Gagal',
+            message: "Gambar produk tidak boleh kosong",
+          );
+          isLoading.value = false;
+          return;
+        }
+
         // update nilai
         updatedProduct = ProductModel(
           id: productId,
@@ -72,6 +81,9 @@ class EditProductController extends GetxController {
             title: 'Sukses', message: "Berhasil mengupdate produk");
 
         Navigator.of(context).pop();
+
+        previousImgUrls.clear();
+        newImgUrls.clear();
 
         // Go to main route
         // Get.offAllNamed('/');

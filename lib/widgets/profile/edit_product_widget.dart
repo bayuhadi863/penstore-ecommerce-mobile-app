@@ -568,7 +568,7 @@ class _ProductFormState extends State<ProductForm> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Stok tidak boleh kosong";
-                          } else if (int.parse(value) <= 0) {
+                          } else if (int.parse(value) < 0) {
                             return "Stok tidak boleh kurang dari 0";
                           }
 

@@ -196,69 +196,69 @@ class _SellListProfileState extends State<SellListProfile> {
                                                             products[index].id,
                                                       )),
                                                   const SizedBox(width: 8.0),
-                                                  // Container(
-                                                  //   width: 26,
-                                                  //   height: 26,
-                                                  //   alignment: Alignment.center,
-                                                  //   decoration: BoxDecoration(
-                                                  //     color: const Color(
-                                                  //             0xFFF46B69)
-                                                  //         .withOpacity(0.3),
-                                                  //     borderRadius:
-                                                  //         BorderRadius.circular(
-                                                  //             6),
-                                                  //   ),
-                                                  //   child: IconButton(
-                                                  //     onPressed: () async {
-                                                  //       Get.dialog(
-                                                  //         ConfirmAction(
-                                                  //           title:
-                                                  //               "Konfirmasi hapus",
-                                                  //           messageTitle:
-                                                  //               "Anda tidak bisa menghapus produk, apakah anda yakin ingin mengkosongkan stok produk?",
-                                                  //           message:
-                                                  //               "Jika iya, stok produk akan di hapus diset ke 0!",
-                                                  //           onPressed: () {
-                                                  //             userProductsController
-                                                  //                 .deleteProduct(
-                                                  //                     products[
-                                                  //                             index]
-                                                  //                         .id);
+                                                  Container(
+                                                    width: 26,
+                                                    height: 26,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                              0xFFF46B69)
+                                                          .withOpacity(0.3),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
+                                                    ),
+                                                    child: IconButton(
+                                                      onPressed: () async {
+                                                        Get.dialog(
+                                                          ConfirmAction(
+                                                            title:
+                                                                "Konfirmasi hapus",
+                                                            messageTitle:
+                                                                "Anda tidak bisa menghapus produk, apakah anda yakin ingin mengkosongkan stok produk?",
+                                                            message:
+                                                                "Jika iya, stok produk akan di hapus diset ke 0!",
+                                                            onPressed: () {
+                                                              userProductsController
+                                                                  .deleteProduct(
+                                                                      products[
+                                                                              index]
+                                                                          .id);
 
-                                                  //             Navigator.of(
-                                                  //                     context)
-                                                  //                 .pop();
-                                                  //           },
-                                                  //         ),
-                                                  //       );
-                                                  //     },
-                                                  //     icon: Image.asset(
-                                                  //       'assets/icons/delete_icon.png',
-                                                  //       height: 16,
-                                                  //       width: 16,
-                                                  //       filterQuality:
-                                                  //           FilterQuality.high,
-                                                  //     ),
-                                                  //     style: ButtonStyle(
-                                                  //       shape:
-                                                  //           MaterialStateProperty
-                                                  //               .all(
-                                                  //         RoundedRectangleBorder(
-                                                  //           borderRadius:
-                                                  //               BorderRadius
-                                                  //                   .circular(
-                                                  //                       6),
-                                                  //         ),
-                                                  //       ),
-                                                  //       padding:
-                                                  //           MaterialStateProperty
-                                                  //               .all(
-                                                  //         const EdgeInsets.all(
-                                                  //             0),
-                                                  //       ),
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        );
+                                                      },
+                                                      icon: Image.asset(
+                                                        'assets/icons/delete_icon.png',
+                                                        height: 16,
+                                                        width: 16,
+                                                        filterQuality:
+                                                            FilterQuality.high,
+                                                      ),
+                                                      style: ButtonStyle(
+                                                        shape:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6),
+                                                          ),
+                                                        ),
+                                                        padding:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                          const EdgeInsets.all(
+                                                              0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ],

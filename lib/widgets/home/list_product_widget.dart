@@ -44,9 +44,14 @@ class ListProductWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             ProductModel product = productController.products[index];
-            return ProductItemWidget(
-              product: product,
-            );
+
+            if (product.stock == 0) {
+              return const SizedBox();
+            } else {
+              return ProductItemWidget(
+                product: product,
+              );
+            }
           },
         );
       }

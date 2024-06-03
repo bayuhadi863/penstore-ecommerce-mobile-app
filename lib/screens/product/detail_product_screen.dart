@@ -478,42 +478,44 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                             ),
                                           ],
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(
-                                              child: Text(
-                                                oneProductController
-                                                    .product.value.name,
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Poppins',
-                                                  color: Color(0xFF424242),
-                                                ),
+                                            Text(
+                                              oneProductController
+                                                  .product.value.name,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Poppins',
+                                                color: Color(0xFF424242),
                                               ),
                                             ),
                                             const SizedBox(
-                                              width: 10,
+                                              height: 7,
                                             ),
-                                            Text(
-                                              Format.formatRupiah(
-                                                  oneProductController
-                                                      .product.value.price),
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xFF6BCCC9),
-                                                fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  Format.formatRupiah(
+                                                      oneProductController
+                                                          .product.value.price),
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Color(0xFF6BCCC9),
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
                                       SizedBox(height: mediaQueryHeight * 0.02),
                                       SizedBox(
-                                        height: mediaQueryHeight * 0.46,
+                                        height: mediaQueryHeight * 0.40,
                                         child: SingleChildScrollView(
                                           physics:
                                               const BouncingScrollPhysics(),

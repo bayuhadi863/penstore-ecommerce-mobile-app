@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
