@@ -533,41 +533,61 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                                                           .spaceBetween,
                                                   children: [
                                                     // rate
-                                                    const Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.star,
-                                                          color:
-                                                              Color(0xFFFFC701),
-                                                          size: 20,
-                                                        ),
-                                                        Icon(
-                                                          Icons.star,
-                                                          color:
-                                                              Color(0xFFFFC701),
-                                                          size: 20,
-                                                        ),
-                                                        Icon(
-                                                          Icons.star,
-                                                          color:
-                                                              Color(0xFFFFC701),
-                                                          size: 20,
-                                                        ),
-                                                        Icon(
-                                                          Icons.star,
-                                                          color:
-                                                              Color(0xFFFFC701),
-                                                          size: 20,
-                                                        ),
-                                                        Icon(
-                                                          Icons
-                                                              .star_border_outlined,
-                                                          color:
-                                                              Color(0xFFFFC701),
-                                                          size: 20,
-                                                        ),
-                                                      ],
-                                                    ),
+                                                    Obx(() {
+                                                      final averageRating =
+                                                          getProductRatingController
+                                                              .averageRating
+                                                              .value;
+                                                      return Row(
+                                                        children: [
+                                                          Icon(
+                                                            averageRating >= 1
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            averageRating >= 2
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            averageRating >= 3
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            averageRating >= 4
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                          Icon(
+                                                            averageRating >= 5
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border_outlined,
+                                                            color: const Color(
+                                                                0xFFFFC701),
+                                                            size: 20,
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
                                                     // stock
                                                     Container(
                                                       width: mediaQueryWidth *

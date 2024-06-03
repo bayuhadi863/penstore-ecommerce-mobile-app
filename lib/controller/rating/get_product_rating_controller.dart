@@ -7,6 +7,7 @@ class GetProductRatingController extends GetxController {
 
   final RxBool isLoading = false.obs;
   final RxList<RatingModel> ratings = <RatingModel>[].obs;
+  final RxInt averageRating = 0.obs;
 
   final String productId;
   GetProductRatingController(this.productId);
@@ -24,6 +25,11 @@ class GetProductRatingController extends GetxController {
       final ratingRepository = Get.put(RatingRepository());
       final ratings = await ratingRepository.fetchRatingsByProductId(productId);
       this.ratings.value = ratings;
+
+      if (ratings.isNotEmpty) {
+        final totalRating = ratings.map((e) => e.score).reduce((a, b) => a + b);
+        averageRating((totalRating / ratings.length).round());
+      }
 
       isLoading(false);
     } catch (e) {
