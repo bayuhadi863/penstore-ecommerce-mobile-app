@@ -16,7 +16,7 @@ class GetCartsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // fetchCart(currentUser!.uid);
+    fetchCart(currentUser!.uid);
     fetchCartSellerId();
     // getUser(currentUser!.uid);
     // print(carts);

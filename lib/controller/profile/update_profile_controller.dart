@@ -79,6 +79,10 @@ class UpdateProfileController extends GetxController {
         Navigator.of(context).pop();
         Get.back();
 
+        // clear
+        name.clear();
+        phone.clear();
+
         // Show success snackbar
         Alerts.successSnackBar(
             title: 'Berhasil!', message: "Profile berhasil diupdate!");

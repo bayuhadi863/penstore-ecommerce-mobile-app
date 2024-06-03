@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,9 +24,13 @@ class ChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GetSingleUserController getSingleUserController = Get.put(
-        GetSingleUserController(roomChat.userId[0]),
-        tag: roomChat.userId[0]);
+    final userIds = roomChat.userId;
+    final authUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    final partnerId = userIds[0] == authUserId ? userIds[1] : userIds[0];
+
+    final GetSingleUserController getSingleUserController =
+        Get.put(GetSingleUserController(partnerId), tag: partnerId);
 
     return InkWell(
       onTap: () {

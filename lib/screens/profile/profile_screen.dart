@@ -275,7 +275,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                       Text(
-                        user.phone ?? "Belum diatur",
+                        user.phone == '' || user.phone == null
+                            ? "Belum diatur"
+                            : user.phone!,
                         style: const TextStyle(
                           color: Color(0xFF757B7B),
                           fontSize: 12,

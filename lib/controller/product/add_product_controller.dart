@@ -46,19 +46,6 @@ class AddProductController extends GetxController {
   Future addProduct(BuildContext context) async {
     try {
       if (formKey.currentState!.validate()) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const Center(
-              child: SpinKitFadingCircle(
-                color: Colors.white,
-                size: 50.0,
-              ),
-            );
-          },
-          barrierDismissible: false,
-        );
-
         if (imgUrls.isEmpty) {
           Alerts.errorSnackBar(
               title: 'Gagal', message: "Produk harus memiliki gambar");

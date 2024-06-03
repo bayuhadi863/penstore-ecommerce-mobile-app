@@ -390,9 +390,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen>
                                                           title:
                                                               "Konfirmasi hapus",
                                                           messageTitle:
-                                                              "Apakah anda yakin ingin menghapus methode pembayaran",
+                                                              "Apakah anda yakin ingin menghapus kategori?",
                                                           message:
-                                                              "Jika iya, metode pembayaran akan di hapus secara permanen!",
+                                                              "Jika iya, kategori akan di hapus secara permanen!",
                                                           onPressed: () async {
                                                             await deleteCategoryController
                                                                 .deleteCategory(
