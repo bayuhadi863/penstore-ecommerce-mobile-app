@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:penstore/controller/profile/get_single_user_controller.dart';
 
 import 'package:penstore/models/roomChat_model.dart';
 
@@ -12,7 +14,8 @@ class ChatCard extends StatelessWidget {
     super.key,
     required this.roomChat,
     required this.isSeen,
-    required this.recieverId, required chat,
+    required this.recieverId,
+    required chat,
   });
 
   final RoomChatModel roomChat;
@@ -21,11 +24,20 @@ class ChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userIds = roomChat.userId;
+    final authUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    final partnerId = userIds[0] == authUserId ? userIds[1] : userIds[0];
+
+    final GetSingleUserController getSingleUserController =
+        Get.put(GetSingleUserController(partnerId), tag: partnerId);
+
     return InkWell(
       onTap: () {
         Get.toNamed('/detail-chat', arguments: {
           'roomChatId': roomChat.id,
           'recieverId': recieverId,
+          'productId': '',
         });
       },
       child: Padding(
@@ -53,20 +65,29 @@ class ChatCard extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  Container(
-                    decoration:
-                        BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF91E0DD).withOpacity(0.5),
-                        blurRadius: 16,
-                        offset: const Offset(1, 1),
-                      ),
-                    ]),
-                    child: const CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage('assets/images/profile.jpeg'),
-                    ),
-                  ),
+                  Obx(() {
+                    final user = getSingleUserController.user.value;
+                    return Container(
+                      decoration:
+                          BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF91E0DD).withOpacity(0.5),
+                          blurRadius: 16,
+                          offset: const Offset(1, 1),
+                        ),
+                      ]),
+                      child: user.imageUrl == '' || user.imageUrl == null
+                          ? const CircleAvatar(
+                              radius: 30,
+                              backgroundImage:
+                                  AssetImage('assets/images/profile.jpeg'),
+                            )
+                          : CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(user.imageUrl!),
+                            ),
+                    );
+                  }),
                 ],
               ),
               Expanded(
@@ -110,7 +131,7 @@ class ChatCard extends StatelessWidget {
                       ),
                       RichText(
                         text: TextSpan(
-                            text: DateFormat('MMMM d, yyyy Hhh:mm a')
+                            text: DateFormat('MMMM d, yyyy hh:mm a')
                                 .format(roomChat.updatedAt!),
                             style: const TextStyle(
                               color: Color(0xFF6BCCC9),

@@ -38,15 +38,24 @@ class ListProductWidget extends StatelessWidget {
       } else if (productController.products.isEmpty) {
         return const NoProduct();
       } else {
+        final products = productController.products;
+
+        // sort by name
+        products.sort((a, b) => a.name.compareTo(b.name));
         return ListView.builder(
-          itemCount: productController.products.length,
+          itemCount: products.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            ProductModel product = productController.products[index];
-            return ProductItemWidget(
-              product: product,
-            );
+            ProductModel product = products[index];
+
+            if (product.stock == 0) {
+              return const SizedBox();
+            } else {
+              return ProductItemWidget(
+                product: product,
+              );
+            }
           },
         );
       }

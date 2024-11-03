@@ -45,13 +45,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
         : const Color(0xFF757B7B);
     suffixIconColor = const Color(0xFF757B7B);
     // Listen to changes in focus state
-    widget.focusNode.addListener(updateIconColors);
+    // if (mounted) {
+    //   widget.focusNode.addListener(updateIconColors);
+    // }
   }
 
   @override
   void dispose() {
     // Dispose of the focus node listener
     widget.focusNode.removeListener(updateIconColors);
+    // widget.focusNode.dispose();
     super.dispose();
   }
 

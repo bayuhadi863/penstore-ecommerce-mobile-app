@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/wishlist/product_wishlist_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/widgets/home/product_item_widget.dart';
+import 'package:penstore/widgets/no_data.dart';
 import 'package:penstore/widgets/no_product.dart';
 import 'package:penstore/widgets/wishlist/appbar_detail_wishlist_widget.dart';
 import 'package:skeletons/skeletons.dart';
@@ -19,12 +20,14 @@ class _WishlistDetailScreenState extends State<WishlistDetailScreen> {
       Get.put(ProductWishlistController());
 
   String? wishlistId;
+  String? wishlistName;
 
   @override
   void initState() {
     super.initState();
     final Map<String, dynamic> arguments = Get.arguments;
     wishlistId = arguments['wishlistId'];
+    wishlistName = arguments['wishlistName'];
 
     productWishlistController.getWishlistProducts(wishlistId!);
   }
@@ -39,7 +42,9 @@ class _WishlistDetailScreenState extends State<WishlistDetailScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const AppBarDetailWishlist(),
+        title: AppBarDetailWishlist(
+          title: "$wishlistName",
+        ),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -64,7 +69,16 @@ class _WishlistDetailScreenState extends State<WishlistDetailScreen> {
               ),
             );
           } else if (productWishlistController.products.isEmpty) {
-            return const NoProduct();
+            return Column(
+              children: [
+                SizedBox(height: 180),
+                NoData(
+                  title: "Maaf, ",
+                  subTitle: "Produk di $wishlistName kosong!",
+                  suggestion: "Silahkan tambahkan produk ke $wishlistName!",
+                ),
+              ],
+            );
           } else {
             return ListView.builder(
               itemCount: productWishlistController.products.length,

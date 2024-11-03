@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:penstore/models/chat_model.dart';
+import 'package:penstore/models/product_model.dart';
 
 class ChatController extends GetxController {
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -14,7 +15,6 @@ class ChatController extends GetxController {
 
   // pengisian saat ini
   var chat = ChatModel.empty().obs;
-
   TextEditingController messageController = TextEditingController();
 
   ChatController(this.roomId);
@@ -24,6 +24,34 @@ class ChatController extends GetxController {
     super.onInit();
     chat.value.roomId = roomId;
     fetchChats(roomId);
+  }
+
+  // menyematkan produk link
+  Future<void> writeProductMessage(String productId) async {
+    // Pastikan productId tidak kosong atau null
+    if (productId.isEmpty) {
+      throw ArgumentError('Product ID must be a non-empty string');
+    }
+
+    chat.value.productId = productId;
+    try {
+      ProductModel product;
+      final DocumentSnapshot documentSnapshot =
+          await db.collection('products').doc(productId).get();
+
+      if (documentSnapshot.exists) {
+        product = ProductModel.fromSnapshot(documentSnapshot);
+      } else {
+        product = ProductModel.empty();
+      }
+
+      chat.value.productImg = product.imageUrl![0];
+      chat.value.productName = product.name;
+      chat.value.productPrice = product.price.toString();
+    } catch (e) {
+      print('Exception caught in fetchChats: $e');
+      rethrow;
+    }
   }
 
   // fetch realtime chats
@@ -65,7 +93,7 @@ class ChatController extends GetxController {
         'isSeen': false,
       });
       messageController.clear();
-      chat.value = ChatModel.empty();
+      // chat.value = ChatModel.empty();
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }
@@ -97,12 +125,17 @@ class ChatController extends GetxController {
         'recieverId': '',
         'recieverName': '',
         'productId': chat.value.productId,
+        'productName': chat.value.productName,
+        'productPrice': chat.value.productPrice,
+        'productImg': chat.value.productImg,
         'isSeen': false,
-        'message': '',
+        'message': 'Saya tertarik dengan produk ini',
         'createdAt': Timestamp.now(),
       });
-      messageController.clear();
-      chat.value = ChatModel.empty();
+      chat.value.productId = '';
+      chat.value.productImg = '';
+      chat.value.productName = '';
+      chat.value.productPrice = '';
     } catch (e) {
       throw 'Cant send message ${e.toString()}';
     }

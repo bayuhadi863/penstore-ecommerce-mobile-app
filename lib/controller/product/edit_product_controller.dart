@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
@@ -51,6 +52,15 @@ class EditProductController extends GetxController {
         formKey.currentState!.save();
         isLoading.value = true;
 
+        if (newImgUrls.isEmpty && previousImgUrls.isEmpty) {
+          Alerts.errorSnackBar(
+            title: 'Gagal',
+            message: "Gambar produk tidak boleh kosong",
+          );
+          isLoading.value = false;
+          return;
+        }
+
         // update nilai
         updatedProduct = ProductModel(
           id: productId,
@@ -73,6 +83,11 @@ class EditProductController extends GetxController {
 
         Navigator.of(context).pop();
 
+        previousImgUrls.clear();
+        newImgUrls.clear();
+
+        ProductController().reloadGetData();
+
         // Go to main route
         // Get.offAllNamed('/');
       }
@@ -94,8 +109,8 @@ class EditProductController extends GetxController {
         newImgUrls.add(imgUrl);
       }
 
-      Alerts.successSnackBar(
-          title: "Success", message: "Gambar berhasil diupload");
+      // Alerts.successSnackBar(
+      //     title: "Success", message: "Gambar berhasil diupload");
       print("berhasil mengupload gambar");
     } catch (e) {
       Alerts.errorSnackBar(title: 'Gagal', message: "Gagal mengupload gambar");

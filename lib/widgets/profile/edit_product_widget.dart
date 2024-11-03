@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:penstore/controller/product/edit_product_controller.dart';
@@ -567,7 +568,7 @@ class _ProductFormState extends State<ProductForm> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Stok tidak boleh kosong";
-                          } else if (int.parse(value) <= 0) {
+                          } else if (int.parse(value) < 0) {
                             return "Stok tidak boleh kurang dari 0";
                           }
 
@@ -643,10 +644,25 @@ class _ProductFormState extends State<ProductForm> {
                           ),
                         ),
                         onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const Center(
+                                child: SpinKitFadingCircle(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                              );
+                            },
+                            barrierDismissible: false,
+                          );
+
                           await editProductController
                               .getImageUrls(selectedImages);
                           await editProductController.saveProduct(
                               widget.productId, context);
+
+                          Navigator.of(context).pop();
                           // refresh products
                           userProductsController.getUserProducts();
                         },

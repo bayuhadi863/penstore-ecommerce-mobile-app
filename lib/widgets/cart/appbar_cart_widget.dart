@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:penstore/controller/cart/get_carts_controller.dart';
 
 class AppBarCartWidget extends StatelessWidget {
   const AppBarCartWidget({super.key});
@@ -7,6 +9,7 @@ class AppBarCartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(
@@ -42,6 +45,7 @@ class AppBarCartWidget extends StatelessWidget {
                 ),
               ),
             ),
+
             Container(
               width: mediaQueryWidth * 0.60,
               height: mediaQueryHeight * 0.055,
@@ -55,15 +59,6 @@ class AppBarCartWidget extends StatelessWidget {
                         text: 'Keranjang Saya',
                         style: TextStyle(
                           color: Color(0xFF424242),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' (2)',
-                        style: TextStyle(
-                          color: Color(0xFF6BCCC9),
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Poppins',

@@ -52,4 +52,61 @@ class CategoryRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  // create category
+  Future<void> createCategory(CategoryModel category) async {
+    try {
+      await db.collection('categories').add(category.toJson());
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // delete category
+  Future<void> deleteCategory(String id) async {
+    try {
+      // get products by categoryId
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('products')
+          .where('categoryId', isEqualTo: id)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        throw 'Kategori ini masih digunakan dalam produk.';
+      }
+
+      await db.collection('categories').doc(id).delete();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
+
+  // edit category with parameter id and category_name
+  Future<void> editCategory(String id, String categoryName) async {
+    try {
+      await db.collection('categories').doc(id).update({
+        'category_name': categoryName,
+      });
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
 }

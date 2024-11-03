@@ -68,7 +68,37 @@ class PaymentMethodRepository extends GetxController {
   // delete payment method by paymentMethodId
   Future<void> deletePaymentMethod(String paymentMethodId) async {
     try {
+      // get orders by paymentMethodId
+      final QuerySnapshot querySnapshot = await db
+          .collection('orders')
+          .where('paymentMethodId', isEqualTo: paymentMethodId)
+          .get();
+
+      // if orders is not empty, throw error
+      if (querySnapshot.docs.isNotEmpty) {
+        throw 'Tidak bisa menghapus karena ada order yang menggunakan metode pembayaran ini';
+      }
+
       await db.collection('paymentMethods').doc(paymentMethodId).delete();
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exeption error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // update payment method by paymentMethodId
+  Future<void> updatePaymentMethod(
+      String paymentMethodId, String recipientName, String number) async {
+    try {
+      await db.collection('paymentMethods').doc(paymentMethodId).update({
+        'recipientName': recipientName,
+        'number': number,
+      });
     } on FirebaseException catch (e) {
       throw e.code;
     } on FormatException catch (_) {

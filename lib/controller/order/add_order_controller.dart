@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:penstore/controller/payment_method/get_single_payment_method_controller.dart';
 import 'package:penstore/models/order_model.dart';
 import 'package:penstore/repository/cart_repository.dart';
 import 'package:penstore/repository/order_repository.dart';
+import 'package:penstore/repository/payment_method_repository.dart';
 import 'package:penstore/repository/product_repository.dart';
 import 'package:penstore/widgets/alerts.dart';
 
@@ -58,6 +60,16 @@ class AddOrderController extends GetxController {
       final OrderRepository orderRepository = Get.put(OrderRepository());
       final OrderModel orderData = await orderRepository.createOrder(order);
       this.orderData.value = orderData;
+
+      final PaymentMethodRepository paymentMethodRepository =
+          Get.put(PaymentMethodRepository());
+      final paymentMethod = await paymentMethodRepository
+          .fetchPaymentMethodById(orderData.paymentMethodId);
+
+      // check if payment method is COD
+      if (paymentMethod.name == 'COD (Bayar di tempat)') {
+        await orderRepository.updateOrderStatus(orderData.id!, 'on_process');
+      }
 
       isLoading(false);
 

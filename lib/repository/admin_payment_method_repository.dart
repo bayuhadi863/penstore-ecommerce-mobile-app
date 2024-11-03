@@ -48,4 +48,26 @@ class AdminPaymentMethodRepository extends GetxController {
       throw 'Something went wrong. Please try again';
     }
   }
+
+  // fetch admin payment method by id
+  Future<AdminPaymentMethodModel> fetchAdminPaymentMethodById(String id) async {
+    try {
+      final snapshot =
+          await db.collection('adminPaymentMethods').doc(id).get();
+
+      if (snapshot.exists) {
+        return AdminPaymentMethodModel.fromSnapshot(snapshot);
+      } else {
+        return AdminPaymentMethodModel.empty();
+      }
+    } on FirebaseException catch (e) {
+      throw e.code;
+    } on FormatException catch (_) {
+      throw 'Format exception error';
+    } on PlatformException catch (e) {
+      throw e.code;
+    } catch (e) {
+      throw 'Something went wrong. Please try again';
+    }
+  }
 }

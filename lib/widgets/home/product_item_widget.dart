@@ -6,6 +6,7 @@ import 'package:penstore/controller/profile/user_controller.dart';
 import 'package:penstore/controller/wishlist/add_product_wishlist_controller.dart';
 import 'package:penstore/models/product_model.dart';
 import 'package:penstore/widgets/home/add_collection_dialog_widget.dart';
+import 'package:penstore/utils/format.dart';
 
 class ProductItemWidget extends StatefulWidget {
   final ProductModel product;
@@ -49,7 +50,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 100,
+      // height: 100,
       margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
       child: Stack(
         children: [
@@ -59,7 +60,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                   arguments: {'productId': widget.product.id});
             },
             child: Container(
-              height: 100,
+              // height: 100,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -78,7 +79,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                     children: [
                       Container(
                         width: 80,
-                        height: 90,
+                        height: 80,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -125,6 +126,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                 },
                               );
                               setState(() {
+                                productController.reloadGetData();
                                 checkWishlist();
                               });
                             }
@@ -168,6 +170,8 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Poppins',
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(
                               width: 230,
@@ -185,12 +189,15 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                             ),
                           ],
                         ),
+                        const SizedBox(
+                          height: 5,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Rp ${widget.product.price} -',
+                              Format.formatRupiah(widget.product.price),
                               style: const TextStyle(
                                 color: Color(0xFF91E0DD),
                                 fontSize: 12,
@@ -198,6 +205,34 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                 fontFamily: 'Poppins',
                               ),
                             ),
+                            widget.product.userId ==
+                                    userController.user.value.id
+                                ? Container()
+                                : GestureDetector(
+                                    onTap: () {
+                                      addCartController.createCart(
+                                          userController.user.value,
+                                          widget.product,
+                                          1,
+                                          context);
+                                    },
+                                    child: Container(
+                                      width: 26,
+                                      height: 26,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF91E0DD)
+                                            .withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/icons/cart_outline.png',
+                                        height: 16,
+                                        width: 16,
+                                        filterQuality: FilterQuality.high,
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ],
@@ -207,33 +242,6 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               ),
             ),
           ),
-          widget.product.userId == userController.user.value.id
-              ? Container()
-              : Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      addCartController.createCart(userController.user.value,
-                          widget.product, 1, context);
-                    },
-                    child: Container(
-                      width: 26,
-                      height: 26,
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.only(right: 10, bottom: 10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF91E0DD).withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Image.asset(
-                        'assets/icons/cart_outline.png',
-                        height: 16,
-                        width: 16,
-                        filterQuality: FilterQuality.high,
-                      ),
-                    ),
-                  ),
-                ),
         ],
       ),
     );

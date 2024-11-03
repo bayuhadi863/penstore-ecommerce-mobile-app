@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:penstore/controller/chat/room_chat_controller.dart';
+import 'package:penstore/controller/profile/get_single_user_controller.dart';
 import 'package:penstore/models/chat.dart';
 import 'package:penstore/widgets/chat/chat_card.dart';
 import 'package:penstore/widgets/no_data.dart';
@@ -27,20 +29,23 @@ class _ChatBodyState extends State<ChatBody> {
           },
         );
       } else if (chatRoomController.chatRooms.isEmpty) {
-        return const Column(
+        return Column(
           children: [
-            NoData(
+            SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+            const NoData(
               title: "Maaf, ",
               subTitle: "Anda belum punya riwayat chat",
-              suggestion: "Silahkan tambahkan buau obrolan!",
+              suggestion: "Silahkan tambahkan obrolan baru!",
             ),
           ],
         );
       } else {
-        return Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: chatRoomController.chatRooms.length,
                 itemBuilder: (context, index) {
                   final chatRoom = chatRoomController.chatRooms[index];
@@ -52,9 +57,9 @@ class _ChatBodyState extends State<ChatBody> {
                         chatRoomController.chatRooms[index].hasUnreadMessages,
                   );
                 },
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         );
       }
     });

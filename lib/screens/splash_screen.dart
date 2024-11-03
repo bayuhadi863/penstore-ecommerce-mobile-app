@@ -2,6 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:penstore/screens/middleware.dart';
 import 'package:penstore/screens/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:penstore/screens/bottom_navigation.dart';
@@ -18,9 +19,7 @@ class SplashScreen extends StatelessWidget {
     if (hasSeenOnboarding == null || !hasSeenOnboarding) {
       return const OnboardingScreen();
     } else {
-      return FirebaseAuth.instance.currentUser != null
-          ? const MyBottomNavBar()
-          : const LoginScreen();
+      return const Middleware();
     }
   }
 

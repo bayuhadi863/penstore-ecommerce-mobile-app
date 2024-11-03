@@ -188,7 +188,7 @@ class AddKategoriWishlistWidget extends StatelessWidget {
                   },
                   child: const Center(
                     child: Text(
-                      'Tambah Produk',
+                      'Tambah Kategori Wishlist',
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 12,

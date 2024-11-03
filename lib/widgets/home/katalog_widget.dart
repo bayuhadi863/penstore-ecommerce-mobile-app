@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:penstore/controller/product/products_controller.dart';
 import 'package:penstore/models/category_model.dart';
 import 'package:penstore/repository/category_repository.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:skeletons/skeletons.dart';
 
 class KatalogWidget extends StatefulWidget {
@@ -25,11 +26,14 @@ class _KatalogWidgetState extends State<KatalogWidget> {
     final CategoryRepository categoryRepository = CategoryRepository();
     final List<CategoryModel> _categories =
         await categoryRepository.getCategories();
-    setState(() {
-      categories =
-          [CategoryModel(id: '0', category_name: 'Semua')] + _categories;
-      isLoading = false;
-    });
+
+    if (mounted) {
+      setState(() {
+        categories =
+            [CategoryModel(id: '0', category_name: 'Semua')] + _categories;
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -44,19 +48,23 @@ class _KatalogWidgetState extends State<KatalogWidget> {
       width: double.infinity,
       height: 32,
       child: isLoading
-          ? SkeletonListView(
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 30),
+          ? Row(
+              children: List.generate(
+                3,
+                (index) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(50),
+                  child: SkeletonItem(
+                    child: SkeletonLine(
+                      style: SkeletonLineStyle(
+                        height: 32,
+                        width: 90,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
                   ),
-                  width: 100,
-                );
-              }
-          )
+                ),
+              ),
+            )
           : categories.isEmpty
               ? const Text("data tidak ada")
               : SingleChildScrollView(
