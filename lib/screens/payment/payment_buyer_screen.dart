@@ -119,7 +119,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        Get.offAllNamed('/');
+        Get.back();
         return true;
       },
       child: Scaffold(
@@ -162,7 +162,7 @@ class _PaymentBuyerScreenState extends State<PaymentBuyerScreen> {
                     ),
                     child: IconButton(
                       onPressed: () {
-                        Get.offAllNamed('/');
+                        Get.back();
                       },
                       icon: const Icon(
                         Icons.arrow_back_ios_new,
